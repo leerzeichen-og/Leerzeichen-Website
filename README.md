@@ -43,8 +43,8 @@ Die Deploy-Action macht dasselbe und lädt bei Fehlern nicht hoch.
 ## Deployment
 
 Push auf `main` → GitHub Action lädt per FTPS auf den Webspace
-(`.github/workflows/deploy.yml`). Der FTP-Benutzer ist im Zielverzeichnis
-der Website verankert, deshalb steht im Workflow nur `server-dir: ./`.
+(`.github/workflows/deploy.yml`). Ziel ist der Unterordner `website/`
+unterhalb des FTP-Benutzers (`server-dir: website/` im Workflow).
 Secrets im GitHub-Repo: `LEERZEICHENAT_FTP_HOST`, `LEERZEICHENAT_FTP_USER`,
 `LEERZEICHENAT_FTP_PWD`. Nicht hochgeladen werden `.md`-Dateien, `tools/`
 und `docs/` — und `daten/`/`bilder/` werden am Server **nie angetastet**

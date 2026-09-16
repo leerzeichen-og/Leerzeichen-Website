@@ -2,8 +2,8 @@
 # Läuft bei jedem Push auf main: erst prüfen, dann per FTPS hochladen.
 # Secrets (Repo → Settings → Secrets and variables → Actions):
 # LEERZEICHENAT_FTP_HOST · LEERZEICHENAT_FTP_USER · LEERZEICHENAT_FTP_PWD
-# Der FTP-Benutzer ist im Zielverzeichnis der Website verankert — deshalb
-# genügt server-dir: ./ und der Workflow muss keinen Serverpfad kennen.
+# Der FTP-Benutzer zeigt auf ein Verzeichnis, in dem der Unterordner
+# website/ das Zielverzeichnis der Site ist (server-dir unten).
 
 name: Deploy leerzeichen.at
 
@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.LEERZEICHENAT_FTP_USER }}
           password: ${{ secrets.LEERZEICHENAT_FTP_PWD }}
           protocol: ftps
-          server-dir: ./
+          server-dir: website/
           exclude: |
             **/.git*
             **/.git*/**
