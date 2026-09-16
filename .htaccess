@@ -9,6 +9,12 @@ AddDefaultCharset utf-8
 # Fehlerseite.
 ErrorDocument 404 /404.php
 
+# Die Staging-Domain darf NICHT in Suchmaschinen: verbindlicher Header,
+# nur solange die Seite unter neu.leerzeichen.at läuft. Beim Livegang auf
+# der Hauptdomain greift die Regel nicht mehr — nichts zu ändern.
+SetEnvIfNoCase Host ^neu\. LZ_STAGING
+Header set X-Robots-Tag "noindex, nofollow, noarchive" env=LZ_STAGING
+
 RewriteEngine On
 
 # sitemap.xml wird von sitemap.php erzeugt (liest Seitenliste + Projekte).
