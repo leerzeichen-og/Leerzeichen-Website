@@ -1,0 +1,8 @@
+# leerzeichen.at — alle Crawler willkommen, auch KI-Systeme
+# (Entscheidung Roman, 16.9.2026: Sichtbarkeit in KI-Antworten
+# ist für eine Agentur wichtiger als der Schutz der Texte).
+
+User-agent: *
+Disallow:
+
+Sitemap: https://www.leerzeichen.at/sitemap.xml

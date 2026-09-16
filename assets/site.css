@@ -1,0 +1,135 @@
+/*
+ * leerzeichen.at — zentrales Stylesheet.
+ * Alle Farben, Schriftgrößen und Abstände sind Variablen in :root —
+ * Gestaltungsänderungen passieren DORT, nicht unten in den Regeln.
+ * Die Werte sind vorläufig (Design-Werte noch nicht festgelegt).
+ */
+
+:root {
+    /* Farben — Platzhalter bis zur Design-Entscheidung */
+    --tinte:      #111111;  /* Text, Flächen */
+    --papier:     #ffffff;  /* Hintergrund */
+    --gedaempft:  #666666;  /* Nebentext */
+    --hairline:   #e2e2e2;  /* feine Linien */
+    --akzent:     #111111;  /* Knöpfe, Hervorhebung — kommt mit dem Design */
+
+    /* Typografie — Schriften werden später self-hosted eingebunden */
+    --schrift:    -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --groesse:    17px;
+    --zeile:      1.6;
+
+    /* Layout */
+    --inhalt-breite: 1180px;   /* Lesespalte */
+    --rand: clamp(20px, 5vw, 64px);  /* Seitenrand, wächst mit dem Fenster */
+    --luft: clamp(48px, 8vh, 120px); /* vertikaler Abstand zwischen Abschnitten */
+}
+
+/* --- Grundlagen ------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    max-width: 100%;   /* nie waagrecht scrollen */
+}
+
+body {
+    font-family: var(--schrift);
+    font-size: var(--groesse);
+    line-height: var(--zeile);
+    color: var(--tinte);
+    background: var(--papier);
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; }
+
+h1, h2, h3 { line-height: 1.2; }
+
+/* --- Kopf und Navigation ---------------------------------------------- */
+
+.kopf {
+    padding: 20px var(--rand);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.kopf-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.kopf-marke {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+}
+
+.kopf-menue {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.kopf-menue a {
+    text-decoration: none;
+}
+
+.kopf-menue a[aria-current="page"] {
+    font-weight: 700;
+}
+
+.kopf-menue a:hover { text-decoration: underline; }
+
+/* --- Inhalt ------------------------------------------------------------ */
+
+.inhalt {
+    max-width: var(--inhalt-breite);
+    margin: 0 auto;
+    padding: var(--luft) var(--rand);
+}
+
+.abschnitt { margin-block: var(--luft); }
+.abschnitt:first-child { margin-top: 0; }
+
+/* Platzhalter-Kennzeichnung, solange die echten Texte fehlen —
+   fliegt raus, sobald die Inhalte eingesetzt sind. */
+.platzhalter {
+    color: var(--gedaempft);
+    border: 1px dashed var(--hairline);
+    border-radius: 8px;
+    padding: 16px 20px;
+}
+
+/* --- Fuß ---------------------------------------------------------------- */
+
+.fuss {
+    border-top: 1px solid var(--hairline);
+    padding: 40px var(--rand);
+    color: var(--gedaempft);
+    font-size: 0.92em;
+}
+
+.fuss-inhalt {
+    max-width: var(--inhalt-breite);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.fuss-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}

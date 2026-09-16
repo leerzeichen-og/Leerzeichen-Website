@@ -1,0 +1,29 @@
+# leerzeichen.at — Serverregeln. Bewusst kurz gehalten; jede Zeile erklärt.
+
+# Keine Verzeichnislisten anzeigen.
+Options -Indexes
+
+# UTF-8 als Vorgabe für Textdateien.
+AddDefaultCharset utf-8
+
+# Fehlerseite.
+ErrorDocument 404 /404.php
+
+RewriteEngine On
+
+# sitemap.xml wird von sitemap.php erzeugt (liest Seitenliste + Projekte).
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Projektseiten: /referenzen/<slug>/ → Template mit dem Slug als Parameter.
+# (Das Template kommt mit dem Referenzen-Schritt; die Regel greift erst dann,
+# weil sie nur zieht, wenn die Zieldatei existiert.)
+RewriteCond %{DOCUMENT_ROOT}/referenzen/projekt.php -f
+RewriteRule ^referenzen/([a-z0-9-]+)/?$ referenzen/projekt.php?slug=$1 [L,QSA]
+
+# daten/ gehört Space (JSON-Rohdaten) — nicht direkt ausliefern.
+# Die Templates lesen die Dateien serverseitig, dafür braucht es keinen HTTP-Zugriff.
+RewriteRule ^daten/ - [F,L]
+
+# --- 301-Umleitungen alter WordPress-Adressen ---------------------------
+# Kommen vor dem Livegang aus der Bestandsliste (docs/wp-url-bestand.md).
+# Muster:  Redirect 301 /alte-seite/ https://www.leerzeichen.at/neue-seite/

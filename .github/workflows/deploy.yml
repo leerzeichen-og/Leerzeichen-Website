@@ -1,0 +1,53 @@
+# Deployment der Website leerzeichen.at.
+# Läuft bei jedem Push auf main: erst prüfen, dann per FTPS hochladen.
+# Secrets (Repo → Settings → Secrets and variables → Actions):
+# LEERZEICHENAT_FTP_HOST · LEERZEICHENAT_FTP_USER · LEERZEICHENAT_FTP_PWD
+# Der FTP-Benutzer ist im Zielverzeichnis der Website verankert — deshalb
+# genügt server-dir: ./ und der Workflow muss keinen Serverpfad kennen.
+
+name: Deploy leerzeichen.at
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: PHP bereitstellen
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'   # gleiche Version wie am Server
+          coverage: none
+
+      - name: Rauchtest (Syntax + jede Seite einmal aufrufen)
+        run: bash tools/rauchtest.sh
+
+  deploy:
+    needs: pruefen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Upload per FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.LEERZEICHENAT_FTP_HOST }}
+          username: ${{ secrets.LEERZEICHENAT_FTP_USER }}
+          password: ${{ secrets.LEERZEICHENAT_FTP_PWD }}
+          protocol: ftps
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/*.md
+            tools/**
+            docs/**
+            # daten/ und bilder/ schreibt Space per FTPS — die Action darf
+            # sie weder hochladen noch löschen:
+            daten/**
+            bilder/**
