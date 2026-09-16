@@ -1,0 +1,62 @@
+# Erfundene Testprojekte am Server einspielen oder entfernen — zum Prüfen des
+# Layouts, solange Space noch keine echten Projekte liefert. Läuft NIE von
+# selbst, nur über Actions → „Testdaten" → Run workflow.
+#
+# Eigener Zustandsspeicher (state-name): Der normale Deploy führt seine eigene
+# Bestandsliste — teilte man sie, würde ein Testdaten-Lauf die Website löschen,
+# weil seine lokale Dateimenge eine ganz andere ist.
+#
+# „entfernen" lädt eine leere Dateimenge hoch — die Action löscht dann genau
+# die Dateien, die sie selbst eingespielt hat, und sonst nichts.
+#
+# WICHTIG: Die Testdaten entfernen, BEVOR Space echte Projekte pusht — beide
+# schreiben daten/projekte/index.json. Falls es doch später passiert: In Space
+# bei einem Projekt „Aktualisieren" drücken, das schreibt die Liste neu.
+
+name: Testdaten
+
+on:
+  workflow_dispatch:
+    inputs:
+      modus:
+        description: 'einspielen oder entfernen'
+        required: true
+        default: 'einspielen'
+        type: choice
+        options: [einspielen, entfernen]
+
+jobs:
+  testdaten:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: PHP bereitstellen
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: gd
+          coverage: none
+
+      - name: Testdaten erzeugen (bei „entfernen" bleibt der Ordner leer)
+        run: |
+          mkdir -p /tmp/testdaten/daten/projekte /tmp/testdaten/bilder/projekte
+          if [ "${{ inputs.modus }}" = "einspielen" ]; then
+            php tools/testdaten-bauen.php /tmp/testdaten
+          else
+            # Leere Platzhalter, damit die Action ein Verzeichnis vorfindet.
+            touch /tmp/testdaten/.leer
+          fi
+
+      - name: Per FTPS abgleichen
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.LEERZEICHENAT_FTP_HOST }}
+          username: ${{ secrets.LEERZEICHENAT_FTP_USER }}
+          password: ${{ secrets.LEERZEICHENAT_FTP_PWD }}
+          protocol: ftps
+          local-dir: /tmp/testdaten/
+          server-dir: ./
+          state-name: .ftp-testdaten-state.json
+          exclude: |
+            .leer
