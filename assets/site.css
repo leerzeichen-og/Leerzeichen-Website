@@ -1,30 +1,82 @@
 /*
  * leerzeichen.at — zentrales Stylesheet.
- * Alle Farben, Schriftgrößen und Abstände sind Variablen in :root —
- * Gestaltungsänderungen passieren DORT, nicht unten in den Regeln.
- * Die Werte sind vorläufig (Design-Werte noch nicht festgelegt).
+ * Tokens aus dem Claude-Design-Projekt „Startseite" (Design-System
+ * „Leerzeichen Design System", Stand 16.9.2026): Schwarz/Weiß als Fundament,
+ * Petrol als Handlungsakzent, Articulat CF als einzige Schrift, Display groß
+ * und eng. Gestaltungsänderungen passieren bei den Variablen, nicht unten
+ * in den Regeln.
  */
 
+/* --- Tokens: Farben ----------------------------------------------------- */
+
 :root {
-    /* Farben — Platzhalter bis zur Design-Entscheidung */
-    --tinte:      #111111;  /* Text, Flächen */
-    --papier:     #ffffff;  /* Hintergrund */
-    --gedaempft:  #666666;  /* Nebentext */
-    --hairline:   #e2e2e2;  /* feine Linien */
-    --akzent:     #111111;  /* Knöpfe, Hervorhebung — kommt mit dem Design */
+    --ink:      #000000;
+    --paper:    #FFFFFF;
 
-    /* Typografie — Schriften werden später self-hosted eingebunden */
-    --schrift:    -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --groesse:    17px;
-    --zeile:      1.6;
+    --petrol:      #0E9C93;
+    --petrol-tint: #CFEDE9;
+    --petrol-ink:  #0A6F69;
+    --lilac:       #8A7CD8;
 
-    /* Layout */
-    --inhalt-breite: 1180px;   /* Lesespalte */
-    --rand: clamp(20px, 5vw, 64px);  /* Seitenrand, wächst mit dem Fenster */
-    --luft: clamp(48px, 8vh, 120px); /* vertikaler Abstand zwischen Abschnitten */
+    --grey-950: #0A0A0A;
+    --grey-700: #3D3D3D;
+    --grey-500: #757575;
+    --grey-300: #C9C9C9;
+    --grey-200: #E4E4E4;
+    --grey-100: #F4F4F4;
+
+    --text-strong: var(--grey-950);
+    --text-body:   var(--grey-700);
+    --text-muted:  var(--grey-500);
+
+    --border-default: var(--grey-200);
+    --border-control: var(--grey-300);
+
+    /* Dunkle Flächen: nie flaches Schwarz, ein kaum sichtbarer Verlauf. */
+    --gradient-ink: linear-gradient(158deg, #000000 0%, #0B0B0B 46%, #1A1A1A 100%);
+
+    /* --- Tokens: Typografie --------------------------------------------- */
+    --font-sans: "Articulat CF", "Helvetica Neue", Arial, system-ui, sans-serif;
+    --weight-display: 500;    /* Display läuft im Medium-Schnitt */
+
+    --text-2xs: 0.75rem;
+    --text-xs:  0.8125rem;
+    --text-sm:  0.9375rem;
+    --text-base: 1rem;
+    --text-lg:  1.3125rem;
+
+    --leading-tight: 1.05;
+    --leading-body:  1.6;
+    --tracking-wide: 0.08em;
+
+    /* --- Tokens: Abstände, Radien, Bewegung ------------------------------ */
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+    --space-10: 8rem;
+
+    --radius-xs: 4px;
+    --radius-control: 10px;
+
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-fast: 120ms;
+
+    /* Seitenrand der Sektionen (Design: 55 px am Schreibtisch, 6vw am Telefon) */
+    --rand: clamp(20px, 4vw, 55px);
+    --inhalt-breite: 1180px;   /* Lesespalte für Unterseiten */
+
+    /* Aliasse für ältere Teile (projekt.css) — nicht neu verwenden. */
+    --tinte:     var(--text-strong);
+    --papier:    var(--paper);
+    --gedaempft: var(--text-muted);
+    --hairline:  var(--border-default);
+    --akzent:    var(--ink);
 }
 
-/* --- Grundlagen ------------------------------------------------------- */
+/* --- Grundlagen ---------------------------------------------------------- */
 
 * { box-sizing: border-box; }
 
@@ -34,102 +86,209 @@ html, body {
 }
 
 body {
-    font-family: var(--schrift);
-    font-size: var(--groesse);
-    line-height: var(--zeile);
-    color: var(--tinte);
-    background: var(--papier);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    color: var(--text-strong);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
 }
 
 img { max-width: 100%; height: auto; display: block; }
 
 a { color: inherit; }
+a:hover { color: var(--petrol-ink); }
 
-h1, h2, h3 { line-height: 1.2; }
+h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tight); }
 
-/* --- Kopf und Navigation ---------------------------------------------- */
+/* --- Wiederkehrende Bausteine (Benennung aus dem Design) ------------------ */
 
-.kopf {
-    padding: 20px var(--rand);
-    border-bottom: 1px solid var(--hairline);
+.lz-sec  { padding: var(--space-9) var(--rand); }
+.lz-dark { background: var(--gradient-ink); color: #fff; }
+
+.lz-eyebrow {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+.lz-dark .lz-eyebrow { color: rgba(255, 255, 255, .5); }
+
+.lz-h2 {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(2rem, 3.6vw, 3.5rem);
+    line-height: var(--leading-tight);
+    text-wrap: pretty;
 }
 
-.kopf-nav {
+.lz-h3 {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+    line-height: 1.12;
+}
+
+.lz-lead {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: var(--text-body);
+    text-wrap: pretty;
+}
+.lz-dark .lz-lead { color: rgba(255, 255, 255, .78); }
+
+/* Knöpfe: Ink auf hellem Grund, Paper auf dunklem. */
+.knopf {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .85rem 1.5rem;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-control);
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+.knopf:hover { background: #262626; color: #fff; }
+
+.knopf-hell {
+    background: var(--paper);
+    border-color: var(--paper);
+    color: var(--ink);
+}
+.knopf-hell:hover { background: var(--grey-200); color: var(--ink); }
+
+/* --- Kopf: liegt über dem Inhalt, färbt sich per Differenz ---------------- */
+/* mix-blend-mode difference macht Weiß auf hellem Grund zu Schwarz und
+   bleibt auf dunklen Flächen Weiß — ein Header für beide Welten. */
+
+.lz-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
+    gap: var(--space-6);
+    padding: 45px 55px;
+    mix-blend-mode: difference;
 }
 
-.kopf-marke {
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-decoration: none;
+.lz-header .lz-logo {
+    height: 40px;
+    width: auto;
+    filter: invert(1);
 }
 
-.kopf-menue {
+.lz-nav {
     display: flex;
-    gap: 28px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    gap: 40px;
     flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
-.kopf-menue a {
+.lz-nav a {
+    font-size: clamp(1.125rem, 1.9vw, 1.625rem);
+    line-height: 38px;
+    font-weight: 500;
+    color: #fff;
     text-decoration: none;
 }
+.lz-nav a:hover { color: #fff; text-decoration: underline; }
+.lz-nav a[aria-current="page"] { text-decoration: underline; }
 
-.kopf-menue a[aria-current="page"] {
-    font-weight: 700;
-}
-
-.kopf-menue a:hover { text-decoration: underline; }
-
-/* --- Inhalt ------------------------------------------------------------ */
+/* --- Inhalt der Unterseiten (Referenzen usw.) ------------------------------ */
 
 .inhalt {
     max-width: var(--inhalt-breite);
     margin: 0 auto;
-    padding: var(--luft) var(--rand);
+    padding: var(--space-8) var(--rand);
 }
 
-.abschnitt { margin-block: var(--luft); }
+.abschnitt { margin-block: var(--space-9); }
 .abschnitt:first-child { margin-top: 0; }
 
-/* Platzhalter-Kennzeichnung, solange die echten Texte fehlen —
-   fliegt raus, sobald die Inhalte eingesetzt sind. */
+/* Platzhalter-Kennzeichnung, solange echte Inhalte fehlen. */
 .platzhalter {
-    color: var(--gedaempft);
-    border: 1px dashed var(--hairline);
-    border-radius: 8px;
+    color: var(--text-muted);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-xs);
     padding: 16px 20px;
 }
 
-/* --- Fuß ---------------------------------------------------------------- */
+/* --- Fuß ------------------------------------------------------------------- */
 
-.fuss {
-    border-top: 1px solid var(--hairline);
-    padding: 40px var(--rand);
-    color: var(--gedaempft);
-    font-size: 0.92em;
+.lz-footer {
+    padding: 65px var(--rand) 100px;
+    background: var(--paper);
+    color: var(--ink);
 }
 
-.fuss-inhalt {
-    max-width: var(--inhalt-breite);
-    margin: 0 auto;
+.lz-footer .lz-logo { height: 40px; width: auto; }
+
+.lz-footgrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-7);
+    margin-top: 65px;
+}
+
+.lz-footcol {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-top: 2px solid var(--ink);
+    padding-top: 60px;
+    font-size: clamp(1.125rem, 1.7vw, 1.625rem);
+    line-height: 38px;
+}
+
+.lz-footcol a { color: var(--ink); text-decoration: none; }
+.lz-footcol a:hover { text-decoration: underline; }
+
+.lz-foothead {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.lz-footbase {
     display: flex;
     justify-content: space-between;
-    gap: 24px;
     flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 65px;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-default);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
 }
 
-.fuss-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+/* --- Telefon ---------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .lz-header { padding: 20px var(--rand); }
+    .lz-nav { gap: 20px; }
+    .lz-nav a { line-height: 1.3; }
+    .lz-footer { padding: 48px var(--rand) 64px; }
+    .lz-footgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lz-footcol { padding-top: 28px; line-height: 1.45; }
+}
+
+@media (max-width: 640px) {
+    /* Im schmalsten Fenster trägt der Fuß die vollständige Navigation. */
+    .lz-nav a:nth-child(-n+2) { display: none; }
 }

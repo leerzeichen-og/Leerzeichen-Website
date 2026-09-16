@@ -20,7 +20,8 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
       "saeule": "erlebnisse",
       "punchline": "Eine Ausstellung, die …",
       "startseite": "top",
-      "teaser_quer": { …Bild-Objekt, siehe unten… }
+      "teaser_quer": { …Bild-Objekt, siehe unten… },
+      "objekt": { …Bild-Objekt… }
     }
   ]
 }
@@ -29,6 +30,11 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
 - `saeule`: `erlebnisse` oder `gestaltung` (die zwei Säulen der Positionierung).
 - `startseite`: `top`, `erlebnisse`, `gestaltung` oder nicht gesetzt —
   bestimmt die vier Plätze im Startseiten-Scroller.
+- `objekt` (seit 16.9.2026): **freigestelltes Objekt** des Projekts —
+  transparentes WebP/PNG, das stellvertretend fürs Projekt steht. Schwebt auf
+  der Startseiten-Bühne (nur Projekte mit `objekt` fliegen dort mit, höchstens
+  acht) und ist als Slot auch im Beitrags-JSON zulässig. Contain, keine feste
+  Zielgröße; empfohlene Breitenstufen 320/640/960.
 
 ## daten/projekte/{slug}.json
 

@@ -10,7 +10,7 @@ const FIRMA_PLZ       = '3371';
 const FIRMA_ORT       = 'Neumarkt an der Ybbs';
 const FIRMA_LAND      = 'AT';
 const FIRMA_TELEFON   = '+43 7412 53638';
-const FIRMA_MAIL      = ''; // TODO Roman: öffentliche Mailadresse eintragen
+const FIRMA_MAIL      = 'office@leerzeichen.at';
 const FIRMA_GEGRUENDET = '2008';
 const FIRMA_URL       = 'https://www.leerzeichen.at';
 

@@ -4,7 +4,9 @@
 // und $beschreibung (Meta-Description, ~155 Zeichen).
 // Optional: $brotkrumen = [['Name', '/pfad/'], …] für die BreadcrumbList,
 //           $jsonld_extra = fertiges Schema-Array (z. B. CreativeWork),
-//           $styles = ['/assets/….css'] für zusätzliche Stylesheets.
+//           $styles = ['/assets/….css'] für zusätzliche Stylesheets,
+//           $voll_breit = true lässt <main> ohne Lesespalten-Begrenzung
+//           (Startseite: die Sektionen bringen ihre Ränder selbst mit).
 
 require_once __DIR__ . '/firma.php';
 
@@ -77,6 +79,8 @@ $nav = [
 <title><?= e($titel) ?></title>
 <meta name="description" content="<?= e($beschreibung) ?>">
 <link rel="canonical" href="<?= e($kanonisch) ?>">
+<link rel="preload" href="/assets/fonts/ArticulatCF-Medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css">
 <link rel="stylesheet" href="/assets/site.css">
 <?php foreach ($styles ?? [] as $css): ?>
 <link rel="stylesheet" href="<?= e($css) ?>">
@@ -86,14 +90,14 @@ $nav = [
 <?php endforeach; ?>
 </head>
 <body>
-<header class="kopf">
-  <nav class="kopf-nav" aria-label="Hauptnavigation">
-    <a class="kopf-marke" href="/"><?= e(FIRMA_KURZ) ?></a>
-    <ul class="kopf-menue">
-      <?php foreach ($nav as [$pfad, $label]): ?>
-      <li><a href="/<?= e($pfad) ?>/"<?= $nav_aktiv === $pfad ? ' aria-current="page"' : '' ?>><?= e($label) ?></a></li>
-      <?php endforeach; ?>
-    </ul>
+<header class="lz-header">
+  <a href="/" aria-label="Zur Startseite">
+    <img class="lz-logo" src="/assets/logo/leerzeichen-logo-pos.svg" alt="<?= e(FIRMA_NAME) ?>" width="316" height="41">
+  </a>
+  <nav class="lz-nav" aria-label="Hauptnavigation">
+    <?php foreach ($nav as [$pfad, $label]): ?>
+    <a href="/<?= e($pfad) ?>/"<?= $nav_aktiv === $pfad ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
+    <?php endforeach; ?>
   </nav>
 </header>
-<main class="inhalt">
+<main<?= empty($voll_breit) ? ' class="inhalt"' : '' ?>>

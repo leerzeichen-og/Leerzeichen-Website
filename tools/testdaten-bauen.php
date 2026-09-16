@@ -75,6 +75,51 @@ function td_bildobjekt(string $ziel, string $slug, string $name, int $zielBreite
     ];
 }
 
+
+/**
+ * Freigestelltes Objekt (transparentes WebP): eine abstrakte Form je Projekt —
+ * Kreisstapel, Rechtecke oder ein "Buch" —, damit die Startseiten-Bühne etwas
+ * zum Fliegen hat. $form: 0..3, damit die vier Testobjekte unterscheidbar sind.
+ */
+function td_objekt(string $ziel, string $slug, int $form, array $farben, string $alt): array
+{
+    [$a, $b, $akzent] = $farben;
+    $quellen = [];
+    foreach ([320, 640, 960] as $w) {
+        $h = $w; // quadratische Bühne, das Motiv füllt sie unterschiedlich
+        $im = imagecreatetruecolor($w, $h);
+        imagealphablending($im, false);
+        imagesavealpha($im, true);
+        imagefill($im, 0, 0, imagecolorallocatealpha($im, 0, 0, 0, 127));
+        imagealphablending($im, true);
+        $cA = imagecolorallocate($im, $a[0], $a[1], $a[2]);
+        $cB = imagecolorallocate($im, $b[0], $b[1], $b[2]);
+        $cX = imagecolorallocate($im, $akzent[0], $akzent[1], $akzent[2]);
+        if ($form === 0) {          // Kreisstapel
+            imagefilledellipse($im, (int)($w*0.5), (int)($h*0.62), (int)($w*0.7), (int)($h*0.5), $cA);
+            imagefilledellipse($im, (int)($w*0.5), (int)($h*0.4),  (int)($w*0.5), (int)($h*0.36), $cX);
+            imagefilledellipse($im, (int)($w*0.5), (int)($h*0.22), (int)($w*0.3), (int)($h*0.2), $cB);
+        } elseif ($form === 1) {    // stehender Quader (Stele)
+            imagefilledrectangle($im, (int)($w*0.34), (int)($h*0.08), (int)($w*0.66), (int)($h*0.92), $cA);
+            imagefilledrectangle($im, (int)($w*0.34), (int)($h*0.08), (int)($w*0.66), (int)($h*0.3), $cX);
+            imagefilledellipse($im, (int)($w*0.5), (int)($h*0.92), (int)($w*0.5), (int)($h*0.1), $cB);
+        } elseif ($form === 2) {    // Flasche/Glas
+            imagefilledellipse($im, (int)($w*0.5), (int)($h*0.6), (int)($w*0.56), (int)($h*0.7), $cB);
+            imagefilledrectangle($im, (int)($w*0.44), (int)($h*0.06), (int)($w*0.56), (int)($h*0.34), $cA);
+            imagefilledellipse($im, (int)($w*0.5), (int)($h*0.06), (int)($w*0.2), (int)($h*0.06), $cX);
+        } else {                    // aufgeschlagenes Buch
+            imagefilledpolygon($im, [ (int)($w*0.08),(int)($h*0.35), (int)($w*0.5),(int)($h*0.22), (int)($w*0.5),(int)($h*0.78), (int)($w*0.08),(int)($h*0.9) ], $cA);
+            imagefilledpolygon($im, [ (int)($w*0.92),(int)($h*0.35), (int)($w*0.5),(int)($h*0.22), (int)($w*0.5),(int)($h*0.78), (int)($w*0.92),(int)($h*0.9) ], $cB);
+            imagefilledrectangle($im, (int)($w*0.485), (int)($h*0.22), (int)($w*0.515), (int)($h*0.78), $cX);
+        }
+        $datei = "bilder/projekte/$slug/objekt-$w.webp";
+        @mkdir(dirname("$ziel/$datei"), 0775, true);
+        imagewebp($im, "$ziel/$datei", 80);
+        $quellen[] = ['datei' => '/' . $datei, 'breite' => $w];
+    }
+    return ['alt' => $alt, 'beschreibung' => '', 'breite' => 960, 'hoehe' => 960, 'quellen' => $quellen];
+}
+
 // ---- Die vier Projekte --------------------------------------------------------
 // Bewusst unterschiedlich vollständig: Projekt 2 hat kein Foto 4 und kein
 // Detail 2, Projekt 4 kein Foto 5 und nur einen Credit plus sehr langen Titel —
@@ -187,7 +232,7 @@ function td_json(array $daten): string
 @mkdir($ziel . '/daten/projekte', 0775, true);
 
 $index = [];
-foreach ($projekte as $p) {
+foreach ($projekte as $nr => $p) {
     $farben = $paletten[$p['palette']];
     $slug   = $p['slug'];
 
@@ -196,6 +241,8 @@ foreach ($projekte as $p) {
             'Testmotiv: Header von ' . $p['titel']),
         'teaser_quer' => td_bildobjekt($ziel, $slug, 'teaser', 2288, 1520 / 2288, $farben,
             'Testmotiv: Teaser von ' . $p['titel']),
+        'objekt'      => td_objekt($ziel, $slug, $nr, $farben,
+            'Freigestelltes Testobjekt von ' . $p['titel']),
     ];
     foreach ($p['fotos'] as $name => $ratio) {
         $bilder[$name] = td_bildobjekt($ziel, $slug, str_replace('_', '-', $name), 2560, $ratio,
@@ -217,6 +264,7 @@ foreach ($projekte as $p) {
         'slug' => $slug, 'titel' => $p['titel'], 'kunde' => $p['kunde'],
         'jahr' => $p['jahr'], 'saeule' => $p['saeule'], 'punchline' => $p['punchline'],
         'teaser_quer' => $bilder['teaser_quer'],
+        'objekt' => $bilder['objekt'],
     ];
     if (!empty($p['startseite'])) {
         $zeile['startseite'] = $p['startseite'];

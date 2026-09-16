@@ -1,0 +1,370 @@
+/*
+ * Startseite — Scroll-Bühne, Leistungsblöcke, Team, Newsletter, Kontakt-CTA.
+ * Portiert aus dem Claude-Design-Projekt „Startseite" (16.9.2026).
+ * Nur von der Startseite eingebunden; Tokens kommen aus site.css.
+ */
+
+/* --- Scroll-Bühne ----------------------------------------------------------- */
+/* Die Sektion ist sehr hoch (Scrollstrecke); innen klebt ein Bildschirm-hoher
+   Ausschnitt (sticky). Das Skript steuert alles über den Scroll-Fortschritt.
+   ACHTUNG display-gegen-hidden-Falle: Auf #buehne und #buehne-statisch selbst
+   steht bewusst KEINE display-Angabe — das Skript schaltet sie mit `hidden`. */
+
+.buehne { position: relative; height: 780vh; background: var(--paper); }
+
+.buehne-blick {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.lz-claim {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(2.7rem, 9vw, 9rem);
+    line-height: .94;
+    letter-spacing: -0.015em;
+}
+
+.buehne-claimblock {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 3;
+    pointer-events: none;
+    min-height: 88vh;
+    display: flex;
+    align-items: flex-end;
+    padding: calc(130px + var(--space-8)) 55px var(--space-9);
+}
+
+/* Solange eine Projekt-Karte offen ist, tritt der Claim zurück — er ist
+   Dekoration und läge sonst über dem Kartentext (Stapelkontext des sticky-
+   Ausschnitts; die Karte kann ihn nicht überdecken). */
+.buehne.hat-karte .buehne-claimblock { opacity: 0; }
+.buehne-claimblock { transition: opacity 300ms var(--ease-out); }
+
+/* Schwebende Projekt-Objekte */
+.buehne-objekte {
+    position: absolute;
+    inset: 0;
+    transition: opacity 400ms linear;
+}
+
+.buehne-obj {
+    position: absolute;
+    left: 0; top: 0;
+    will-change: transform;
+}
+
+.buehne-obj button {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: block;
+    transition: opacity 420ms var(--ease-out);
+}
+
+.buehne-obj img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* leichtes Eigenleben, unabhängig vom Flug */
+    animation: buehne-schweben 11s ease-in-out infinite;
+}
+
+.buehne-objekte.hat-auswahl .buehne-obj button { opacity: .14; }
+.buehne-objekte.hat-auswahl .buehne-obj.ist-auswahl button { opacity: 1; }
+
+/* Fragen: wortweise hinter einer Maske hervor */
+.buehne-fragen { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+
+.buehne-frage {
+    position: absolute;
+    left: 55px; right: 55px;
+    top: 50%;
+    margin: 0;
+    transform: translateY(-50%);
+    max-width: min(34ch, 88vw);
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: .3em;
+    font-weight: var(--weight-display);
+    font-size: clamp(1.6rem, 3.4vw, 3.25rem);
+    line-height: 1.1;
+    color: var(--ink);
+}
+
+.buehne-wort-maske {
+    display: inline-block;
+    overflow: hidden;
+    padding-bottom: .08em;
+    vertical-align: bottom;
+}
+.buehne-wort-maske > span { display: inline-block; }
+
+/* Dunkles Finale: Fläche, Astronaut, Antwort */
+.buehne-finale { position: absolute; inset: 0; }
+
+.buehne-astro {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: center;
+    will-change: transform, opacity;
+}
+
+.buehne-astro img {
+    height: 84vh;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+    animation: buehne-schweben 9s ease-in-out infinite;
+}
+
+@keyframes buehne-schweben {
+    0%   { transform: translateY(0) rotate(-1deg); }
+    50%  { transform: translateY(-20px) rotate(1.2deg); }
+    100% { transform: translateY(0) rotate(-1deg); }
+}
+
+.buehne-antwort {
+    position: relative;
+    padding: calc(130px + var(--space-7)) 55px 0;
+}
+.buehne-antwort h2 {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(1.6rem, 3.4vw, 3.25rem);
+    line-height: 1.1;
+    max-width: min(24ch, 100%);
+    color: #fff;
+}
+.buehne-antwort p {
+    margin: var(--space-5) 0 0;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: rgba(255, 255, 255, .72);
+}
+
+/* Karte, die aus dem angeklickten Objekt herauswächst */
+.buehne-karte {
+    position: absolute;
+    max-height: calc(100vh - 2 * var(--space-6));
+    overflow: auto;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-xs);
+    padding: var(--space-6);
+    z-index: 5;
+    animation: buehne-pop 380ms cubic-bezier(.22, .61, .36, 1) both;
+}
+@keyframes buehne-pop {
+    from { opacity: 0; transform: scale(.28); }
+    to   { opacity: 1; transform: none; }
+}
+
+.buehne-karte h3 { margin: 12px 0 0; }
+.buehne-karte .lz-lead { margin: 14px 0 22px; max-width: min(26ch, 100%); }
+
+.buehne-schliessen {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 6px 2px;
+}
+.buehne-schliessen:hover { color: var(--ink); }
+
+/* Statischer Ersatz (ohne JavaScript oder bei reduzierter Bewegung):
+   gleiche Inhalte als ruhige Seite. */
+.buehne-statisch { padding: calc(130px + var(--space-7)) var(--rand) var(--space-9); }
+.buehne-statisch .lz-claim { margin-bottom: var(--space-8); }
+.buehne-statisch-frage {
+    margin: 0 0 var(--space-5);
+    font-weight: var(--weight-display);
+    font-size: clamp(1.4rem, 2.6vw, 2.5rem);
+    line-height: 1.15;
+    max-width: 34ch;
+}
+.buehne-statisch-antwort { margin: var(--space-7) 0 var(--space-6); }
+
+/* --- Leistungsblöcke ---------------------------------------------------------- */
+
+.lz-blockgrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    margin-top: var(--space-7);
+    align-items: start;
+}
+
+.lz-blocktext {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    align-items: flex-start;
+}
+.lz-blocktext p { margin: 0; max-width: min(52ch, 100%); }
+
+.lz-svc {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--text-body);
+}
+.lz-svc li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--text-base);
+    font-weight: 500;
+}
+.lz-svc li::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex: 0 0 auto;
+}
+
+/* --- Team ----------------------------------------------------------------------- */
+
+.lz-teamgrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: center;
+}
+
+.team-foto {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-xs);
+    background: rgba(255, 255, 255, .08);
+    border: 1px dashed rgba(255, 255, 255, .3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, .5);
+    font-size: var(--text-sm);
+}
+
+/* --- Newsletter -------------------------------------------------------------------- */
+
+.nl-baum { display: flex; justify-content: center; }
+.nl-baum img { width: min(380px, 68vw); height: auto; }
+
+.lz-nlcard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xs);
+    padding: var(--space-7);
+    margin-top: calc(var(--space-6) * -1);
+    background: var(--paper);
+    position: relative;
+}
+
+.lz-nllist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+.lz-nllist li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 20px;
+    position: relative;
+    font-size: var(--text-base);
+    color: var(--text-body);
+    line-height: 1.5;
+}
+.lz-nllist li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: .55em;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ink);
+}
+.lz-nllist strong {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.nl-form { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.lz-field { display: flex; flex-direction: column; gap: 6px; }
+.lz-label {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+.lz-input {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    padding: .8rem .9rem;
+    border-radius: var(--radius-xs);
+    border: 1.5px solid var(--border-control);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+}
+.lz-input:focus { border-color: var(--ink); }
+
+.nl-zustimmung {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.nl-zustimmung input { margin-top: 3px; accent-color: var(--ink); }
+
+/* --- Kontakt-CTA ------------------------------------------------------------------- */
+
+.kontakt-cta { text-align: center; }
+.kontakt-cta .knopf-wrap {
+    margin-top: var(--space-7);
+    display: flex;
+    justify-content: center;
+}
+
+/* --- Telefon ------------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .lz-blockgrid, .lz-teamgrid, .lz-nlcard { grid-template-columns: 1fr; gap: var(--space-7); }
+    .buehne-frage { max-width: none; left: var(--rand); right: var(--rand); }
+    .buehne-claimblock { padding: calc(90px + var(--space-7)) var(--rand) var(--space-8); }
+    .buehne-antwort { padding: calc(90px + var(--space-6)) var(--rand) 0; }
+    .buehne-statisch { padding-top: calc(90px + var(--space-6)); }
+}
+
+/* Reduzierte Bewegung: kein Eigenleben — das Skript bleibt ohnehin bei der
+   statischen Fassung, aber auch Astronaut/Karten stehen dann still. */
+@media (prefers-reduced-motion: reduce) {
+    .buehne-obj img, .buehne-astro img { animation: none; }
+    .buehne-karte { animation: none; }
+}
