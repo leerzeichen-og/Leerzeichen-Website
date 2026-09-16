@@ -3,7 +3,8 @@
 // Jede Seite setzt VOR dem Einbinden: $titel (Browser-Tab/Suchergebnis)
 // und $beschreibung (Meta-Description, ~155 Zeichen).
 // Optional: $brotkrumen = [['Name', '/pfad/'], …] für die BreadcrumbList,
-//           $jsonld_extra = fertiges Schema-Array (z. B. CreativeWork).
+//           $jsonld_extra = fertiges Schema-Array (z. B. CreativeWork),
+//           $styles = ['/assets/….css'] für zusätzliche Stylesheets.
 
 require_once __DIR__ . '/firma.php';
 
@@ -77,6 +78,9 @@ $nav = [
 <meta name="description" content="<?= e($beschreibung) ?>">
 <link rel="canonical" href="<?= e($kanonisch) ?>">
 <link rel="stylesheet" href="/assets/site.css">
+<?php foreach ($styles ?? [] as $css): ?>
+<link rel="stylesheet" href="<?= e($css) ?>">
+<?php endforeach; ?>
 <?php foreach ($jsonld as $block): ?>
 <script type="application/ld+json"><?= json_encode($block, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>

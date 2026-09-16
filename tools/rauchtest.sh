@@ -22,7 +22,8 @@ trap 'kill $server 2>/dev/null' EXIT
 sleep 1
 
 # Jede index.php im Repo entspricht einer Seite; dazu Sonderfälle.
-seiten="/ /404.php /sitemap.php"
+# projekt.php ohne Slug muss die 404-Seite liefern (auch ohne Daten aus Space).
+seiten="/ /404.php /sitemap.php /referenzen/projekt.php"
 while read -r f; do
   pfad="${f#.}"; pfad="${pfad%index.php}"
   [ "$pfad" = "/" ] || seiten="$seiten $pfad"
@@ -30,7 +31,8 @@ done < <(find . -name 'index.php' -not -path './.git/*')
 
 for seite in $seiten; do
   code=$(curl -s -o /tmp/lz-seite.html -w "%{http_code}" "http://127.0.0.1:8931$seite")
-  erwartet=200; [ "$seite" = "/404.php" ] && erwartet=404
+  erwartet=200
+  case "$seite" in /404.php|/referenzen/projekt.php) erwartet=404 ;; esac
   if [ "$code" != "$erwartet" ] || grep -qE "Fatal error|Warning:|Deprecated:" /tmp/lz-seite.html; then
     echo "FEHLER $seite (HTTP $code)"
     grep -E "Fatal error|Warning:|Deprecated:" /tmp/lz-seite.html | head -3

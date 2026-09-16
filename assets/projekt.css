@@ -1,0 +1,358 @@
+/*
+ * Projektseiten und Referenzen-Übersicht (.pj-…).
+ * Portiert aus der WordPress-Shortcode-Fassung (wp-projektseite/projekt.css
+ * im Space-Repo); Farben und Schriften kommen jetzt aus den Tokens in
+ * site.css statt aus Elementor. Eingebunden nur von den Referenzen-Seiten.
+ *
+ * Die Seiten liegen in der Inhaltsbox (.inhalt aus site.css) — Bilder brechen
+ * mit 100vw und negativen Rändern daraus aus, Texte bleiben darin.
+ */
+
+.pj {
+  /* Zuordnung auf die Site-Tokens (site.css :root) */
+  --pj-ink:       var(--tinte);
+  --pj-gedaempft: var(--gedaempft);
+  --pj-akzent:    var(--akzent);
+  --pj-linie:     var(--hairline);
+
+  /* Kein eigener Seitenrand: .inhalt bringt ihn mit. */
+  --pj-rand: 0px;
+
+  /* Höhe der Kopfzeile der Website — das Headerbild füllt den Bildschirm
+     abzüglich dieses Werts. Ändert sich die Kopfzeile, hier nachziehen. */
+  --pj-kopfhoehe: 72px;
+
+  /* Wie weit Badge und Überschrift im Headerbild nach unten rücken. */
+  --pj-header-tiefer: clamp(40px, 10vh, 100px);
+
+  --pj-textspalte: 44rem;        /* Lesebreite der Textblöcke */
+  --pj-luft: clamp(48px, 7vw, 120px);
+
+  color: var(--pj-ink);
+}
+
+/* ---- Header: echtes <img> mit Overlay (srcset/fetchpriority) ------------- */
+
+.pj-header {
+  position: relative;
+  isolation: isolate;
+}
+
+.pj .pj-header-bild {
+  display: block;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  /* 100svh statt 100vh, damit die Browserleiste am Handy das Bild nicht
+     springen lässt; die erste Zeile ist der Rückfall für ältere Browser. */
+  height: calc(100vh - var(--pj-kopfhoehe));
+  height: calc(100svh - var(--pj-kopfhoehe));
+  min-height: 320px;
+  object-fit: cover;
+}
+
+/* Verlauf für die Lesbarkeit — über dem Bild, unter dem Text. Von oben und
+   von links (der Titel steht links oben), unten leicht für den Scrollhinweis. */
+.pj-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .18) 42%, rgba(0, 0, 0, 0) 68%),
+    linear-gradient(90deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .12) 45%, rgba(0, 0, 0, 0) 70%),
+    linear-gradient(0deg, rgba(0, 0, 0, .34) 0%, rgba(0, 0, 0, 0) 16%);
+  z-index: 1;
+}
+
+.pj-header-inhalt {
+  position: absolute;
+  z-index: 2;
+  top: calc(clamp(72px, 12vh, 160px) + var(--pj-header-tiefer));
+  left: var(--pj-rand);
+  right: var(--pj-rand);
+  max-width: 34rem;
+  color: #fff;
+}
+
+.pj .pj-badge {
+  display: inline-block;
+  margin-bottom: .8rem;
+  padding: .18rem .5rem;
+  background: #000;
+  color: #fff;
+  font-size: .72rem;
+  line-height: 1.35;
+  letter-spacing: .02em;
+  text-decoration: none;
+  border-radius: 2px;
+}
+
+.pj .pj-titel {
+  margin: 0;
+  font-size: clamp(1.7rem, 3.4vw, 3rem);
+  line-height: 1.12;
+  color: #fff;
+  text-shadow: 0 1px 24px rgba(0, 0, 0, .35);
+}
+
+/* Falls ein Projekt (noch) kein Headerbild hat. */
+.pj .pj-titel-ohne-bild { margin: 0 0 1rem; }
+
+/* ---- Scrollhinweis: drei fallende Leerzeichen-Balken --------------------- */
+/* Rein visuell (aria-hidden); bei prefers-reduced-motion steht er still.    */
+
+.pj .pj-scrollhinweis {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: clamp(20px, 4vh, 52px);
+  transform: translateX(-50%);
+  color: #fff;
+  pointer-events: none;
+}
+
+.pj .pj-scrollhinweis.is-balken { width: 44px; height: 34px; }
+
+.pj .pj-scrollhinweis.is-balken i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: currentColor;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, .5);
+  animation: pj-fallen 2.1s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+
+.pj .pj-scrollhinweis.is-balken i:nth-child(2) { animation-delay: .28s; }
+.pj .pj-scrollhinweis.is-balken i:nth-child(3) { animation-delay: .56s; }
+
+@keyframes pj-fallen {
+  0%   { transform: translateY(0);    opacity: 0; }
+  25%  {                              opacity: 1; }
+  100% { transform: translateY(32px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pj .pj-scrollhinweis i { animation: none; opacity: .9; }
+  .pj .pj-scrollhinweis.is-balken i:nth-child(2) { top: 8px;  opacity: .5; }
+  .pj .pj-scrollhinweis.is-balken i:nth-child(3) { top: 16px; opacity: .25; }
+}
+
+/* ---- Textblöcke: schmale Spalte rechts der Mitte, wie im Layout ---------- */
+
+.pj-text {
+  max-width: var(--pj-textspalte);
+  margin: var(--pj-luft) auto var(--pj-luft) 50%;
+  padding-right: var(--pj-rand);
+  transform: translateX(-25%);
+  font-size: clamp(.95rem, 1.05vw, 1.06rem);
+  line-height: 1.65;
+}
+
+.pj .pj-text p { margin: 0 0 1em; }
+.pj .pj-text p:last-child { margin-bottom: 0; }
+
+.pj-lead { font-size: clamp(1rem, 1.2vw, 1.15rem); }
+
+@media (max-width: 900px) {
+  .pj-text {
+    margin: var(--pj-luft) 0;
+    padding-right: 0;
+    transform: none;
+    max-width: none;
+  }
+}
+
+/* ---- Contentfotos: randfüllend ------------------------------------------ */
+
+.pj .pj-foto {
+  display: block;
+  width: 100vw;
+  max-width: 100vw;
+  height: auto;
+  margin: var(--pj-luft) calc(50% - 50vw);
+}
+
+/* ---- Die beiden Details nebeneinander ------------------------------------ */
+
+.pj-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 4vw, 64px);
+  max-width: calc(var(--pj-textspalte) * 1.5);
+  margin: var(--pj-luft) auto var(--pj-luft) 50%;
+  padding-right: var(--pj-rand);
+  transform: translateX(-25%);
+}
+
+.pj-details .pj-text {
+  margin: 0;
+  padding-right: 0;
+  transform: none;
+  max-width: none;
+}
+
+@media (max-width: 900px) {
+  .pj-details {
+    grid-template-columns: 1fr;
+    margin: var(--pj-luft) 0;
+    padding-right: 0;
+    transform: none;
+    max-width: none;
+  }
+}
+
+/* ---- Call to Action mit Credits ------------------------------------------ */
+
+.pj-abschluss {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 22rem);
+  gap: clamp(32px, 5vw, 96px);
+  align-items: start;
+  margin: var(--pj-luft) var(--pj-rand);
+  padding-top: var(--pj-luft);
+  border-top: 1px solid var(--pj-linie);
+}
+
+.pj-abschluss .pj-text {
+  margin: 0;
+  padding-right: 0;
+  transform: none;
+  max-width: none;
+}
+
+.pj-cta-text {
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2vw, 1.7rem);
+  line-height: 1.3;
+  max-width: 24ch;
+}
+
+.pj-cta-text p { margin: 0 0 .6em; }
+
+.pj .pj-knopf {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: 1.6rem;
+  padding: .7rem 1.2rem;
+  border: 1px solid var(--pj-akzent);
+  color: var(--pj-akzent);
+  text-decoration: none;
+  font-size: .9rem;
+  transition: background .15s ease, color .15s ease;
+}
+
+.pj .pj-knopf:hover,
+.pj .pj-knopf:focus-visible {
+  background: var(--pj-akzent);
+  color: #fff;
+}
+
+.pj-credits {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.5;
+  color: var(--pj-gedaempft);
+}
+
+.pj-credit { display: flex; gap: .5rem; }
+.pj-credit dt { margin: 0; }
+.pj-credit dt::after { content: ":"; }
+.pj .pj-credit dd { margin: 0; color: var(--pj-ink); }
+
+@media (max-width: 900px) {
+  .pj-abschluss { grid-template-columns: 1fr; }
+}
+
+/* ---- Projektkarten (Übersicht, „Weitere Projekte", Scroller) ------------- */
+
+.pj-weitere {
+  margin: var(--pj-luft) var(--pj-rand);
+  padding-top: var(--pj-luft);
+  border-top: 1px solid var(--pj-linie);
+}
+
+.pj-weitere h2 {
+  margin: 0 0 1.6rem;
+  font-size: 1rem;
+  letter-spacing: .03em;
+}
+
+.pj-weitere-liste,
+.pj-liste {
+  display: grid;
+  /* min(100%, …) — sonst schiebt die Mindestbreite am Telefon die Seite auf */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: clamp(16px, 2vw, 32px);
+}
+
+.pj-liste { margin-top: 2rem; }
+
+.pj-karte { text-decoration: none; color: inherit; display: block; }
+
+.pj-karte-bild {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2288 / 1520;
+  object-fit: cover;
+}
+
+.pj-karte-kunde {
+  display: block;
+  margin-top: .7rem;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  color: var(--gedaempft);
+}
+
+.pj-karte-titel {
+  display: block;
+  margin-top: .15rem;
+  font-size: .95rem;
+  line-height: 1.35;
+}
+
+.pj-karte-punchline {
+  display: block;
+  margin-top: .2rem;
+  font-size: .85rem;
+  color: var(--gedaempft);
+}
+
+.pj-karte:hover .pj-karte-titel { text-decoration: underline; }
+
+/* ---- Filter-Pillen der Übersicht ------------------------------------------ */
+
+.pj-pillen {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+}
+
+.pj-pille {
+  padding: .35rem .9rem;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: .88rem;
+}
+
+.pj-pille[aria-current="true"] {
+  background: var(--tinte);
+  border-color: var(--tinte);
+  color: var(--papier);
+}
+
+/* ---- Bewegung sparsam ------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pj .pj-knopf { transition: none; }
+}
