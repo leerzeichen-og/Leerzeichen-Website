@@ -31,21 +31,33 @@ $fragen = [
     'Und wie wird aus beidem|eine Geschichte, die man|weitererzählt?',
 ];
 
-// Flugbahnen der Projekt-Objekte (aus Space, Bild-Slot „objekt"; höchstens acht).
+// Bahnen der Projekt-Objekte — IMMER acht (Beschluss Roman 17.9.2026).
+// Die Objekte schweben nahezu am Stand (nur sanftes seitliches Treiben, vx)
+// und wandern ans Scrollen gekoppelt nach oben: y0 = Startlage in vh,
+// tiefe = wie viele vh sie über die ganze Bühnenstrecke zurücklegen —
+// dadurch verteilen sie sich über die Fragen-Reise statt auf einen Schirm.
+// tiefe ≈ Bühnenhöhe (980vh): die Objekte ziehen etwa im Seitentempo vorbei
+// (kein Schwindel), leichte Unterschiede geben dezente Tiefe. y0 staffelt
+// sie über die Strecke — es sind immer nur zwei, drei zugleich im Bild.
 $bahnen = [
-    ['w' => 21, 'h' => 15, 'x' => 14, 'y' => 64,  'vx' => 0.9,   'vy' => -0.5],
-    ['w' => 16, 'h' => 13, 'x' => 68, 'y' => 86,  'vx' => -0.7,  'vy' => -0.75],
-    ['w' => 13, 'h' => 17, 'x' => 42, 'y' => 92,  'vx' => 0.65,  'vy' => -0.6],
-    ['w' => 18, 'h' => 12, 'x' => 26, 'y' => 104, 'vx' => -0.85, 'vy' => -0.45],
-    ['w' => 15, 'h' => 16, 'x' => 80, 'y' => 60,  'vx' => 0.5,   'vy' => -0.85],
-    ['w' => 19, 'h' => 13, 'x' => 54, 'y' => 112, 'vx' => -0.55, 'vy' => -0.8],
-    ['w' => 12, 'h' => 12, 'x' => 6,  'y' => 96,  'vx' => 0.8,   'vy' => -0.4],
-    ['w' => 17, 'h' => 11, 'x' => 90, 'y' => 100, 'vx' => -0.6,  'vy' => -0.7],
+    ['w' => 21, 'h' => 15, 'x' => 8,  'y0' => 90,  'tiefe' => 900, 'vx' => 0.10],
+    ['w' => 16, 'h' => 13, 'x' => 64, 'y0' => 150, 'tiefe' => 880, 'vx' => -0.08],
+    ['w' => 13, 'h' => 17, 'x' => 36, 'y0' => 215, 'tiefe' => 920, 'vx' => 0.07],
+    ['w' => 18, 'h' => 12, 'x' => 79, 'y0' => 275, 'tiefe' => 860, 'vx' => -0.09],
+    ['w' => 15, 'h' => 16, 'x' => 14, 'y0' => 340, 'tiefe' => 940, 'vx' => 0.06],
+    ['w' => 19, 'h' => 13, 'x' => 54, 'y0' => 400, 'tiefe' => 900, 'vx' => -0.07],
+    ['w' => 12, 'h' => 12, 'x' => 28, 'y0' => 460, 'tiefe' => 980, 'vx' => 0.08],
+    ['w' => 17, 'h' => 11, 'x' => 84, 'y0' => 515, 'tiefe' => 940, 'vx' => -0.06],
 ];
-$flieger = array_slice(
-    array_values(array_filter(pj_index(), fn($p) => !empty($p['objekt']['quellen']))),
-    0, count($bahnen)
-);
+// Immer acht Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
+$objektProjekte = array_values(array_filter(pj_index(),
+    fn($p) => !empty($p['objekt']['quellen'])));
+$flieger = [];
+if ($objektProjekte) {
+    for ($i = 0; $i < count($bahnen); $i++) {
+        $flieger[] = $objektProjekte[$i % count($objektProjekte)];
+    }
+}
 
 // Die zwei Säulen (Texte: „Website-Texte"). Der erste Absatz ist der Lead.
 $saeulen_boxen = [
@@ -106,13 +118,13 @@ require __DIR__ . '/teile/kopf.php';
       <?php foreach ($flieger as $i => $p): $b = $bahnen[$i]; ?>
       <div class="buehne-obj"
            data-w="<?= $b['w'] ?>" data-h="<?= $b['h'] ?>"
-           data-x="<?= $b['x'] ?>" data-y="<?= $b['y'] ?>"
-           data-vx="<?= $b['vx'] ?>" data-vy="<?= $b['vy'] ?>"
+           data-x="<?= $b['x'] ?>" data-y0="<?= $b['y0'] ?>"
+           data-tiefe="<?= $b['tiefe'] ?>" data-vx="<?= $b['vx'] ?>"
            data-kat="<?= e(PJ_SAEULEN[$p['saeule'] ?? ''][0] ?? '') ?>"
            data-titel="<?= e((string) ($p['titel'] ?? '')) ?>"
            data-punchline="<?= e((string) ($p['punchline'] ?? '')) ?>"
            data-url="/referenzen/<?= e((string) ($p['slug'] ?? '')) ?>/"
-           style="width:<?= $b['w'] ?>vw;height:<?= $b['h'] ?>vh;transform:translate3d(<?= $b['x'] ?>vw,<?= $b['y'] ?>vh,0)">
+           style="width:<?= $b['w'] ?>vw;height:<?= $b['h'] ?>vh;transform:translate3d(<?= $b['x'] ?>vw,<?= $b['y0'] ?>vh,0)">
         <button type="button" aria-label="<?= e((string) ($p['titel'] ?? '')) ?>">
           <?= pj_bild($p['objekt'], '', '22vw') ?>
         </button>

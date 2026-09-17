@@ -162,7 +162,7 @@
     /* Ans untere Ende: dort ist der Splash weiß — der Text lag sonst im
        hellgrauen Übergangsbereich und war schwer zu lesen. */
     justify-content: flex-end;
-    gap: var(--space-6);
+    gap: calc(var(--space-6) + 100px);
     padding: 70px var(--rand) 16px;
 }
 
@@ -171,7 +171,7 @@
 .buehne-team-halter { will-change: transform; }
 
 .buehne-team-foto {
-    width: min(1170px, 92vw, 88vh);
+    width: min(1170px, 92vw, 80vh);
     height: auto;
     border-radius: var(--radius-xs);
     box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
@@ -306,6 +306,7 @@
 
 .handwerk-titel {
     margin: var(--space-8) 0 0;
+    text-align: center;
     font-weight: 300;
     font-size: clamp(2.4rem, 8vw, 8rem);
     line-height: 1.04;
@@ -354,11 +355,24 @@
 .laufbaender {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-5);
+    /* volle Breite und Luft, damit die Schräglage nicht beschnitten wird */
+    margin-inline: calc(-1 * var(--rand));
+    padding: 28px 0;
+    overflow: hidden;
 }
 .lz-saeulen + .laufbaender { margin-top: var(--space-9); }
 
-.laufband { overflow: hidden; }
+.laufband {
+    overflow: hidden;
+    width: 110%;
+    margin-left: -5%;
+}
+/* Jede Bahn leicht anders geneigt — oben und unten unterschiedlich */
+.laufbaender .laufband:nth-child(1) { transform: rotate(-1.7deg); }
+.laufbaender .laufband:nth-child(2) { transform: rotate(1.1deg); }
+.lz-saeulen ~ .laufbaender .laufband:nth-child(1) { transform: rotate(1.9deg); }
+.lz-saeulen ~ .laufbaender .laufband:nth-child(2) { transform: rotate(-1.3deg); }
 
 .laufband-spur {
     display: flex;
@@ -497,12 +511,13 @@
     line-height: 1.5;
 }
 .lz-nllist li::before {
-    content: "";
+    content: "+";
     position: absolute;
-    left: 0; top: .55em;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--ink);
+    left: 0; top: 0;
+    font-size: var(--text-lg);
+    line-height: 1.3;
+    font-weight: 500;
+    color: var(--ink);
 }
 .lz-nllist strong {
     font-size: var(--text-sm);

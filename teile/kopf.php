@@ -103,7 +103,7 @@ $nav = [
 <body>
 <header class="lz-header">
   <a href="/" aria-label="Zur Startseite">
-    <img class="lz-logo" src="/assets/logo/leerzeichen-logo-pos.svg" alt="<?= e(FIRMA_NAME) ?>" width="316" height="41">
+    <img class="lz-logo" src="/assets/logo/leerzeichen-logo-neg.svg" alt="<?= e(FIRMA_NAME) ?>" width="316" height="41">
   </a>
   <nav class="lz-nav" aria-label="Hauptnavigation">
     <?php foreach ($nav as [$pfad, $label]): ?>

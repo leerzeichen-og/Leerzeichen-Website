@@ -203,7 +203,9 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 .lz-header .lz-logo {
     height: 40px;
     width: auto;
-    filter: invert(1);
+    /* KEIN invert-Filter: filter + mix-blend-mode isoliert die Ebene und
+       zeichnete einen weißen Kasten, wenn ein Objekt darunter schwebte —
+       stattdessen direkt das Negativ-Logo (weiß). */
 }
 
 .lz-nav {

@@ -66,12 +66,13 @@
         });
     });
 
-    // --- Flugzustand je Objekt aus den data-Attributen -----------------------
+    // --- Zustand je Objekt: schwebt fast am Stand (kleines seitliches
+    //     Treiben), die Höhe hängt am Scroll-Fortschritt (y0 − p·tiefe).
     var zustand = objekte.map(function (el) {
         return {
             el: el,
-            x: parseFloat(el.dataset.x), y: parseFloat(el.dataset.y),
-            vx: parseFloat(el.dataset.vx), vy: parseFloat(el.dataset.vy),
+            x: parseFloat(el.dataset.x), y0: parseFloat(el.dataset.y0),
+            tiefe: parseFloat(el.dataset.tiefe), vx: parseFloat(el.dataset.vx),
             w: parseFloat(el.dataset.w), h: parseFloat(el.dataset.h)
         };
     });
@@ -122,7 +123,7 @@
         // unsichtbar auf den schwarzen Akt geschaltet.
         var uIn       = klemm((p - 0.56) / 0.20);
         var schwarz   = uIn >= 0.5 ? 1 : 0;
-        var textIn    = klemm((p - 0.78) / 0.04);      // Antwort erscheint …
+        var textIn    = klemm((p - 0.72) / 0.04);      // Antwort erscheint, sobald das Bild die Mitte freigibt
         var textWeg   = klemm((p - 0.87) / 0.03);      // … hält, geht
         var splashIn  = klemm((p - 0.88) / 0.11);      // Splash scrollt herein
 
@@ -152,24 +153,20 @@
         antwort.style.transform = 'translateY(calc(-50% + ' + ((1 - textIn) * 28) + 'px))';
     }
 
-    // --- Der Flug: gleichmäßiges Driften mit Umlauf ----------------------------
-    var TEMPO = 1;
+    // --- Sanftes Treiben am Stand; die Höhe kommt vom Scrollen ------------------
     var zuletzt = performance.now();
     function fliegen(jetzt) {
         var dt = Math.min(64, jetzt - zuletzt) / 1000;
         zuletzt = jetzt;
         if (auswahl === null) {
             zustand.forEach(function (s) {
-                s.x += s.vx * TEMPO * dt * 1.6;
-                s.y += s.vy * TEMPO * dt * 1.6;
+                s.x += s.vx * dt * 1.6;
                 if (s.x > 100) s.x = -s.w;
                 if (s.x < -s.w - 2) s.x = 100;
-                if (s.y > 100) s.y = -s.h;
-                if (s.y < -s.h - 2) s.y = 100;
             });
         }
         zustand.forEach(function (s) {
-            s.el.style.transform = 'translate3d(' + s.x + 'vw,' + s.y + 'vh,0)';
+            s.el.style.transform = 'translate3d(' + s.x + 'vw,' + (s.y0 - p * s.tiefe) + 'vh,0)';
         });
         requestAnimationFrame(fliegen);
     }
