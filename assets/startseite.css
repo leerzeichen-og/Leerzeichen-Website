@@ -88,19 +88,23 @@
     top: 50%;
     margin: 0;
     transform: translateY(-50%);
-    /* ~26 Zeichen je Zeile: bricht jede der drei Fragen verlässlich in
-       drei Zeilen — auch auf breiten Bildschirmen, wo die 8rem-Obergrenze
-       der Schrift sonst zwei Zeilen ergäbe. */
-    max-width: min(26ch, 100%);
+    /* Die Umbrüche stehen im Markup (span.buehne-zeile) — nur so sind die
+       Fragen auf JEDER Bildschirmbreite verlässlich dreizeilig. */
+    max-width: none;
     display: flex;
-    flex-wrap: wrap;
-    column-gap: .3em;
+    flex-direction: column;
     /* Light und annähernd Claim-Größe — die Fragen SIND die Bühne; drei
        Zeilen sind erwünscht (Wunsch Roman, 17.9.2026). */
     font-weight: 300;
     font-size: clamp(2.4rem, 8vw, 8rem);
     line-height: 1.04;
     color: var(--ink);
+}
+
+.buehne-zeile {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: .3em;
 }
 
 .buehne-wort-maske {
@@ -115,7 +119,14 @@
    der Antwort an der Fragen-Position; erst beim Weiterscrollen blendet die
    Splash-Ebene (Ink-Motiv als Inline-Hintergrund aus index.php) mit dem
    Astronauten darüber ein. */
-.buehne-finale { position: absolute; inset: 0; }
+.buehne-finale {
+    position: absolute;
+    inset: 0;
+    /* Flaches #000 statt --gradient-ink: Die Oberkante des Splash-Motivs ist
+       reines Schwarz — auf dem Verlauf war die Bildkante sichtbar. */
+    background: #000;
+    color: #fff;
+}
 
 .buehne-splash {
     position: absolute;
@@ -168,6 +179,13 @@
     font-size: var(--text-lg);
     line-height: var(--leading-body);
     color: rgba(255, 255, 255, .72);
+}
+
+.buehne-knoepfe {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
 }
 
 /* Karte, die aus dem angeklickten Objekt herauswächst */
@@ -234,29 +252,39 @@
 }
 .lz-blocktext p { margin: 0; max-width: min(52ch, 100%); }
 
-.lz-svc {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+/* Die zwei Säulen als Boxen, am Schreibtisch nebeneinander */
+.lz-saeulen {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(min(100%, 320px), 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+    align-items: stretch;
+}
+
+.lz-saeule {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-5);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xs);
+    padding: var(--space-7);
+}
+.lz-saeule p { margin: 0; }
+.lz-saeule-fuss { margin-top: auto; padding-top: var(--space-4); }
+
+/* Leistungsliste: waagrechte Linien zwischen den Einträgen, kein Punkt */
+.lz-svc {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
     color: var(--text-body);
 }
 .lz-svc li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
     font-size: var(--text-base);
     font-weight: 500;
+    padding: 10px 0;
 }
-.lz-svc li::before {
-    content: "";
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--ink);
-    flex: 0 0 auto;
-}
+.lz-svc li + li { border-top: 1px solid var(--border-default); }
 
 /* --- Team ----------------------------------------------------------------------- */
 
@@ -277,65 +305,46 @@
     width: 100%;
     aspect-ratio: 4 / 3;
     border-radius: var(--radius-xs);
-    background: rgba(255, 255, 255, .08);
-    border: 1px dashed rgba(255, 255, 255, .3);
+    background: var(--grey-100);
+    border: 1px dashed var(--border-default);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, .5);
+    color: var(--text-muted);
     font-size: var(--text-sm);
 }
 
 /* --- Newsletter -------------------------------------------------------------------- */
 
 .nl-baum { display: flex; justify-content: center; }
-.nl-baum img { width: min(380px, 68vw); height: auto; }
+.nl-baum img { width: min(320px, 60vw); height: auto; }
 
-.lz-nlcard {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--space-8);
-    border: 1px solid var(--border-default);
+/* Kompakter Block in Postkarten-Anmutung: begrenzte Breite, mittig, Rahmen
+   wie eine Karte — geht nie auf die volle Seitenbreite auf. */
+.nl-karte {
+    max-width: 680px;
+    margin: calc(var(--space-6) * -1) auto 0;
+    border: 1.5px solid var(--ink);
     border-radius: var(--radius-xs);
     padding: var(--space-7);
-    margin-top: calc(var(--space-6) * -1);
     background: var(--paper);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
 }
+.nl-karte-inhalt p { margin: 6px 0 var(--space-5); color: var(--text-body); }
 
-.lz-nllist {
+.nl-punkte {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-}
-.lz-nllist li {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-left: 20px;
-    position: relative;
-    font-size: var(--text-base);
     color: var(--text-body);
+    font-size: var(--text-base);
     line-height: 1.5;
 }
-.lz-nllist li::before {
-    content: "";
-    position: absolute;
-    left: 0; top: .55em;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--ink);
-}
-.lz-nllist strong {
-    font-size: var(--text-2xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--ink);
-}
+.nl-punkte li { padding: 8px 0; }
+.nl-punkte li + li { border-top: 1px solid var(--border-default); }
 
 .nl-form { display: flex; flex-direction: column; gap: var(--space-4); }
 
@@ -381,7 +390,8 @@
 /* --- Telefon ------------------------------------------------------------------------- */
 
 @media (max-width: 900px) {
-    .lz-blockgrid, .lz-teamgrid, .lz-nlcard { grid-template-columns: 1fr; gap: var(--space-7); }
+    .lz-blockgrid, .lz-teamgrid, .lz-saeulen { grid-template-columns: 1fr; gap: var(--space-7); }
+    .nl-karte { padding: var(--space-6); }
     .buehne-frage { max-width: none; left: var(--rand); right: var(--rand); }
     .buehne-claimblock { padding: calc(90px + var(--space-7)) var(--rand) var(--space-8); }
     .buehne-antwort { left: var(--rand); right: var(--rand); }

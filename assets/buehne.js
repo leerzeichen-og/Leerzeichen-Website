@@ -30,19 +30,23 @@
 
     var klemm = function (v) { return Math.min(1, Math.max(0, v)); };
 
-    // --- Wörter der Fragen in Masken zerlegen (Markup bleibt lesbarer Text) --
+    // --- Wörter der Fragen in Masken zerlegen — je Zeile (span.buehne-zeile),
+    //     damit die im Markup festgelegten Umbrüche erhalten bleiben.
     fragen.forEach(function (f) {
-        var text = f.textContent.trim();
-        f.setAttribute('aria-label', text);
-        f.textContent = '';
-        text.split(/\s+/).forEach(function (wort) {
-            var maske = document.createElement('span');
-            maske.className = 'buehne-wort-maske';
-            maske.setAttribute('aria-hidden', 'true');
-            var w = document.createElement('span');
-            w.textContent = wort;
-            maske.appendChild(w);
-            f.appendChild(maske);
+        var zeilen = Array.prototype.slice.call(f.querySelectorAll('.buehne-zeile'));
+        f.setAttribute('aria-label', zeilen.map(function (z) { return z.textContent.trim(); }).join(' '));
+        zeilen.forEach(function (z) {
+            var text = z.textContent.trim();
+            z.textContent = '';
+            text.split(/\s+/).forEach(function (wort) {
+                var maske = document.createElement('span');
+                maske.className = 'buehne-wort-maske';
+                maske.setAttribute('aria-hidden', 'true');
+                var w = document.createElement('span');
+                w.textContent = wort;
+                maske.appendChild(w);
+                z.appendChild(maske);
+            });
         });
     });
 
@@ -83,7 +87,7 @@
             var t = (p - fenster[0]) / (fenster[1] - fenster[0]);
             if (t <= -0.05 || t >= 1.05) { f.style.visibility = 'hidden'; return; }
             f.style.visibility = '';
-            var woerter = f.children;
+            var woerter = f.querySelectorAll('.buehne-wort-maske');
             for (var j = 0; j < woerter.length; j++) {
                 var rein = klemm((t - j * 0.012) / 0.24);
                 var raus = klemm((t - 0.82 - j * 0.005) / 0.16);
@@ -109,6 +113,8 @@
         finale.style.pointerEvents = dunkel > 0.5 ? 'auto' : 'none';
         splash.style.transform = 'translateY(' + ((1 - splashIn) * 100) + 'vh)';
         antwort.style.opacity = textIn * (1 - textWeg);
+        // Unsichtbare Knöpfe dürfen keine Klicks abfangen (Splash liegt darunter).
+        antwort.style.pointerEvents = (textIn * (1 - textWeg)) > 0.5 ? 'auto' : 'none';
         antwort.style.transform = 'translateY(calc(-50% + ' + ((1 - textIn) * 28) + 'px))';
     }
 

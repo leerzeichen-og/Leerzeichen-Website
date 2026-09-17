@@ -167,6 +167,21 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 }
 .knopf-hell:hover { background: var(--grey-200); color: var(--ink); }
 
+/* Umriss-Varianten: auf dunklem Grund weiß, auf hellem Grund Ink. */
+.knopf-umriss {
+    background: transparent;
+    border-color: #fff;
+    color: #fff;
+}
+.knopf-umriss:hover { background: rgba(255, 255, 255, .14); color: #fff; }
+
+.knopf-umriss-dunkel {
+    background: transparent;
+    border-color: var(--ink);
+    color: var(--ink);
+}
+.knopf-umriss-dunkel:hover { background: var(--grey-100); color: var(--ink); }
+
 /* --- Kopf: liegt über dem Inhalt, färbt sich per Differenz ---------------- */
 /* mix-blend-mode difference macht Weiß auf hellem Grund zu Schwarz und
    bleibt auf dunklen Flächen Weiß — ein Header für beide Welten. */
@@ -235,6 +250,16 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 }
 
 .lz-footer .lz-logo { height: 40px; width: auto; }
+
+.lz-footintro {
+    max-width: 62ch;
+    margin-top: var(--space-6);
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    color: var(--text-body);
+}
+.lz-footintro p { margin: 0; }
+.lz-footintro a { color: var(--ink); text-decoration: underline; }
 
 .lz-footgrid {
     display: grid;
