@@ -25,6 +25,7 @@
     var objekte  = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-obj'));
     var fragen   = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-frage'));
     var finale   = buehne.querySelector('.buehne-finale');
+    var splash   = buehne.querySelector('.buehne-splash');
     var astro    = buehne.querySelector('.buehne-astro');
     var antwort  = buehne.querySelector('.buehne-antwort');
 
@@ -72,7 +73,10 @@
     window.addEventListener('resize', angefordert);
 
     // --- Was am Fortschritt hängt: Fragen, Finale, Objekt-Ausblenden ----------
-    var FRAGEN_FENSTER = [[0.15, 0.37], [0.38, 0.56], [0.58, 0.74]];
+    // Zeitplan (Anteile der Scrollstrecke, Umbau 17.9.2026): drei Fragen →
+    // reines Schwarz mit der Antwort an der Fragen-Position → erst beim
+    // Weiterscrollen Splash und Astronaut.
+    var FRAGEN_FENSTER = [[0.12, 0.30], [0.32, 0.48], [0.50, 0.66]];
 
     function malenFortschritt() {
         fragen.forEach(function (f, i) {
@@ -91,21 +95,23 @@
             }
         });
 
-        var objWeg  = 1 - klemm((p - 0.78) / 0.05);
-        var dunkel  = klemm((p - 0.72) / 0.08);
-        var astroIn = klemm((p - 0.76) / 0.12);
-        var astroE  = 1 - Math.pow(1 - astroIn, 3);
-        var textIn  = klemm((p - 0.86) / 0.05);
+        var objWeg   = 1 - klemm((p - 0.60) / 0.06);   // Objekte gehen
+        var dunkel   = klemm((p - 0.64) / 0.06);       // Schwarz kommt
+        var textIn   = klemm((p - 0.72) / 0.05);       // Antwort erscheint …
+        var textWeg  = klemm((p - 0.85) / 0.04);       // … hält lange, geht
+        var splashIn = klemm((p - 0.88) / 0.08);       // dann Splash + Astronaut
+        var astroE   = 1 - Math.pow(1 - splashIn, 3);
 
         huelle.style.opacity = objWeg;
         huelle.style.pointerEvents = objWeg < 0.5 ? 'none' : '';
         buehne.querySelector('.buehne-fragen').style.opacity = 1 - dunkel;
         finale.style.opacity = dunkel;
         finale.style.pointerEvents = dunkel > 0.5 ? 'auto' : 'none';
-        astro.style.opacity = astroIn;
+        splash.style.opacity = splashIn;
+        astro.style.opacity = splashIn;
         astro.style.transform = 'translateY(' + (26 - astroE * 26) + 'vh) scale(' + (0.9 + astroE * 0.1) + ')';
-        antwort.style.opacity = textIn;
-        antwort.style.transform = 'translateY(' + (28 - textIn * 28) + 'px)';
+        antwort.style.opacity = textIn * (1 - textWeg);
+        antwort.style.transform = 'translateY(calc(-50% + ' + ((1 - textIn) * 28) + 'px))';
     }
 
     // --- Der Flug: gleichmäßiges Driften mit Umlauf ----------------------------

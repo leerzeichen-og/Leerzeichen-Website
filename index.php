@@ -105,9 +105,11 @@ require __DIR__ . '/teile/kopf.php';
       <?php endforeach; ?>
     </div>
 
-    <div class="buehne-finale lz-dark" style="opacity:0;pointer-events:none<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
-      <div class="buehne-astro" style="opacity:0">
-        <img src="/assets/bilder/astronaut.webp" alt="" width="640" height="900">
+    <div class="buehne-finale lz-dark" style="opacity:0;pointer-events:none">
+      <div class="buehne-splash" style="opacity:0<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
+        <div class="buehne-astro" style="opacity:0">
+          <img src="/assets/bilder/astronaut.webp" alt="" width="640" height="900">
+        </div>
       </div>
       <div class="buehne-antwort" style="opacity:0">
         <h2>Darauf finden wir gemeinsam Antworten.</h2>

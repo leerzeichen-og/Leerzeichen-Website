@@ -10,7 +10,7 @@
    ACHTUNG display-gegen-hidden-Falle: Auf #buehne und #buehne-statisch selbst
    steht bewusst KEINE display-Angabe — das Skript schaltet sie mit `hidden`. */
 
-.buehne { position: relative; height: 780vh; background: var(--paper); }
+.buehne { position: relative; height: 880vh; background: var(--paper); }
 
 .buehne-blick {
     position: sticky;
@@ -88,15 +88,15 @@
     top: 50%;
     margin: 0;
     transform: translateY(-50%);
-    max-width: min(34ch, 88vw);
+    max-width: none;
     display: flex;
     flex-wrap: wrap;
     column-gap: .3em;
-    /* Light und groß — die Fragen sind der typografische Auftritt der Bühne
-       (Wunsch Roman, 17.9.2026). */
+    /* Light und annähernd Claim-Größe — die Fragen SIND die Bühne; drei
+       Zeilen sind erwünscht (Wunsch Roman, 17.9.2026). */
     font-weight: 300;
-    font-size: clamp(2.1rem, 5vw, 5rem);
-    line-height: 1.06;
+    font-size: clamp(2.4rem, 8vw, 8rem);
+    line-height: 1.04;
     color: var(--ink);
 }
 
@@ -108,10 +108,13 @@
 }
 .buehne-wort-maske > span { display: inline-block; }
 
-/* Dunkles Finale: Fläche, Astronaut, Antwort. Das Ink-Splash-Motiv kommt als
-   Inline-Hintergrund aus index.php, sobald assets/bilder/ink-splash.* liegt —
-   der Verlauf bleibt darunter als Rückfall. */
-.buehne-finale {
+/* Dunkles Finale in zwei Akten (Umbau 17.9.2026): Zuerst reines Schwarz mit
+   der Antwort an der Fragen-Position; erst beim Weiterscrollen blendet die
+   Splash-Ebene (Ink-Motiv als Inline-Hintergrund aus index.php) mit dem
+   Astronauten darüber ein. */
+.buehne-finale { position: absolute; inset: 0; }
+
+.buehne-splash {
     position: absolute;
     inset: 0;
     background-size: cover;
@@ -142,15 +145,17 @@
 }
 
 .buehne-antwort {
-    position: relative;
-    padding: calc(130px + var(--space-7)) 55px 0;
+    position: absolute;
+    left: 55px; right: 55px;
+    top: 50%;
+    transform: translateY(-50%);
+    will-change: opacity;
 }
 .buehne-antwort h2 {
     margin: 0;
     font-weight: 300;
-    font-size: clamp(2.1rem, 5vw, 5rem);
-    line-height: 1.06;
-    max-width: min(24ch, 100%);
+    font-size: clamp(2.4rem, 8vw, 8rem);
+    line-height: 1.04;
     color: #fff;
 }
 .buehne-antwort p {
@@ -374,7 +379,7 @@
     .lz-blockgrid, .lz-teamgrid, .lz-nlcard { grid-template-columns: 1fr; gap: var(--space-7); }
     .buehne-frage { max-width: none; left: var(--rand); right: var(--rand); }
     .buehne-claimblock { padding: calc(90px + var(--space-7)) var(--rand) var(--space-8); }
-    .buehne-antwort { padding: calc(90px + var(--space-6)) var(--rand) 0; }
+    .buehne-antwort { left: var(--rand); right: var(--rand); }
     .buehne-statisch { padding-top: calc(90px + var(--space-6)); }
 }
 
