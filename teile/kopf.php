@@ -16,6 +16,17 @@ if (!function_exists('e')) {
     function e(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 }
 
+// lz_asset(): hängt die Änderungszeit der Datei als ?v= an CSS/JS-Adressen.
+// Ändert sich die Datei, ändert sich ihre Adresse — Browser können nie mehr
+// ein veraltetes Stylesheet aus dem Cache zeigen (passiert am 17.9.2026).
+if (!function_exists('lz_asset')) {
+    function lz_asset(string $pfad): string
+    {
+        $datei = dirname(__DIR__) . $pfad;
+        return $pfad . (is_file($datei) ? '?v=' . filemtime($datei) : '');
+    }
+}
+
 $titel        = $titel        ?? FIRMA_KURZ;
 $beschreibung = $beschreibung ?? '';
 
@@ -80,10 +91,10 @@ $nav = [
 <meta name="description" content="<?= e($beschreibung) ?>">
 <link rel="canonical" href="<?= e($kanonisch) ?>">
 <link rel="preload" href="/assets/fonts/ArticulatCF-Medium.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/fonts.css">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="<?= e(lz_asset('/assets/fonts.css')) ?>">
+<link rel="stylesheet" href="<?= e(lz_asset('/assets/site.css')) ?>">
 <?php foreach ($styles ?? [] as $css): ?>
-<link rel="stylesheet" href="<?= e($css) ?>">
+<link rel="stylesheet" href="<?= e(lz_asset($css)) ?>">
 <?php endforeach; ?>
 <?php foreach ($jsonld as $block): ?>
 <script type="application/ld+json"><?= json_encode($block, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>

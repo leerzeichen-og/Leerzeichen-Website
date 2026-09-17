@@ -216,5 +216,5 @@ require __DIR__ . '/teile/kopf.php';
   </div>
 </section>
 
-<script src="/assets/buehne.js" defer></script>
+<script src="<?= e(lz_asset('/assets/buehne.js')) ?>" defer></script>
 <?php require __DIR__ . '/teile/fuss.php'; ?>
