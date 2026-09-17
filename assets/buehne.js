@@ -26,7 +26,6 @@
     var fragen   = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-frage'));
     var finale   = buehne.querySelector('.buehne-finale');
     var splash   = buehne.querySelector('.buehne-splash');
-    var astro    = buehne.querySelector('.buehne-astro');
     var antwort  = buehne.querySelector('.buehne-antwort');
 
     var klemm = function (v) { return Math.min(1, Math.max(0, v)); };
@@ -98,18 +97,17 @@
         var objWeg   = 1 - klemm((p - 0.60) / 0.06);   // Objekte gehen
         var dunkel   = klemm((p - 0.64) / 0.06);       // Schwarz kommt
         var textIn   = klemm((p - 0.72) / 0.05);       // Antwort erscheint …
-        var textWeg  = klemm((p - 0.85) / 0.04);       // … hält lange, geht
-        var splashIn = klemm((p - 0.88) / 0.08);       // dann Splash + Astronaut
-        var astroE   = 1 - Math.pow(1 - splashIn, 3);
+        var textWeg  = klemm((p - 0.84) / 0.04);       // … hält lange, geht
+        // Der Splash schiebt sich ans Scrollen gekoppelt von unten herein
+        // (Wunsch Roman 17.9.2026: hereinscrollen, nicht einblenden).
+        var splashIn = klemm((p - 0.87) / 0.10);
 
         huelle.style.opacity = objWeg;
         huelle.style.pointerEvents = objWeg < 0.5 ? 'none' : '';
         buehne.querySelector('.buehne-fragen').style.opacity = 1 - dunkel;
         finale.style.opacity = dunkel;
         finale.style.pointerEvents = dunkel > 0.5 ? 'auto' : 'none';
-        splash.style.opacity = splashIn;
-        astro.style.opacity = splashIn;
-        astro.style.transform = 'translateY(' + (26 - astroE * 26) + 'vh) scale(' + (0.9 + astroE * 0.1) + ')';
+        splash.style.transform = 'translateY(' + ((1 - splashIn) * 100) + 'vh)';
         antwort.style.opacity = textIn * (1 - textWeg);
         antwort.style.transform = 'translateY(calc(-50% + ' + ((1 - textIn) * 28) + 'px))';
     }

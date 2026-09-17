@@ -106,8 +106,8 @@ require __DIR__ . '/teile/kopf.php';
     </div>
 
     <div class="buehne-finale lz-dark" style="opacity:0;pointer-events:none">
-      <div class="buehne-splash" style="opacity:0<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
-        <div class="buehne-astro" style="opacity:0">
+      <div class="buehne-splash" style="transform:translateY(100vh)<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
+        <div class="buehne-astro">
           <img src="/assets/bilder/astronaut.webp" alt="" width="640" height="900">
         </div>
       </div>

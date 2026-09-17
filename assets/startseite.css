@@ -88,7 +88,10 @@
     top: 50%;
     margin: 0;
     transform: translateY(-50%);
-    max-width: none;
+    /* ~26 Zeichen je Zeile: bricht jede der drei Fragen verlässlich in
+       drei Zeilen — auch auf breiten Bildschirmen, wo die 8rem-Obergrenze
+       der Schrift sonst zwei Zeilen ergäbe. */
+    max-width: min(26ch, 100%);
     display: flex;
     flex-wrap: wrap;
     column-gap: .3em;
@@ -120,6 +123,8 @@
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
+    /* schiebt sich ans Scrollen gekoppelt von unten herein (kein Einblenden) */
+    will-change: transform;
 }
 
 .buehne-astro {
