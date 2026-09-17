@@ -28,6 +28,21 @@
     var splash    = buehne.querySelector('.buehne-splash');
     var antwort   = buehne.querySelector('.buehne-antwort');
     var uebergang = buehne.querySelector('.buehne-uebergang');
+    var fotoHalter = buehne.querySelector('.buehne-team-halter');
+
+    // Wo läge das Foto, wenn der Splash steht? (Layout-Abstand Halter→Splash;
+    // unabhängig von der Splash-Verschiebung, weil der Halter mitfährt.)
+    var fotoLage = 0;
+    function fotoVermessen() {
+        if (!fotoHalter) return;
+        // Eigene Verschiebung herausrechnen — beim Nachvermessen (load/resize)
+        // ist der Halter meist schon transformiert.
+        var m = new DOMMatrixReadOnly(getComputedStyle(fotoHalter).transform);
+        fotoLage = fotoHalter.getBoundingClientRect().top - m.f - splash.getBoundingClientRect().top;
+    }
+    fotoVermessen();
+    window.addEventListener('load', function () { fotoVermessen(); angefordert(); });
+    window.addEventListener('resize', fotoVermessen);
 
     var klemm = function (v) { return Math.min(1, Math.max(0, v)); };
 
@@ -109,7 +124,7 @@
         var schwarz   = uIn >= 0.5 ? 1 : 0;
         var textIn    = klemm((p - 0.78) / 0.04);      // Antwort erscheint …
         var textWeg   = klemm((p - 0.87) / 0.03);      // … hält, geht
-        var splashIn  = klemm((p - 0.90) / 0.09);      // Splash scrollt herein
+        var splashIn  = klemm((p - 0.88) / 0.11);      // Splash scrollt herein
 
         huelle.style.opacity = objWeg;
         huelle.style.pointerEvents = objWeg < 0.5 ? 'none' : '';
@@ -118,7 +133,19 @@
         }
         finale.style.opacity = schwarz;
         finale.style.pointerEvents = schwarz ? 'auto' : 'none';
-        splash.style.transform = 'translateY(' + ((1 - splashIn) * 100) + 'vh)';
+        var splashPx = (1 - splashIn) * innerHeight;
+        splash.style.transform = 'translateY(' + splashPx + 'px)';
+        if (fotoHalter) {
+            // Das Foto ragt schon im Antwort-Akt von unten herein: gewünschte
+            // Oberkante am Bildschirm — erst Vorschau (105→70 % der Höhe),
+            // dann mit dem Splash an den Layout-Platz (Versatz wird 0).
+            var blickIn = klemm((p - 0.76) / 0.10);
+            var ziel = innerHeight * (1.05 - 0.35 * blickIn);
+            if (splashIn > 0) {
+                ziel = ziel + (fotoLage - ziel) * splashIn;
+            }
+            fotoHalter.style.transform = 'translateY(' + (ziel - fotoLage - splashPx) + 'px)';
+        }
         antwort.style.opacity = textIn * (1 - textWeg);
         // Unsichtbare Knöpfe dürfen keine Klicks abfangen (Splash liegt darüber).
         antwort.style.pointerEvents = (textIn * (1 - textWeg)) > 0.5 ? 'auto' : 'none';

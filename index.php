@@ -142,8 +142,10 @@ require __DIR__ . '/teile/kopf.php';
       <div class="buehne-splash" style="transform:translateY(100vh)<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
         <div class="buehne-team">
           <?php if ($teamFoto): ?>
-          <img class="buehne-team-foto" src="<?= e($teamFoto) ?>"
-            alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand">
+          <div class="buehne-team-halter">
+            <img class="buehne-team-foto" src="<?= e($teamFoto) ?>" width="2500" height="1667"
+              alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand">
+          </div>
           <?php endif; ?>
           <div class="buehne-team-text">
             <h2 class="lz-h3">Wir sind Leerzeichen.</h2>
@@ -194,26 +196,10 @@ require __DIR__ . '/teile/kopf.php';
 </section>
 
 <?php // ---- Die zwei Säulen (Variante über ?saeulen=…, bis entschieden) -------- ?>
-<section id="handwerk" class="lz-sec">
-  <h2 class="handwerk-titel">Gestaltung ist unser Handwerk.</h2>
-  <div class="lz-saeulen">
-    <?php foreach ($saeulen_boxen as $box): ?>
-    <article id="<?= e($box['id']) ?>" class="lz-saeule">
-      <h3 class="lz-saeule-titel"><?= e($box['titel']) ?></h3>
-      <?php foreach ($box['text'] as $t): ?>
-      <p class="lz-saeule-text"><?= e($t) ?></p>
-      <?php endforeach; ?>
-      <div class="lz-saeule-fuss">
-        <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu <?= $pfeil ?></a>
-      </div>
-    </article>
-    <?php endforeach; ?>
-  </div>
-
-  <?php // Die Leistungen beider Säulen: zwei gegenläufige Laufbänder, dezent.
-        // Der Inhalt steht doppelt in der Spur (aria-hidden), damit die
-        // Schleife nahtlos läuft; bei reduzierter Bewegung stehen die Bänder
-        // als umbrechende Liste still. ?>
+<?php
+// Das Doppel-Spruchband (beide Leistungslisten, gegenläufig) — steht über
+// und unter den Säulen; einmal gebaut, zweimal ausgegeben.
+ob_start(); ?>
   <div class="laufbaender" aria-label="Unsere Leistungen">
     <?php foreach ($saeulen_boxen as $nr => $box): ?>
     <div class="laufband <?= $nr === 1 ? 'laufband-retour' : '' ?>">
@@ -229,6 +215,26 @@ require __DIR__ . '/teile/kopf.php';
     </div>
     <?php endforeach; ?>
   </div>
+<?php $laufbaender = ob_get_clean(); ?>
+
+<section id="handwerk" class="lz-sec">
+  <?= $laufbaender ?>
+  <h2 class="handwerk-titel"><span class="buehne-zeile">Gestaltung ist</span><span class="buehne-zeile">unser Handwerk.</span></h2>
+  <div class="lz-saeulen">
+    <?php foreach ($saeulen_boxen as $box): ?>
+    <article id="<?= e($box['id']) ?>" class="lz-saeule">
+      <h3 class="lz-saeule-titel"><?= e($box['titel']) ?></h3>
+      <?php foreach ($box['text'] as $t): ?>
+      <p class="lz-saeule-text"><?= e($t) ?></p>
+      <?php endforeach; ?>
+      <div class="lz-saeule-fuss">
+        <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu <?= $pfeil ?></a>
+      </div>
+    </article>
+    <?php endforeach; ?>
+  </div>
+
+  <?= $laufbaender ?>
 </section>
 
 <?php require __DIR__ . '/teile/newsletter.php'; ?>

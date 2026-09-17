@@ -253,55 +253,33 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 
 .lz-footer .lz-logo { height: 40px; width: auto; }
 
-.lz-footintro {
-    max-width: 62ch;
-    margin-top: var(--space-6);
-    font-size: var(--text-base);
-    line-height: var(--leading-body);
-    color: var(--text-body);
-}
-.lz-footintro p { margin: 0; }
-.lz-footintro a { color: var(--ink); text-decoration: underline; }
-
 .lz-footgrid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-7);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.7fr) minmax(0, 1.25fr);
+    gap: var(--space-8);
     margin-top: 65px;
 }
 
 .lz-footcol {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
     border-top: 2px solid var(--ink);
-    padding-top: 60px;
-    font-size: clamp(1.125rem, 1.7vw, 1.625rem);
-    line-height: 38px;
+    padding-top: 44px;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
 }
+.lz-footcol p { margin: 0 0 var(--space-5); }
+.lz-footcol p:last-child { margin-bottom: 0; }
 
-.lz-footcol a { color: var(--ink); text-decoration: none; }
-.lz-footcol a:hover { text-decoration: underline; }
-
-.lz-foothead {
-    font-size: var(--text-2xs);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-}
+.lz-footcol a { color: var(--ink); text-decoration: underline; }
+.lz-footcol a:hover { color: var(--petrol-ink); }
 
 .lz-footbase {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
+    justify-content: center;
+    text-align: center;
     margin-top: 65px;
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border-default);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
+    padding-top: var(--space-5);
+    font-size: var(--text-base);
+    color: var(--text-strong);
 }
 
 /* --- Telefon ---------------------------------------------------------------- */
@@ -311,8 +289,8 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     .lz-nav { gap: 20px; }
     .lz-nav a { line-height: 1.3; }
     .lz-footer { padding: 48px var(--rand) 64px; }
-    .lz-footgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .lz-footcol { padding-top: 28px; line-height: 1.45; }
+    .lz-footgrid { grid-template-columns: 1fr; gap: var(--space-6); }
+    .lz-footcol { padding-top: 24px; }
 }
 
 @media (max-width: 640px) {

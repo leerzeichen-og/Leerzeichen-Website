@@ -162,12 +162,16 @@
     /* Ans untere Ende: dort ist der Splash weiß — der Text lag sonst im
        hellgrauen Übergangsbereich und war schwer zu lesen. */
     justify-content: flex-end;
-    gap: var(--space-7);
-    padding: 90px var(--rand) clamp(24px, 5vh, 56px);
+    gap: var(--space-6);
+    padding: 70px var(--rand) 16px;
 }
 
+/* Der Halter wird vom Skript gefahren: Das Foto ragt schon im Antwort-Akt
+   von unten herein und fährt dann mit dem Splash an seinen Platz. */
+.buehne-team-halter { will-change: transform; }
+
 .buehne-team-foto {
-    width: min(780px, 86vw, 72vh);
+    width: min(1170px, 92vw, 88vh);
     height: auto;
     border-radius: var(--radius-xs);
     box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
@@ -298,12 +302,15 @@
 }
 .lz-blocktext p { margin: 0; max-width: min(52ch, 100%); }
 
+#handwerk { padding-top: calc(2 * var(--space-10)); }
+
 .handwerk-titel {
-    margin: 0;
+    margin: var(--space-8) 0 0;
     font-weight: 300;
     font-size: clamp(2.4rem, 8vw, 8rem);
     line-height: 1.04;
 }
+.handwerk-titel .buehne-zeile { display: block; }
 
 /* Die zwei Säulen: Fassung „frei" (Beschluss 17.9.2026) — schmale, offene
    Spalten mit kräftiger Oberlinie und reichlich Weißraum links, mittig
@@ -345,11 +352,11 @@
 /* Leistungen beider Säulen: zwei gegenläufige Laufbänder, dezent gesetzt.
    Die Spur enthält den Inhalt doppelt — bei -50% beginnt die Schleife nahtlos. */
 .laufbaender {
-    margin-top: var(--space-9);
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
 }
+.lz-saeulen + .laufbaender { margin-top: var(--space-9); }
 
 .laufband { overflow: hidden; }
 
@@ -437,25 +444,24 @@
 
 /* Zweispaltige Karte wie im Design-Briefing, aber nie auf voller Breite.
    Die Kuvert-Grafik ragt oben über den Rahmen in die Box hinein. */
-.nl-bereich { padding-top: calc(var(--space-9) + 120px); }
+.nl-bereich { padding-top: calc(var(--space-9) + 200px); }
 
 .nl-karte {
-    max-width: 900px;
+    max-width: 1080px;
     margin: 0 auto;
     border: 1px solid var(--border-default);
     border-radius: var(--radius-xs);
-    padding: var(--space-7);
-    padding-top: calc(var(--space-7) + 60px);
+    padding: var(--space-8);
+    padding-top: calc(var(--space-8) + 110px);
     background: var(--paper);
     position: relative;
 }
 
 .nl-kuvert {
     position: absolute;
-    top: -120px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(240px, 44vw);
+    top: -220px;
+    left: clamp(8px, 5%, 64px);
+    width: min(480px, 70vw);
     height: auto;
 }
 
@@ -465,7 +471,12 @@
     gap: var(--space-8);
 }
 
-.nl-untertitel { margin: 6px 0 var(--space-6); color: var(--text-body); }
+.nl-untertitel {
+    margin: 8px 0 var(--space-6);
+    color: var(--text-body);
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+}
 
 .lz-nllist {
     list-style: none;
@@ -479,9 +490,9 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-left: 20px;
+    padding-left: 24px;
     position: relative;
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
     color: var(--text-body);
     line-height: 1.5;
 }
@@ -494,7 +505,7 @@
     background: var(--ink);
 }
 .lz-nllist strong {
-    font-size: var(--text-2xs);
+    font-size: var(--text-sm);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     font-weight: 700;
@@ -546,10 +557,10 @@
 
 @media (max-width: 900px) {
     .lz-blockgrid, .lz-teamgrid, .lz-saeulen { grid-template-columns: 1fr; gap: var(--space-7); }
-    .nl-karte { padding: var(--space-6); padding-top: calc(var(--space-6) + 48px); }
+    .nl-karte { padding: var(--space-6); padding-top: calc(var(--space-6) + 70px); }
     .nl-spalten { grid-template-columns: 1fr; gap: var(--space-6); }
-    .nl-kuvert { top: -90px; }
-    .nl-bereich { padding-top: calc(var(--space-8) + 90px); }
+    .nl-kuvert { top: -140px; width: min(300px, 64vw); }
+    .nl-bereich { padding-top: calc(var(--space-8) + 140px); }
     .buehne-frage { max-width: none; left: var(--rand); right: var(--rand); }
     .buehne-claimblock { padding: calc(90px + var(--space-7)) var(--rand) var(--space-8); }
     .buehne-antwort { left: var(--rand); right: var(--rand); }
