@@ -61,6 +61,20 @@ $bloecke = [
     ],
 ];
 
+// Motive, die erst noch eingecheckt werden: greifen automatisch, sobald die
+// Datei unter assets/bilder/ liegt (jpg, webp oder png — erste gewinnt).
+function startseite_bild(string $name): ?string
+{
+    foreach (['webp', 'jpg', 'png'] as $ext) {
+        if (is_file(__DIR__ . '/assets/bilder/' . $name . '.' . $ext)) {
+            return '/assets/bilder/' . $name . '.' . $ext;
+        }
+    }
+    return null;
+}
+$inkSplash = startseite_bild('ink-splash');
+$teamFoto  = startseite_bild('team');
+
 require __DIR__ . '/teile/kopf.php';
 ?>
 
@@ -91,7 +105,7 @@ require __DIR__ . '/teile/kopf.php';
       <?php endforeach; ?>
     </div>
 
-    <div class="buehne-finale lz-dark" style="opacity:0;pointer-events:none">
+    <div class="buehne-finale lz-dark" style="opacity:0;pointer-events:none<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
       <div class="buehne-astro" style="opacity:0">
         <img src="/assets/bilder/astronaut.webp" alt="" width="640" height="900">
       </div>
@@ -141,7 +155,12 @@ require __DIR__ . '/teile/kopf.php';
 <?php // ---- Team (dunkel) ------------------------------------------------------ ?>
 <section id="team" class="lz-dark lz-sec">
   <div class="lz-teamgrid">
+    <?php if ($teamFoto): ?>
+    <img class="team-foto-bild" src="<?= e($teamFoto) ?>"
+      alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand" loading="lazy">
+    <?php else: ?>
     <div class="team-foto">Foto folgt: Team an der Wand mit Entwürfen</div>
+    <?php endif; ?>
     <div>
       <h2 class="lz-h2">Wir sind Leerzeichen.</h2>
       <p class="lz-lead" style="margin-top:var(--space-5);max-width:min(40ch,100%)">

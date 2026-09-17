@@ -92,9 +92,11 @@
     display: flex;
     flex-wrap: wrap;
     column-gap: .3em;
-    font-weight: var(--weight-display);
-    font-size: clamp(1.6rem, 3.4vw, 3.25rem);
-    line-height: 1.1;
+    /* Light und groß — die Fragen sind der typografische Auftritt der Bühne
+       (Wunsch Roman, 17.9.2026). */
+    font-weight: 300;
+    font-size: clamp(2.1rem, 5vw, 5rem);
+    line-height: 1.06;
     color: var(--ink);
 }
 
@@ -106,8 +108,16 @@
 }
 .buehne-wort-maske > span { display: inline-block; }
 
-/* Dunkles Finale: Fläche, Astronaut, Antwort */
-.buehne-finale { position: absolute; inset: 0; }
+/* Dunkles Finale: Fläche, Astronaut, Antwort. Das Ink-Splash-Motiv kommt als
+   Inline-Hintergrund aus index.php, sobald assets/bilder/ink-splash.* liegt —
+   der Verlauf bleibt darunter als Rückfall. */
+.buehne-finale {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
 
 .buehne-astro {
     position: absolute;
@@ -137,9 +147,9 @@
 }
 .buehne-antwort h2 {
     margin: 0;
-    font-weight: var(--weight-display);
-    font-size: clamp(1.6rem, 3.4vw, 3.25rem);
-    line-height: 1.1;
+    font-weight: 300;
+    font-size: clamp(2.1rem, 5vw, 5rem);
+    line-height: 1.06;
     max-width: min(24ch, 100%);
     color: #fff;
 }
@@ -189,8 +199,8 @@
 .buehne-statisch .lz-claim { margin-bottom: var(--space-8); }
 .buehne-statisch-frage {
     margin: 0 0 var(--space-5);
-    font-weight: var(--weight-display);
-    font-size: clamp(1.4rem, 2.6vw, 2.5rem);
+    font-weight: 300;
+    font-size: clamp(1.8rem, 3.4vw, 3.5rem);
     line-height: 1.15;
     max-width: 34ch;
 }
@@ -245,6 +255,12 @@
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: var(--space-8);
     align-items: center;
+}
+
+.lz-teamgrid img.team-foto-bild {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xs);
 }
 
 .team-foto {

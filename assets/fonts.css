@@ -1,7 +1,15 @@
 /* Articulat CF — die Hausschrift, self-hosted (keine Google Fonts).
-   Zwei Schnitte: Medium (500, Fließtext und Display) und Bold (700, seltene
-   Betonung). Das Design sähe für Display eigentlich Regular (400) vor —
-   der Schnitt liegt nicht vor, Medium ist die nächste Entsprechung. */
+   Drei Schnitte: Light (300, die großen Fragen der Bühne), Medium (500,
+   Fließtext und Display) und Bold (700, seltene Betonung). */
+
+@font-face {
+  font-family: "Articulat CF";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/ArticulatCF-Light.woff2") format("woff2"),
+       url("fonts/ArticulatCF-Light.woff") format("woff");
+}
 
 @font-face {
   font-family: "Articulat CF";
