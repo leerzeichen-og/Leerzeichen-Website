@@ -24,9 +24,10 @@
     var huelle   = buehne.querySelector('.buehne-objekte');
     var objekte  = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-obj'));
     var fragen   = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-frage'));
-    var finale   = buehne.querySelector('.buehne-finale');
-    var splash   = buehne.querySelector('.buehne-splash');
-    var antwort  = buehne.querySelector('.buehne-antwort');
+    var finale    = buehne.querySelector('.buehne-finale');
+    var splash    = buehne.querySelector('.buehne-splash');
+    var antwort   = buehne.querySelector('.buehne-antwort');
+    var uebergang = buehne.querySelector('.buehne-uebergang');
 
     var klemm = function (v) { return Math.min(1, Math.max(0, v)); };
 
@@ -76,10 +77,12 @@
     window.addEventListener('resize', angefordert);
 
     // --- Was am Fortschritt hängt: Fragen, Finale, Objekt-Ausblenden ----------
-    // Zeitplan (Anteile der Scrollstrecke, Umbau 17.9.2026): drei Fragen →
-    // reines Schwarz mit der Antwort an der Fragen-Position → erst beim
-    // Weiterscrollen Splash und Astronaut.
-    var FRAGEN_FENSTER = [[0.12, 0.30], [0.32, 0.48], [0.50, 0.66]];
+    // Zeitplan (Anteile der Scrollstrecke, Stand 17.9.2026): drei Fragen →
+    // das Übergangsbild (weiß→schwarz) scrollt herein und deckt die Bühne zu,
+    // dahinter wird hart auf den schwarzen Akt umgeschaltet (unsichtbar, weil
+    // gerade alles zugedeckt ist) → Antwort mit Knöpfen → der Splash scrollt
+    // herein, darauf schwebt das Team-Foto.
+    var FRAGEN_FENSTER = [[0.10, 0.26], [0.28, 0.44], [0.46, 0.62]];
 
     function malenFortschritt() {
         fragen.forEach(function (f, i) {
@@ -98,22 +101,26 @@
             }
         });
 
-        var objWeg   = 1 - klemm((p - 0.60) / 0.06);   // Objekte gehen
-        var dunkel   = klemm((p - 0.64) / 0.06);       // Schwarz kommt
-        var textIn   = klemm((p - 0.72) / 0.05);       // Antwort erscheint …
-        var textWeg  = klemm((p - 0.84) / 0.04);       // … hält lange, geht
-        // Der Splash schiebt sich ans Scrollen gekoppelt von unten herein
-        // (Wunsch Roman 17.9.2026: hereinscrollen, nicht einblenden).
-        var splashIn = klemm((p - 0.87) / 0.10);
+        var objWeg    = 1 - klemm((p - 0.52) / 0.06);  // Objekte gehen
+        // Übergangsbild: 100vh (unter dem Bild) → -100vh (oben hinaus);
+        // bei 0 deckt es den Bildschirm vollständig — dort wird dahinter
+        // unsichtbar auf den schwarzen Akt geschaltet.
+        var uIn       = klemm((p - 0.56) / 0.20);
+        var schwarz   = uIn >= 0.5 ? 1 : 0;
+        var textIn    = klemm((p - 0.78) / 0.04);      // Antwort erscheint …
+        var textWeg   = klemm((p - 0.87) / 0.03);      // … hält, geht
+        var splashIn  = klemm((p - 0.90) / 0.09);      // Splash scrollt herein
 
         huelle.style.opacity = objWeg;
         huelle.style.pointerEvents = objWeg < 0.5 ? 'none' : '';
-        buehne.querySelector('.buehne-fragen').style.opacity = 1 - dunkel;
-        finale.style.opacity = dunkel;
-        finale.style.pointerEvents = dunkel > 0.5 ? 'auto' : 'none';
+        if (uebergang) {
+            uebergang.style.transform = 'translateY(' + (100 - uIn * 200) + 'vh)';
+        }
+        finale.style.opacity = schwarz;
+        finale.style.pointerEvents = schwarz ? 'auto' : 'none';
         splash.style.transform = 'translateY(' + ((1 - splashIn) * 100) + 'vh)';
         antwort.style.opacity = textIn * (1 - textWeg);
-        // Unsichtbare Knöpfe dürfen keine Klicks abfangen (Splash liegt darunter).
+        // Unsichtbare Knöpfe dürfen keine Klicks abfangen (Splash liegt darüber).
         antwort.style.pointerEvents = (textIn * (1 - textWeg)) > 0.5 ? 'auto' : 'none';
         antwort.style.transform = 'translateY(calc(-50% + ' + ((1 - textIn) * 28) + 'px))';
     }

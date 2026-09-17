@@ -160,6 +160,8 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 }
 .knopf:hover { background: #262626; color: #fff; }
 
+.knopf svg { height: .8em; width: auto; flex: 0 0 auto; }
+
 .knopf-hell {
     background: var(--paper);
     border-color: var(--paper);

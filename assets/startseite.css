@@ -10,7 +10,7 @@
    ACHTUNG display-gegen-hidden-Falle: Auf #buehne und #buehne-statisch selbst
    steht bewusst KEINE display-Angabe — das Skript schaltet sie mit `hidden`. */
 
-.buehne { position: relative; height: 880vh; background: var(--paper); }
+.buehne { position: relative; height: 980vh; background: var(--paper); }
 
 .buehne-blick {
     position: sticky;
@@ -79,6 +79,19 @@
 .buehne-objekte.hat-auswahl .buehne-obj button { opacity: .14; }
 .buehne-objekte.hat-auswahl .buehne-obj.ist-auswahl button { opacity: 1; }
 
+/* Übergangsbild: weiß oben, schwarz unten — scrollt über die weiße Bühne
+   herein und trägt sie ins Schwarz. Liegt über Fragen und Finale. */
+.buehne-uebergang {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    will-change: transform;
+    pointer-events: none;
+}
+
 /* Fragen: wortweise hinter einer Maske hervor */
 .buehne-fragen { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
 
@@ -131,6 +144,7 @@
 .buehne-splash {
     position: absolute;
     inset: 0;
+    z-index: 2;
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
@@ -138,21 +152,38 @@
     will-change: transform;
 }
 
-.buehne-astro {
+/* Team-Akt auf dem Splash: Foto schwebt im Orbit, darunter zentriert der Text */
+.buehne-team {
     position: absolute;
-    left: 0; right: 0; bottom: 0;
+    inset: 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    will-change: transform, opacity;
+    gap: var(--space-6);
+    padding: 100px var(--rand) var(--space-6);
 }
 
-.buehne-astro img {
-    height: 84vh;
-    width: auto;
-    max-width: none;
-    object-fit: contain;
-    animation: buehne-schweben 9s ease-in-out infinite;
+.buehne-team-foto {
+    width: min(520px, 72vw, 58vh);
+    height: auto;
+    border-radius: var(--radius-xs);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+    animation: buehne-orbit 11s ease-in-out infinite;
 }
+
+@keyframes buehne-orbit {
+    0%   { transform: translateY(0) rotate(-2.2deg); }
+    50%  { transform: translateY(-22px) rotate(2.2deg); }
+    100% { transform: translateY(0) rotate(-2.2deg); }
+}
+
+.buehne-team-text {
+    text-align: center;
+    color: var(--ink);
+    max-width: 56ch;
+}
+.buehne-team-text p { margin: var(--space-3) 0 var(--space-5); color: var(--text-body); }
 
 @keyframes buehne-schweben {
     0%   { transform: translateY(0) rotate(-1deg); }
@@ -174,6 +205,7 @@
     line-height: 1.04;
     color: #fff;
 }
+.buehne-antwort h2 .buehne-zeile { display: block; }
 .buehne-antwort p {
     margin: var(--space-5) 0 0;
     font-size: var(--text-lg);
@@ -252,7 +284,8 @@
 }
 .lz-blocktext p { margin: 0; max-width: min(52ch, 100%); }
 
-/* Die zwei Säulen als Boxen, am Schreibtisch nebeneinander */
+/* Die zwei Säulen, am Schreibtisch nebeneinander. Drei Fassungen, gewählt
+   über die Sektions-Klasse (?saeulen=karten|kontrast|frei), bis entschieden. */
 .lz-saeulen {
     display: grid;
     grid-template-columns: repeat(2, minmax(min(100%, 320px), 1fr));
@@ -264,13 +297,56 @@
 .lz-saeule {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-4);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-xs);
-    padding: var(--space-7);
+    padding: var(--space-6);
 }
 .lz-saeule p { margin: 0; }
-.lz-saeule-fuss { margin-top: auto; padding-top: var(--space-4); }
+.lz-saeule-fuss { margin-top: auto; padding-top: var(--space-5); }
+
+.lz-saeule-titel {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(1.7rem, 2.7vw, 2.75rem);
+    line-height: 1.08;
+    max-width: 18ch;
+}
+.lz-saeule-lead {
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    color: var(--text-strong);
+    max-width: 38ch;
+}
+.lz-saeule-text {
+    font-size: var(--text-base);
+    color: var(--text-body);
+    max-width: 42ch;
+}
+
+/* Fassung „kontrast": erste Box Ink, zweite Paper mit Ink-Rahmen */
+.saeulen-kontrast .lz-saeule:first-child {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+}
+.saeulen-kontrast .lz-saeule:first-child .lz-eyebrow { color: rgba(255,255,255,.55); }
+.saeulen-kontrast .lz-saeule:first-child .lz-saeule-lead { color: #fff; }
+.saeulen-kontrast .lz-saeule:first-child .lz-saeule-text { color: rgba(255,255,255,.75); }
+.saeulen-kontrast .lz-saeule:first-child .lz-svc { color: rgba(255,255,255,.85); }
+.saeulen-kontrast .lz-saeule:first-child .lz-svc li + li { border-top-color: rgba(255,255,255,.22); }
+.saeulen-kontrast .lz-saeule:first-child .knopf {
+    background: var(--paper); border-color: var(--paper); color: var(--ink);
+}
+.saeulen-kontrast .lz-saeule:last-child { border: 1.5px solid var(--ink); }
+
+/* Fassung „frei": keine Boxen — zwei Spalten mit kräftiger Oberlinie */
+.saeulen-frei .lz-saeule {
+    border: 0;
+    border-top: 2px solid var(--ink);
+    border-radius: 0;
+    padding: var(--space-6) 0 0;
+}
 
 /* Leistungsliste: waagrechte Linien zwischen den Einträgen, kein Punkt */
 .lz-svc {
@@ -316,35 +392,71 @@
 
 /* --- Newsletter -------------------------------------------------------------------- */
 
-.nl-baum { display: flex; justify-content: center; }
-.nl-baum img { width: min(320px, 60vw); height: auto; }
+/* Zweispaltige Karte wie im Design-Briefing, aber nie auf voller Breite.
+   Die Kuvert-Grafik ragt oben über den Rahmen in die Box hinein. */
+.nl-bereich { padding-top: calc(var(--space-9) + 120px); }
 
-/* Kompakter Block in Postkarten-Anmutung: begrenzte Breite, mittig, Rahmen
-   wie eine Karte — geht nie auf die volle Seitenbreite auf. */
 .nl-karte {
-    max-width: 680px;
-    margin: calc(var(--space-6) * -1) auto 0;
-    border: 1.5px solid var(--ink);
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid var(--border-default);
     border-radius: var(--radius-xs);
     padding: var(--space-7);
+    padding-top: calc(var(--space-7) + 60px);
     background: var(--paper);
     position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
 }
-.nl-karte-inhalt p { margin: 6px 0 var(--space-5); color: var(--text-body); }
 
-.nl-punkte {
+.nl-kuvert {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(240px, 44vw);
+    height: auto;
+}
+
+.nl-spalten {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+}
+
+.nl-untertitel { margin: 6px 0 var(--space-6); color: var(--text-body); }
+
+.lz-nllist {
     list-style: none;
     margin: 0;
     padding: 0;
-    color: var(--text-body);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+.lz-nllist li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 20px;
+    position: relative;
     font-size: var(--text-base);
+    color: var(--text-body);
     line-height: 1.5;
 }
-.nl-punkte li { padding: 8px 0; }
-.nl-punkte li + li { border-top: 1px solid var(--border-default); }
+.lz-nllist li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: .55em;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ink);
+}
+.lz-nllist strong {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+}
 
 .nl-form { display: flex; flex-direction: column; gap: var(--space-4); }
 
@@ -391,7 +503,10 @@
 
 @media (max-width: 900px) {
     .lz-blockgrid, .lz-teamgrid, .lz-saeulen { grid-template-columns: 1fr; gap: var(--space-7); }
-    .nl-karte { padding: var(--space-6); }
+    .nl-karte { padding: var(--space-6); padding-top: calc(var(--space-6) + 48px); }
+    .nl-spalten { grid-template-columns: 1fr; gap: var(--space-6); }
+    .nl-kuvert { top: -90px; }
+    .nl-bereich { padding-top: calc(var(--space-8) + 90px); }
     .buehne-frage { max-width: none; left: var(--rand); right: var(--rand); }
     .buehne-claimblock { padding: calc(90px + var(--space-7)) var(--rand) var(--space-8); }
     .buehne-antwort { left: var(--rand); right: var(--rand); }

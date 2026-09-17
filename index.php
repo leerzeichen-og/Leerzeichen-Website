@@ -1,10 +1,13 @@
 <?php
-// Startseite. Aufbau seit 17.9.2026 (Beschluss Roman, Texte aus „Website-Texte"):
-// Scroll-Bühne (Claim, fliegende Projekt-Objekte, drei Fragen, Schwarz-Akt mit
-// Antwort + zwei Knöpfen, hereinscrollender Splash mit Astronaut) · Team auf
-// Weiß · die zwei Säulen als Boxen nebeneinander · Newsletter als kompakte
-// Postkarte · Abschluss-CTA. Ohne JavaScript oder bei reduzierter Bewegung
-// steht statt der Bühne die statische Fassung (#buehne-statisch).
+// Startseite. Dramaturgie der Bühne (Stand 17.9.2026, Beschluss Roman):
+// Claim + fliegende Projekt-Objekte + drei Fragen → das Übergangsbild
+// (weiß oben, schwarz unten) scrollt herein und trägt die Seite ins Schwarz
+// (keine Einblendung) → Antwort zweizeilig mit zwei Pfeil-Knöpfen → der
+// Splash scrollt herein, darauf schwebt das Team-Foto im Orbit, darunter
+// zentriert Text und Knopf. Danach: die zwei Säulen (Variante über
+// ?saeulen=karten|kontrast|frei, solange nicht entschieden) · Newsletter-
+// Karte mit hineinragendem Kuvert · Abschluss-CTA.
+// Ohne JavaScript oder bei reduzierter Bewegung steht die statische Fassung.
 
 require_once __DIR__ . '/teile/firma.php';
 require_once __DIR__ . '/teile/projekte.php';
@@ -15,18 +18,20 @@ $beschreibung = 'Agentur für Ausstellungen, Erlebniswege und Corporate Design. 
 $styles       = ['/assets/startseite.css'];
 $voll_breit   = true;
 
-// Die drei Fragen der Bühne. Der senkrechte Strich ist ein fester
-// Zeilenumbruch — so bleiben sie auf jeder Bildschirmbreite dreizeilig
-// (auf 27-Zoll-Displays brachen sie sonst ein- bis zweizeilig).
+// Der lange Leerzeichen-Pfeil (assets/long-long-pfeil.svg) — inline, damit er
+// die Schriftfarbe des Knopfs übernimmt.
+$pfeil = '<svg viewBox="0 0 63.611 14.4" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+       . '<path fill="currentColor" d="M54.906,12.9l4.622-4.622H0V6.125H59.528L54.906,1.5,56.412,0l7.2,7.2-7.2,7.2Z"/></svg>';
+
+// Die drei Fragen. Senkrechter Strich = fester Zeilenumbruch (dreizeilig auf
+// jeder Bildschirmbreite, auch 27 Zoll).
 $fragen = [
     'Wie wird aus Ihrem Projekt|ein Erlebnis, das neue|Besucher bringt?',
     'Wie wird aus Ihrem|Unternehmen ein Bild,|das man wiedererkennt?',
     'Und wie wird aus beidem|eine Geschichte, die man|weitererzählt?',
 ];
 
-// Flugbahnen aus dem Design (Breite/Höhe in vw/vh, Start x/y, Richtung vx/vy).
-// Die Projekte kommen aus Space (index.json, Bild-Slot „objekt"), die Bahnen
-// bleiben Gestaltung — Projekt i bekommt Bahn i, höchstens acht.
+// Flugbahnen der Projekt-Objekte (aus Space, Bild-Slot „objekt"; höchstens acht).
 $bahnen = [
     ['w' => 21, 'h' => 15, 'x' => 14, 'y' => 64,  'vx' => 0.9,   'vy' => -0.5],
     ['w' => 16, 'h' => 13, 'x' => 68, 'y' => 86,  'vx' => -0.7,  'vy' => -0.75],
@@ -42,10 +47,10 @@ $flieger = array_slice(
     0, count($bahnen)
 );
 
-// Die zwei Säulen (Texte: „Website-Texte", Abschnitt „Gestaltung ist unser Handwerk").
+// Die zwei Säulen (Texte: „Website-Texte"). Der erste Absatz ist der Lead.
 $saeulen_boxen = [
     [
-        'id' => 'erlebnis', 'url' => '/erlebnisgestaltung/',
+        'id' => 'erlebnis', 'url' => '/erlebnisgestaltung/', 'eyebrow' => 'Säule 1 · Erlebnisse',
         'titel' => 'Wir schaffen Erlebnisse — und bringen Neues in die Welt.',
         'text' => [
             'Erlebnisse haben viele Formen: Ausstellungen, Escape-Rooms und Treasure Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer, Spielplätze mit ihrer eigenen Geschichte, Kinderebenen, die eine Ausstellung für Familien öffnen. Am Ende steht immer dieselbe Frage: Was bringt Besucher zum Staunen?',
@@ -56,8 +61,8 @@ $saeulen_boxen = [
                     'Spielplatzkonzepte', 'Leitsysteme und Beschilderung', 'Interaktive Stationen'],
     ],
     [
-        'id' => 'marke', 'url' => '/grafikdesign/',
-        'titel' => 'Wir machen sichtbar, was Ihr Unternehmen ausmacht — und geben Ihrer Geschichte eine Form.',
+        'id' => 'marke', 'url' => '/grafikdesign/', 'eyebrow' => 'Säule 2 · Gestaltung für Unternehmen',
+        'titel' => 'Wir machen sichtbar, was Ihr Unternehmen ausmacht.',
         'text' => [
             'Zuerst das klare Bild: Logo, Farben, Schrift und Bildwelt. Daran erkennt man Sie auf den ersten Blick, auf Papier wie am Screen.',
             'Dann beginnt Ihre Marke zu agieren: ein Mitarbeitermagazin, das gelesen wird. Ein Buch, das im Regal bleibt. Eine Microsite, die Ihre neue Produktlinie in die Auslage stellt.',
@@ -68,6 +73,16 @@ $saeulen_boxen = [
                     'Geschäftsausstattung', 'Microsites und Landingpages', 'Screendesign'],
     ],
 ];
+// Gestaltungs-Varianten der Säulen, bis Roman entschieden hat:
+// karten (Vorgabe) · kontrast (eine Box Ink, eine Paper) · frei (ohne Boxen).
+$saeulenVariante = in_array($_GET['saeulen'] ?? '', ['kontrast', 'frei'], true)
+    ? $_GET['saeulen'] : 'karten';
+
+// Team-Text (Kurzfassung „Über uns") — steht jetzt im Splash-Akt der Bühne.
+$teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff '
+          . 'entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den '
+          . 'Blick lenkt und das Wichtige stehen lässt. Dem folgend begleiten wir seit '
+          . FIRMA_GEGRUENDET . ' Projekte von der ersten Skizze bis zur Übergabe.';
 
 // Motive: greifen automatisch, sobald die Datei unter assets/bilder/ liegt.
 function startseite_bild(string $name): ?string
@@ -79,8 +94,9 @@ function startseite_bild(string $name): ?string
     }
     return null;
 }
-$inkSplash = startseite_bild('ink-splash');
-$teamFoto  = startseite_bild('team');
+$inkSplash  = startseite_bild('ink-splash');
+$uebergang  = startseite_bild('leerzeichen-design-abenteuer-erfolg-breiter_start_bg');
+$teamFoto   = startseite_bild('team');
 
 require __DIR__ . '/teile/kopf.php';
 ?>
@@ -112,21 +128,39 @@ require __DIR__ . '/teile/kopf.php';
       <?php endforeach; ?>
     </div>
 
+    <?php // Schwarzer Akt: liegt unter dem Übergangsbild, wird von ihm
+          // zugedeckt aufgedeckt — keine Einblendung nötig. ?>
     <div class="buehne-finale" style="opacity:0;pointer-events:none">
-      <div class="buehne-splash" style="transform:translateY(100vh)<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
-        <div class="buehne-astro">
-          <img src="/assets/bilder/astronaut.webp" alt="" width="640" height="900">
-        </div>
-      </div>
       <div class="buehne-antwort" style="opacity:0">
-        <h2>Darauf finden wir gemeinsam Antworten.</h2>
+        <h2><span class="buehne-zeile">Darauf finden wir</span><span class="buehne-zeile">gemeinsam Antworten.</span></h2>
         <p>Seit <?= e(FIRMA_GEGRUENDET) ?>.<br>gedruckt • gebaut • digital</p>
         <div class="buehne-knoepfe">
-          <a class="knopf knopf-hell" href="/referenzen/">Referenzen</a>
-          <a class="knopf knopf-umriss" href="/kontakt/">Kontakt</a>
+          <a class="knopf knopf-hell" href="/referenzen/">Referenzen <?= $pfeil ?></a>
+          <a class="knopf knopf-umriss" href="/kontakt/">Kontakt <?= $pfeil ?></a>
+        </div>
+      </div>
+      <?php // Splash-Akt: scrollt herein; darauf schwebt das Team-Foto im
+            // Orbit, darunter zentriert Text und Knopf. ?>
+      <div class="buehne-splash" style="transform:translateY(100vh)<?= $inkSplash ? ';background-image:url(' . e($inkSplash) . ')' : '' ?>">
+        <div class="buehne-team">
+          <?php if ($teamFoto): ?>
+          <img class="buehne-team-foto" src="<?= e($teamFoto) ?>"
+            alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand">
+          <?php endif; ?>
+          <div class="buehne-team-text">
+            <h2 class="lz-h3">Wir sind Leerzeichen.</h2>
+            <p><?= e($teamText) ?></p>
+            <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen <?= $pfeil ?></a>
+          </div>
         </div>
       </div>
     </div>
+
+    <?php // Übergangsbild (weiß oben, schwarz unten): scrollt über die weiße
+          // Bühne herein und trägt sie ins Schwarz — liegt ÜBER dem Finale. ?>
+    <?php if ($uebergang): ?>
+    <div class="buehne-uebergang" style="transform:translateY(100vh);background-image:url(<?= e($uebergang) ?>)"></div>
+    <?php endif; ?>
   </div>
 
   <div class="buehne-claimblock">
@@ -143,44 +177,35 @@ require __DIR__ . '/teile/kopf.php';
   <p class="lz-lead buehne-statisch-antwort">Darauf finden wir gemeinsam Antworten.
     Seit <?= e(FIRMA_GEGRUENDET) ?> — gedruckt • gebaut • digital.</p>
   <div class="buehne-knoepfe">
-    <a class="knopf" href="/referenzen/">Referenzen</a>
-    <a class="knopf knopf-umriss-dunkel" href="/kontakt/">Kontakt</a>
+    <a class="knopf" href="/referenzen/">Referenzen <?= $pfeil ?></a>
+    <a class="knopf knopf-umriss-dunkel" href="/kontakt/">Kontakt <?= $pfeil ?></a>
   </div>
-</section>
-
-<?php // ---- Team auf Weiß (Kurzfassung „Über uns") ------------------------------ ?>
-<section id="team" class="lz-sec">
-  <div class="lz-teamgrid">
+  <div class="lz-teamgrid" style="margin-top:var(--space-9)">
     <?php if ($teamFoto): ?>
     <img class="team-foto-bild" src="<?= e($teamFoto) ?>"
       alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand" loading="lazy">
-    <?php else: ?>
-    <div class="team-foto">Foto folgt: Team an der Wand mit Entwürfen</div>
     <?php endif; ?>
     <div>
       <h2 class="lz-h2">Wir sind Leerzeichen.</h2>
-      <p class="lz-lead" style="margin-top:var(--space-5);max-width:min(44ch,100%)">
-        Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff
-        entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den
-        Blick lenkt und das Wichtige stehen lässt. Dem folgend begleiten wir seit
-        <?= e(FIRMA_GEGRUENDET) ?> Projekte von der ersten Skizze bis zur Übergabe.
-      </p>
+      <p class="lz-lead" style="margin-top:var(--space-5);max-width:min(44ch,100%)"><?= e($teamText) ?></p>
       <div style="margin-top:var(--space-6)">
-        <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen</a>
+        <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen <?= $pfeil ?></a>
       </div>
     </div>
   </div>
 </section>
 
-<?php // ---- Die zwei Säulen als Boxen nebeneinander ------------------------------ ?>
-<section id="handwerk" class="lz-sec">
+<?php // ---- Die zwei Säulen (Variante über ?saeulen=…, bis entschieden) -------- ?>
+<section id="handwerk" class="lz-sec saeulen-<?= e($saeulenVariante) ?>">
   <h2 class="lz-h2">Gestaltung ist unser Handwerk.</h2>
   <div class="lz-saeulen">
     <?php foreach ($saeulen_boxen as $box): ?>
     <article id="<?= e($box['id']) ?>" class="lz-saeule">
-      <h3 class="lz-h3"><?= e($box['titel']) ?></h3>
-      <?php foreach ($box['text'] as $t): ?>
-      <p class="lz-lead"><?= e($t) ?></p>
+      <p class="lz-eyebrow"><?= e($box['eyebrow']) ?></p>
+      <h3 class="lz-saeule-titel"><?= e($box['titel']) ?></h3>
+      <p class="lz-saeule-lead"><?= e($box['text'][0]) ?></p>
+      <?php foreach (array_slice($box['text'], 1) as $t): ?>
+      <p class="lz-saeule-text"><?= e($t) ?></p>
       <?php endforeach; ?>
       <ul class="lz-svc">
         <?php foreach ($box['liste'] as $l): ?>
@@ -188,7 +213,7 @@ require __DIR__ . '/teile/kopf.php';
         <?php endforeach; ?>
       </ul>
       <div class="lz-saeule-fuss">
-        <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu</a>
+        <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu <?= $pfeil ?></a>
       </div>
     </article>
     <?php endforeach; ?>
