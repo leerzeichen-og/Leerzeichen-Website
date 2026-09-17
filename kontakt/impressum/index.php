@@ -10,7 +10,7 @@ require __DIR__ . '/../../teile/kopf.php';
 ?>
 
 <section class="abschnitt">
-  <h1>Impressum</h1>
+  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Impressum</h1>
   <p class="platzhalter">Der Text folgt — hier einsetzen, sobald er vorliegt.</p>
 </section>
 

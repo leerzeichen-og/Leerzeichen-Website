@@ -8,7 +8,7 @@ require __DIR__ . '/teile/kopf.php';
 ?>
 
 <section class="abschnitt">
-  <h1>Hier ist nichts. Nicht einmal ein Leerzeichen.</h1>
+  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Hier ist nichts. Nicht einmal ein Leerzeichen.</h1>
   <p class="lz-lead">Die Seite, die Sie suchen, gibt es nicht mehr oder hat einen
     neuen Namen bekommen.</p>
   <p><a href="/">Zur Startseite</a> · <a href="/referenzen/">Referenzen</a> ·

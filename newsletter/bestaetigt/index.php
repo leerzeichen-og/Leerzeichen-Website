@@ -11,7 +11,7 @@ require __DIR__ . '/../../teile/kopf.php';
 ?>
 
 <section class="abschnitt">
-  <h1>Sie sind dabei.</h1>
+  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Sie sind dabei.</h1>
   <p class="lz-lead" style="max-width:52ch">Pro Quartal können Sie nun mit einer
     Ausgabe unseres Newsletters rechnen. Bis dahin:
     <a href="/referenzen/">Schauen Sie sich um, woran wir gerade arbeiten.</a></p>

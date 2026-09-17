@@ -19,6 +19,34 @@ if (!function_exists('e')) {
 // lz_asset(): hängt die Änderungszeit der Datei als ?v= an CSS/JS-Adressen.
 // Ändert sich die Datei, ändert sich ihre Adresse — Browser können nie mehr
 // ein veraltetes Stylesheet aus dem Cache zeigen (passiert am 17.9.2026).
+// lz_pfeil(): der lange Leerzeichen-Pfeil (assets/long-long-pfeil.svg) als
+// Inline-SVG — erbt die Schriftfarbe des umgebenden Elements.
+if (!function_exists('lz_pfeil')) {
+    function lz_pfeil(): string
+    {
+        return '<svg viewBox="0 0 63.611 14.4" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+             . '<path fill="currentColor" d="M54.906,12.9l4.622-4.622H0V6.125H59.528L54.906,1.5,56.412,0l7.2,7.2-7.2,7.2Z"/></svg>';
+    }
+}
+
+// lz_laufband(): das Leistungs-Laufband — eine geneigte, nahtlos laufende
+// Bahn (Inhalt doppelt, aria-hidden); bei reduzierter Bewegung steht sie
+// als umbrechende Liste. Klassen: kipp-a/kipp-b (Neigung), laufband-retour.
+if (!function_exists('lz_laufband')) {
+    function lz_laufband(array $liste, string $klassen): string
+    {
+        $teile = '';
+        foreach ($liste as $l) {
+            $teile .= '<span>' . e($l) . '</span><i aria-hidden="true"></i>';
+        }
+        return '<div class="laufbaender" aria-label="Unsere Leistungen">'
+             . '<div class="laufband ' . e($klassen) . '"><div class="laufband-spur">'
+             . '<span class="laufband-teil">' . $teile . '</span>'
+             . '<span class="laufband-teil" aria-hidden="true">' . $teile . '</span>'
+             . '</div></div></div>';
+    }
+}
+
 if (!function_exists('lz_asset')) {
     function lz_asset(string $pfad): string
     {

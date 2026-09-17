@@ -11,7 +11,7 @@ require __DIR__ . '/../../teile/kopf.php';
 ?>
 
 <section class="abschnitt">
-  <h1>Fast geschafft.</h1>
+  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Fast geschafft.</h1>
   <p class="lz-lead" style="max-width:52ch">Wir haben Ihnen eine Mail geschickt.
     Ein Klick auf den Link darin, und Sie sind dabei. Schauen Sie notfalls im
     Spam-Ordner nach — manchmal landen wir dort.</p>

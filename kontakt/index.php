@@ -12,7 +12,7 @@ require __DIR__ . '/../teile/kopf.php';
 ?>
 
 <section class="abschnitt">
-  <h1>Am besten, wir treffen uns.</h1>
+  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Am besten, wir treffen uns.</h1>
   <p class="lz-lead" style="max-width:52ch">Rufen Sie an, und wir vereinbaren einen
     Termin. Dann finden wir gemeinsam heraus, was Ihr Projekt braucht — bei Ihnen,
     oder bei uns im Rathaus in Neumarkt.</p>

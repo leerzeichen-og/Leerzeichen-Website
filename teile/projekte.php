@@ -91,7 +91,13 @@ function pj_karte(array $eintrag): string
 {
     $url = '/referenzen/' . e($eintrag['slug'] ?? '') . '/';
     $out = '<a class="pj-karte" href="' . $url . '">';
-    $out .= pj_bild($eintrag['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 33vw');
+    $out .= '<span class="pj-karte-bildwrap">'
+          . pj_bild($eintrag['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 33vw');
+    $saeule = PJ_SAEULEN[$eintrag['saeule'] ?? ''][0] ?? null;
+    if ($saeule) {
+        $out .= '<span class="chip pj-karte-chip">' . e($saeule) . '</span>';
+    }
+    $out .= '</span>';
     if (!empty($eintrag['kunde'])) {
         $out .= '<span class="pj-karte-kunde">' . e($eintrag['kunde']) . '</span>';
     }

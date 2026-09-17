@@ -296,6 +296,14 @@
 
 .pj-karte { text-decoration: none; color: inherit; display: block; }
 
+.pj-karte-bildwrap { position: relative; display: block; }
+
+.pj-karte-chip {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+}
+
 .pj-karte-bild {
   display: block;
   width: 100%;

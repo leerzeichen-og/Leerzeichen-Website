@@ -18,10 +18,7 @@ $beschreibung = 'Agentur für Ausstellungen, Erlebniswege und Corporate Design. 
 $styles       = ['/assets/startseite.css'];
 $voll_breit   = true;
 
-// Der lange Leerzeichen-Pfeil (assets/long-long-pfeil.svg) — inline, damit er
-// die Schriftfarbe des Knopfs übernimmt.
-$pfeil = '<svg viewBox="0 0 63.611 14.4" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
-       . '<path fill="currentColor" d="M54.906,12.9l4.622-4.622H0V6.125H59.528L54.906,1.5,56.412,0l7.2,7.2-7.2,7.2Z"/></svg>';
+
 
 // Die drei Fragen. Senkrechter Strich = fester Zeilenumbruch (dreizeilig auf
 // jeder Bildschirmbreite, auch 27 Zoll).
@@ -40,14 +37,15 @@ $fragen = [
 // (kein Schwindel), leichte Unterschiede geben dezente Tiefe. y0 staffelt
 // sie über die Strecke — es sind immer nur zwei, drei zugleich im Bild.
 $bahnen = [
-    ['w' => 21, 'h' => 15, 'x' => 8,  'y0' => 90,  'tiefe' => 900, 'vx' => 0.10],
-    ['w' => 16, 'h' => 13, 'x' => 64, 'y0' => 150, 'tiefe' => 880, 'vx' => -0.08],
-    ['w' => 13, 'h' => 17, 'x' => 36, 'y0' => 215, 'tiefe' => 920, 'vx' => 0.07],
-    ['w' => 18, 'h' => 12, 'x' => 79, 'y0' => 275, 'tiefe' => 860, 'vx' => -0.09],
-    ['w' => 15, 'h' => 16, 'x' => 14, 'y0' => 340, 'tiefe' => 940, 'vx' => 0.06],
-    ['w' => 19, 'h' => 13, 'x' => 54, 'y0' => 400, 'tiefe' => 900, 'vx' => -0.07],
-    ['w' => 12, 'h' => 12, 'x' => 28, 'y0' => 460, 'tiefe' => 980, 'vx' => 0.08],
-    ['w' => 17, 'h' => 11, 'x' => 84, 'y0' => 515, 'tiefe' => 940, 'vx' => -0.06],
+    // Die ersten beiden starten im Bild — schon ohne Scrollen fliegt etwas.
+    ['w' => 21, 'h' => 15, 'x' => 10, 'y0' => 34,  'tiefe' => 900, 'vx' => 0.28],
+    ['w' => 16, 'h' => 13, 'x' => 66, 'y0' => 70,  'tiefe' => 880, 'vx' => -0.22],
+    ['w' => 13, 'h' => 17, 'x' => 36, 'y0' => 175, 'tiefe' => 920, 'vx' => 0.20],
+    ['w' => 18, 'h' => 12, 'x' => 79, 'y0' => 245, 'tiefe' => 860, 'vx' => -0.26],
+    ['w' => 15, 'h' => 16, 'x' => 14, 'y0' => 320, 'tiefe' => 940, 'vx' => 0.18],
+    ['w' => 19, 'h' => 13, 'x' => 54, 'y0' => 390, 'tiefe' => 900, 'vx' => -0.20],
+    ['w' => 12, 'h' => 12, 'x' => 28, 'y0' => 455, 'tiefe' => 980, 'vx' => 0.24],
+    ['w' => 17, 'h' => 11, 'x' => 84, 'y0' => 515, 'tiefe' => 940, 'vx' => -0.18],
 ];
 // Immer acht Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
 $objektProjekte = array_values(array_filter(pj_index(),
@@ -145,8 +143,8 @@ require __DIR__ . '/teile/kopf.php';
         <h2><span class="buehne-zeile">Darauf finden wir</span><span class="buehne-zeile">gemeinsam Antworten.</span></h2>
         <p>Seit <?= e(FIRMA_GEGRUENDET) ?>.<br>gedruckt • gebaut • digital</p>
         <div class="buehne-knoepfe">
-          <a class="knopf knopf-hell" href="/referenzen/">Referenzen <?= $pfeil ?></a>
-          <a class="knopf knopf-umriss" href="/kontakt/">Kontakt <?= $pfeil ?></a>
+          <a class="knopf knopf-hell" href="/referenzen/">Referenzen <?= lz_pfeil() ?></a>
+          <a class="knopf knopf-umriss" href="/kontakt/">Kontakt <?= lz_pfeil() ?></a>
         </div>
       </div>
       <?php // Splash-Akt: scrollt herein; darauf schwebt das Team-Foto im
@@ -162,7 +160,7 @@ require __DIR__ . '/teile/kopf.php';
           <div class="buehne-team-text">
             <h2 class="lz-h3">Wir sind Leerzeichen.</h2>
             <p><?= e($teamText) ?></p>
-            <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen <?= $pfeil ?></a>
+            <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen <?= lz_pfeil() ?></a>
           </div>
         </div>
       </div>
@@ -189,8 +187,8 @@ require __DIR__ . '/teile/kopf.php';
   <p class="lz-lead buehne-statisch-antwort">Darauf finden wir gemeinsam Antworten.
     Seit <?= e(FIRMA_GEGRUENDET) ?> — gedruckt • gebaut • digital.</p>
   <div class="buehne-knoepfe">
-    <a class="knopf" href="/referenzen/">Referenzen <?= $pfeil ?></a>
-    <a class="knopf knopf-umriss-dunkel" href="/kontakt/">Kontakt <?= $pfeil ?></a>
+    <a class="knopf" href="/referenzen/">Referenzen <?= lz_pfeil() ?></a>
+    <a class="knopf knopf-umriss-dunkel" href="/kontakt/">Kontakt <?= lz_pfeil() ?></a>
   </div>
   <div class="lz-teamgrid" style="margin-top:var(--space-9)">
     <?php if ($teamFoto): ?>
@@ -201,36 +199,17 @@ require __DIR__ . '/teile/kopf.php';
       <h2 class="lz-h2">Wir sind Leerzeichen.</h2>
       <p class="lz-lead" style="margin-top:var(--space-5);max-width:min(44ch,100%)"><?= e($teamText) ?></p>
       <div style="margin-top:var(--space-6)">
-        <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen <?= $pfeil ?></a>
+        <a class="knopf" href="/agentur/">Lernen Sie unser Team kennen <?= lz_pfeil() ?></a>
       </div>
     </div>
   </div>
 </section>
 
 <?php // ---- Die zwei Säulen (Variante über ?saeulen=…, bis entschieden) -------- ?>
-<?php
-// Das Doppel-Spruchband (beide Leistungslisten, gegenläufig) — steht über
-// und unter den Säulen; einmal gebaut, zweimal ausgegeben.
-ob_start(); ?>
-  <div class="laufbaender" aria-label="Unsere Leistungen">
-    <?php foreach ($saeulen_boxen as $nr => $box): ?>
-    <div class="laufband <?= $nr === 1 ? 'laufband-retour' : '' ?>">
-      <div class="laufband-spur">
-        <?php for ($kopie = 0; $kopie < 2; $kopie++): ?>
-        <span class="laufband-teil"<?= $kopie ? ' aria-hidden="true"' : '' ?>>
-          <?php foreach ($box['liste'] as $l): ?>
-          <span><?= e($l) ?></span><i aria-hidden="true"></i>
-          <?php endforeach; ?>
-        </span>
-        <?php endfor; ?>
-      </div>
-    </div>
-    <?php endforeach; ?>
-  </div>
-<?php $laufbaender = ob_get_clean(); ?>
+
 
 <section id="handwerk" class="lz-sec">
-  <?= $laufbaender ?>
+  <?= lz_laufband($saeulen_boxen[0]['liste'], 'kipp-a') ?>
   <h2 class="handwerk-titel"><span class="buehne-zeile">Gestaltung ist</span><span class="buehne-zeile">unser Handwerk.</span></h2>
   <div class="lz-saeulen">
     <?php foreach ($saeulen_boxen as $box): ?>
@@ -240,13 +219,13 @@ ob_start(); ?>
       <p class="lz-saeule-text"><?= e($t) ?></p>
       <?php endforeach; ?>
       <div class="lz-saeule-fuss">
-        <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu <?= $pfeil ?></a>
+        <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu <?= lz_pfeil() ?></a>
       </div>
     </article>
     <?php endforeach; ?>
   </div>
 
-  <?= $laufbaender ?>
+  <?= lz_laufband($saeulen_boxen[1]['liste'], 'laufband-retour kipp-b') ?>
 </section>
 
 <?php require __DIR__ . '/teile/newsletter.php'; ?>

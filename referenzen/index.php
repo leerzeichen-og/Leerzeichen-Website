@@ -10,6 +10,7 @@ $titel        = 'Referenzen — Projekte von leerzeichen';
 $beschreibung = 'Ausgewählte Projekte aus Ausstellungsgestaltung, Erlebnisplanung und Corporate Design.';
 $brotkrumen   = [['Referenzen', '/referenzen/']];
 $styles       = ['/assets/projekt.css'];
+$voll_breit   = true;
 
 $filter   = (string) ($_GET['saeule'] ?? '');
 $filter   = isset(PJ_SAEULEN[$filter]) ? $filter : '';
@@ -21,7 +22,8 @@ if ($filter !== '') {
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<h1>Referenzen</h1>
+<section class="lz-sec" style="padding-top:calc(90px + var(--space-7));padding-bottom:0">
+<h1 class="titel-seite">Referenzen</h1>
 
 <nav class="pj-pillen" aria-label="Nach Säule filtern">
   <a class="pj-pille" href="/referenzen/" <?= $filter === '' ? 'aria-current="true"' : '' ?>>Alle</a>
@@ -38,5 +40,10 @@ require __DIR__ . '/../teile/kopf.php';
 <?php else: ?>
 <p class="platzhalter">Hier erscheinen die Projekte, sobald Space sie veröffentlicht hat.</p>
 <?php endif; ?>
+
+</section>
+
+<?php require __DIR__ . '/../teile/newsletter.php'; ?>
+<?php require __DIR__ . '/../teile/cta.php'; ?>
 
 <?php require __DIR__ . '/../teile/fuss.php'; ?>

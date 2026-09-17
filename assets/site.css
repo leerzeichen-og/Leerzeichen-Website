@@ -184,6 +184,143 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 }
 .knopf-umriss-dunkel:hover { background: var(--grey-100); color: var(--ink); }
 
+/* Chip: kleines schwarzes Etikett (Kategorien, Bildbeschriftungen) */
+.chip {
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: .35rem .65rem;
+    border-radius: 2px;
+}
+
+/* Seitentitel der Unterseiten: Light und groß — die Stimme der Startseite */
+.titel-seite {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(2.2rem, 4.6vw, 4.4rem);
+    line-height: 1.06;
+}
+
+/* Dunkler Seiten-Hero (Landingpages): Ink-Motiv, Chip, Light-Titel */
+.seiten-hero {
+    background-color: #000;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    color: #fff;
+    padding: calc(130px + var(--space-8)) var(--rand) var(--space-9);
+}
+.seiten-hero .titel-seite { color: #fff; max-width: 22ch; margin-top: var(--space-5); }
+.seiten-hero .lz-lead { color: rgba(255, 255, 255, .8); }
+
+/* Prinzipien-Raster: offene Blöcke mit Oberlinie (Fassung „frei") */
+.prinzipien {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+}
+.prinzip { border-top: 2px solid var(--ink); padding-top: var(--space-5); }
+.prinzip h3 { margin: 0 0 var(--space-3); font-weight: 500; font-size: var(--text-lg); }
+.prinzip p { margin: 0; color: var(--text-body); }
+
+/* Leistungs-Laufband: nahtlose Schleife (Inhalt doppelt in der Spur),
+   Pause bei Hover, stehend bei reduzierter Bewegung. Neigung über .kipp-*. */
+.laufbaender {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    margin-inline: calc(-1 * var(--rand));
+    padding: 28px 0;
+    overflow: hidden;
+}
+
+.laufband {
+    overflow: hidden;
+    width: 110%;
+    margin-left: -5%;
+}
+.laufband.kipp-a { transform: rotate(-1.7deg); }
+.laufband.kipp-b { transform: rotate(1.9deg); }
+
+.laufband-spur {
+    display: flex;
+    width: max-content;
+    animation: laufband-links 46s linear infinite;
+}
+.laufband-retour .laufband-spur { animation-name: laufband-rechts; }
+.laufband:hover .laufband-spur { animation-play-state: paused; }
+
+.laufband-teil { display: flex; align-items: center; flex: 0 0 auto; }
+
+.laufband-teil > span {
+    font-size: var(--text-base);
+    letter-spacing: .02em;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.laufband-teil > i {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border-control);
+    margin: 0 clamp(18px, 2.4vw, 40px);
+    flex: 0 0 auto;
+}
+
+@keyframes laufband-links  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes laufband-rechts { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .laufband-spur { animation: none; flex-wrap: wrap; width: auto; }
+    .laufband-teil[aria-hidden] { display: none; }
+    .laufband-teil { flex-wrap: wrap; row-gap: 8px; }
+}
+
+/* Portraits (Agenturseite) */
+.portraits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+}
+.portrait { margin: 0; }
+.portrait img { width: 100%; height: auto; border-radius: var(--radius-xs); }
+.portrait figcaption { margin-top: var(--space-3); font-size: var(--text-lg); line-height: 1.4; }
+.portrait figcaption strong { font-weight: 700; }
+
+/* Das Büro in Bildern (Agenturseite) */
+.buero-bild { position: relative; }
+.buero-bild img { width: 100%; height: auto; border-radius: var(--radius-xs); }
+.buero-tag {
+    position: absolute;
+    left: var(--space-5);
+    bottom: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+.buero-untertitel {
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--text-sm);
+    padding: .4rem .65rem;
+    border-radius: 2px;
+    max-width: 24ch;
+}
+.buero-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-7);
+}
+.buero-details img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; border-radius: var(--radius-xs); }
+
 /* --- Kopf: liegt über dem Inhalt, färbt sich per Differenz ---------------- */
 /* mix-blend-mode difference macht Weiß auf hellem Grund zu Schwarz und
    bleibt auf dunklen Flächen Weiß — ein Header für beide Welten. */

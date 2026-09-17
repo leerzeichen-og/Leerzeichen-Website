@@ -72,8 +72,18 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* leichtes Eigenleben, unabhängig vom Flug */
-    animation: buehne-schweben 11s ease-in-out infinite;
+    /* Eigenleben, unabhängig vom Scroll-Weg — je Objekt ein anderer Takt */
+    animation: buehne-objekt-schweben 9s ease-in-out infinite;
+}
+.buehne-obj:nth-child(2n) img { animation-duration: 12s; animation-delay: -3s; }
+.buehne-obj:nth-child(3n) img { animation-duration: 10s; animation-delay: -6s; animation-direction: reverse; }
+.buehne-obj:nth-child(5n) img { animation-duration: 14s; animation-delay: -2s; }
+
+@keyframes buehne-objekt-schweben {
+    0%   { transform: translate(0, 0) rotate(-2.4deg); }
+    33%  { transform: translate(14px, -26px) rotate(1.6deg); }
+    66%  { transform: translate(-12px, -8px) rotate(2.6deg); }
+    100% { transform: translate(0, 0) rotate(-2.4deg); }
 }
 
 .buehne-objekte.hat-auswahl .buehne-obj button { opacity: .14; }
@@ -349,82 +359,6 @@
     line-height: var(--leading-body);
     color: var(--text-body);
 }
-
-/* Leistungen beider Säulen: zwei gegenläufige Laufbänder, dezent gesetzt.
-   Die Spur enthält den Inhalt doppelt — bei -50% beginnt die Schleife nahtlos. */
-.laufbaender {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    /* volle Breite und Luft, damit die Schräglage nicht beschnitten wird */
-    margin-inline: calc(-1 * var(--rand));
-    padding: 28px 0;
-    overflow: hidden;
-}
-.lz-saeulen + .laufbaender { margin-top: var(--space-9); }
-
-.laufband {
-    overflow: hidden;
-    width: 110%;
-    margin-left: -5%;
-}
-/* Jede Bahn leicht anders geneigt — oben und unten unterschiedlich */
-.laufbaender .laufband:nth-child(1) { transform: rotate(-1.7deg); }
-.laufbaender .laufband:nth-child(2) { transform: rotate(1.1deg); }
-.lz-saeulen ~ .laufbaender .laufband:nth-child(1) { transform: rotate(1.9deg); }
-.lz-saeulen ~ .laufbaender .laufband:nth-child(2) { transform: rotate(-1.3deg); }
-
-.laufband-spur {
-    display: flex;
-    width: max-content;
-    animation: laufband-links 46s linear infinite;
-}
-.laufband-retour .laufband-spur { animation-name: laufband-rechts; }
-.laufband:hover .laufband-spur { animation-play-state: paused; }
-
-.laufband-teil {
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
-}
-
-.laufband-teil > span {
-    font-size: var(--text-base);
-    letter-spacing: .02em;
-    color: var(--text-muted);
-    white-space: nowrap;
-}
-
-.laufband-teil > i {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--border-control);
-    margin: 0 clamp(18px, 2.4vw, 40px);
-    flex: 0 0 auto;
-}
-
-@keyframes laufband-links  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes laufband-rechts { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-
-@media (prefers-reduced-motion: reduce) {
-    .laufband-spur { animation: none; flex-wrap: wrap; width: auto; }
-    .laufband-teil[aria-hidden] { display: none; }
-    .laufband-teil { flex-wrap: wrap; row-gap: 8px; }
-}
-
-/* Leistungsliste: waagrechte Linien zwischen den Einträgen, kein Punkt */
-.lz-svc {
-    list-style: none;
-    margin: var(--space-2) 0 0;
-    padding: 0;
-    color: var(--text-body);
-}
-.lz-svc li {
-    font-size: var(--text-base);
-    font-weight: 500;
-    padding: 10px 0;
-}
-.lz-svc li + li { border-top: 1px solid var(--border-default); }
 
 /* --- Team ----------------------------------------------------------------------- */
 
