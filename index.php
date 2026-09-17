@@ -4,9 +4,9 @@
 // (weiß oben, schwarz unten) scrollt herein und trägt die Seite ins Schwarz
 // (keine Einblendung) → Antwort zweizeilig mit zwei Pfeil-Knöpfen → der
 // Splash scrollt herein, darauf schwebt das Team-Foto im Orbit, darunter
-// zentriert Text und Knopf. Danach: die zwei Säulen (Variante über
-// ?saeulen=karten|kontrast|frei, solange nicht entschieden) · Newsletter-
-// Karte mit hineinragendem Kuvert · Abschluss-CTA.
+// zentriert Text und Knopf. Danach: die zwei Säulen (Fassung „frei") mit
+// den Leistungs-Laufbändern darunter · Newsletter-Karte mit hineinragendem
+// Kuvert · Abschluss-CTA.
 // Ohne JavaScript oder bei reduzierter Bewegung steht die statische Fassung.
 
 require_once __DIR__ . '/teile/firma.php';
@@ -73,10 +73,8 @@ $saeulen_boxen = [
                     'Geschäftsausstattung', 'Microsites und Landingpages', 'Screendesign'],
     ],
 ];
-// Gestaltungs-Varianten der Säulen, bis Roman entschieden hat:
-// karten (Vorgabe) · kontrast (eine Box Ink, eine Paper) · frei (ohne Boxen).
-$saeulenVariante = in_array($_GET['saeulen'] ?? '', ['kontrast', 'frei'], true)
-    ? $_GET['saeulen'] : 'karten';
+// Säulen-Gestaltung: Variante „frei" (Beschluss Roman 17.9.2026) —
+// offene, schmale Spalten mit kräftiger Oberlinie, viel Weißraum.
 
 // Team-Text (Kurzfassung „Über uns") — steht jetzt im Splash-Akt der Bühne.
 $teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff '
@@ -196,26 +194,39 @@ require __DIR__ . '/teile/kopf.php';
 </section>
 
 <?php // ---- Die zwei Säulen (Variante über ?saeulen=…, bis entschieden) -------- ?>
-<section id="handwerk" class="lz-sec saeulen-<?= e($saeulenVariante) ?>">
-  <h2 class="lz-h2">Gestaltung ist unser Handwerk.</h2>
+<section id="handwerk" class="lz-sec">
+  <h2 class="handwerk-titel">Gestaltung ist unser Handwerk.</h2>
   <div class="lz-saeulen">
     <?php foreach ($saeulen_boxen as $box): ?>
     <article id="<?= e($box['id']) ?>" class="lz-saeule">
-      <p class="lz-eyebrow"><?= e($box['eyebrow']) ?></p>
       <h3 class="lz-saeule-titel"><?= e($box['titel']) ?></h3>
-      <p class="lz-saeule-lead"><?= e($box['text'][0]) ?></p>
-      <?php foreach (array_slice($box['text'], 1) as $t): ?>
+      <?php foreach ($box['text'] as $t): ?>
       <p class="lz-saeule-text"><?= e($t) ?></p>
       <?php endforeach; ?>
-      <ul class="lz-svc">
-        <?php foreach ($box['liste'] as $l): ?>
-        <li><?= e($l) ?></li>
-        <?php endforeach; ?>
-      </ul>
       <div class="lz-saeule-fuss">
         <a class="knopf" href="<?= e($box['url']) ?>">Mehr dazu <?= $pfeil ?></a>
       </div>
     </article>
+    <?php endforeach; ?>
+  </div>
+
+  <?php // Die Leistungen beider Säulen: zwei gegenläufige Laufbänder, dezent.
+        // Der Inhalt steht doppelt in der Spur (aria-hidden), damit die
+        // Schleife nahtlos läuft; bei reduzierter Bewegung stehen die Bänder
+        // als umbrechende Liste still. ?>
+  <div class="laufbaender" aria-label="Unsere Leistungen">
+    <?php foreach ($saeulen_boxen as $nr => $box): ?>
+    <div class="laufband <?= $nr === 1 ? 'laufband-retour' : '' ?>">
+      <div class="laufband-spur">
+        <?php for ($kopie = 0; $kopie < 2; $kopie++): ?>
+        <span class="laufband-teil"<?= $kopie ? ' aria-hidden="true"' : '' ?>>
+          <?php foreach ($box['liste'] as $l): ?>
+          <span><?= e($l) ?></span><i aria-hidden="true"></i>
+          <?php endforeach; ?>
+        </span>
+        <?php endfor; ?>
+      </div>
+    </div>
     <?php endforeach; ?>
   </div>
 </section>

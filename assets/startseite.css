@@ -159,13 +159,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-6);
-    padding: 100px var(--rand) var(--space-6);
+    /* Ans untere Ende: dort ist der Splash weiß — der Text lag sonst im
+       hellgrauen Übergangsbereich und war schwer zu lesen. */
+    justify-content: flex-end;
+    gap: var(--space-7);
+    padding: 90px var(--rand) clamp(24px, 5vh, 56px);
 }
 
 .buehne-team-foto {
-    width: min(520px, 72vw, 58vh);
+    width: min(780px, 86vw, 72vh);
     height: auto;
     border-radius: var(--radius-xs);
     box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
@@ -181,9 +183,21 @@
 .buehne-team-text {
     text-align: center;
     color: var(--ink);
-    max-width: 56ch;
+    max-width: 62ch;
 }
-.buehne-team-text p { margin: var(--space-3) 0 var(--space-5); color: var(--text-body); }
+.buehne-team-text h2 {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(1.9rem, 3vw, 3.1rem);
+    line-height: 1.1;
+}
+.buehne-team-text p {
+    /* Gleiche Größe wie „Seit 2008." im Antwort-Akt */
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    margin: var(--space-5) 0 var(--space-6);
+    color: var(--text-body);
+}
 
 @keyframes buehne-schweben {
     0%   { transform: translateY(0) rotate(-1deg); }
@@ -284,13 +298,24 @@
 }
 .lz-blocktext p { margin: 0; max-width: min(52ch, 100%); }
 
-/* Die zwei Säulen, am Schreibtisch nebeneinander. Drei Fassungen, gewählt
-   über die Sektions-Klasse (?saeulen=karten|kontrast|frei), bis entschieden. */
+.handwerk-titel {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(2.4rem, 8vw, 8rem);
+    line-height: 1.04;
+}
+
+/* Die zwei Säulen: Fassung „frei" (Beschluss 17.9.2026) — schmale, offene
+   Spalten mit kräftiger Oberlinie und reichlich Weißraum links, mittig
+   und rechts. */
 .lz-saeulen {
     display: grid;
-    grid-template-columns: repeat(2, minmax(min(100%, 320px), 1fr));
-    gap: var(--space-6);
-    margin-top: var(--space-7);
+    /* Halb so breite Spalten, verteilt mit Weißraum links, mittig, rechts */
+    grid-template-columns: repeat(2, minmax(min(100%, 260px), 420px));
+    justify-content: space-evenly;
+    column-gap: var(--space-8);
+    row-gap: var(--space-7);
+    margin-top: var(--space-8);
     align-items: stretch;
 }
 
@@ -298,9 +323,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-xs);
-    padding: var(--space-6);
+    border-top: 2px solid var(--ink);
+    padding: var(--space-6) 0 0;
 }
 .lz-saeule p { margin: 0; }
 .lz-saeule-fuss { margin-top: auto; padding-top: var(--space-5); }
@@ -310,42 +334,61 @@
     font-weight: 300;
     font-size: clamp(1.7rem, 2.7vw, 2.75rem);
     line-height: 1.08;
-    max-width: 18ch;
 }
-.lz-saeule-lead {
-    font-size: var(--text-lg);
-    line-height: 1.5;
-    color: var(--text-strong);
-    max-width: 38ch;
-}
+/* Eine Fließtext-Größe über alle Absätze */
 .lz-saeule-text {
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
     color: var(--text-body);
-    max-width: 42ch;
 }
 
-/* Fassung „kontrast": erste Box Ink, zweite Paper mit Ink-Rahmen */
-.saeulen-kontrast .lz-saeule:first-child {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: #fff;
+/* Leistungen beider Säulen: zwei gegenläufige Laufbänder, dezent gesetzt.
+   Die Spur enthält den Inhalt doppelt — bei -50% beginnt die Schleife nahtlos. */
+.laufbaender {
+    margin-top: var(--space-9);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
 }
-.saeulen-kontrast .lz-saeule:first-child .lz-eyebrow { color: rgba(255,255,255,.55); }
-.saeulen-kontrast .lz-saeule:first-child .lz-saeule-lead { color: #fff; }
-.saeulen-kontrast .lz-saeule:first-child .lz-saeule-text { color: rgba(255,255,255,.75); }
-.saeulen-kontrast .lz-saeule:first-child .lz-svc { color: rgba(255,255,255,.85); }
-.saeulen-kontrast .lz-saeule:first-child .lz-svc li + li { border-top-color: rgba(255,255,255,.22); }
-.saeulen-kontrast .lz-saeule:first-child .knopf {
-    background: var(--paper); border-color: var(--paper); color: var(--ink);
-}
-.saeulen-kontrast .lz-saeule:last-child { border: 1.5px solid var(--ink); }
 
-/* Fassung „frei": keine Boxen — zwei Spalten mit kräftiger Oberlinie */
-.saeulen-frei .lz-saeule {
-    border: 0;
-    border-top: 2px solid var(--ink);
-    border-radius: 0;
-    padding: var(--space-6) 0 0;
+.laufband { overflow: hidden; }
+
+.laufband-spur {
+    display: flex;
+    width: max-content;
+    animation: laufband-links 46s linear infinite;
+}
+.laufband-retour .laufband-spur { animation-name: laufband-rechts; }
+.laufband:hover .laufband-spur { animation-play-state: paused; }
+
+.laufband-teil {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.laufband-teil > span {
+    font-size: var(--text-base);
+    letter-spacing: .02em;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.laufband-teil > i {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border-control);
+    margin: 0 clamp(18px, 2.4vw, 40px);
+    flex: 0 0 auto;
+}
+
+@keyframes laufband-links  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes laufband-rechts { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .laufband-spur { animation: none; flex-wrap: wrap; width: auto; }
+    .laufband-teil[aria-hidden] { display: none; }
+    .laufband-teil { flex-wrap: wrap; row-gap: 8px; }
 }
 
 /* Leistungsliste: waagrechte Linien zwischen den Einträgen, kein Punkt */
