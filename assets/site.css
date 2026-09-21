@@ -68,6 +68,11 @@
     --rand: clamp(20px, 4vw, 55px);
     --inhalt-breite: 1180px;   /* Lesespalte für Unterseiten */
 
+    /* Die Kopfzeile ist fixiert und nimmt keinen Platz im Fluss ein — Seiten
+       mit hellem Anfang müssen ihr oben so viel Raum lassen (40 px Logo plus
+       zweimal 45 px Polster; am Telefon kleiner, siehe unten). */
+    --kopf-frei: 130px;
+
     /* Aliasse für ältere Teile (projekt.css) — nicht neu verwenden. */
     --tinte:     var(--text-strong);
     --papier:    var(--paper);
@@ -205,14 +210,22 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     line-height: 1.06;
 }
 
-/* Dunkler Seiten-Hero (Landingpages): Ink-Motiv, Chip, Light-Titel */
+/* Dunkler Seiten-Hero (Landingpages): Ink-Motiv, Chip, Light-Titel.
+   Beginnt an der Bildschirmkante (die Kopfzeile ist fixiert und liegt
+   negativ darüber) und füllt fast die ganze Höhe; der Inhalt sitzt unten. */
 .seiten-hero {
     background-color: #000;
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
     color: #fff;
-    padding: calc(130px + var(--space-8)) var(--rand) var(--space-9);
+    padding: calc(var(--kopf-frei) + var(--space-6)) var(--rand) var(--space-9);
+    min-height: clamp(520px, 88vh, 1100px);
+    min-height: clamp(520px, 88svh, 1100px);   /* svh: stabil trotz Handy-Browserleiste */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
 }
 .seiten-hero .titel-seite { color: #fff; max-width: 22ch; margin-top: var(--space-5); }
 .seiten-hero .lz-lead { color: rgba(255, 255, 255, .8); }
@@ -326,8 +339,14 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
    bleibt auf dunklen Flächen Weiß — ein Header für beide Welten. */
 
 .lz-header {
-    position: sticky;
+    /* Fixiert statt sticky: Die Kopfzeile nimmt keinen Platz im Fluss ein,
+       Heroes und Headerbilder beginnen dadurch an der Bildschirmkante —
+       auf dunklen Motiven erscheinen Logo und Navigation negativ (Differenz).
+       Helle Seitenanfänge halten mit --kopf-frei Abstand. */
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 30;
     display: flex;
     align-items: center;
@@ -369,6 +388,8 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     max-width: var(--inhalt-breite);
     margin: 0 auto;
     padding: var(--space-8) var(--rand);
+    /* Oben zusätzlich an der fixierten Kopfzeile vorbei. */
+    padding-top: calc(var(--kopf-frei) + var(--space-6));
 }
 
 .abschnitt { margin-block: var(--space-9); }
@@ -538,9 +559,13 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 /* --- Telefon ---------------------------------------------------------------- */
 
 @media (max-width: 900px) {
-    .lz-header { padding: 20px var(--rand); }
-    .lz-nav { gap: 20px; }
-    .lz-nav a { line-height: 1.3; }
+    /* Kompakter Kopf: kleineres Logo und engere Navigation, damit die
+       Freihaltung auch reicht, wenn die Navigation zweizeilig umbricht. */
+    :root { --kopf-frei: 118px; }
+    .lz-header { padding: 18px var(--rand); }
+    .lz-header .lz-logo { height: 30px; }
+    .lz-nav { gap: 8px 18px; }
+    .lz-nav a { line-height: 1.35; font-size: 1rem; }
     .lz-footer { padding: 48px var(--rand) 64px; }
     .lz-footgrid { grid-template-columns: 1fr; gap: var(--space-6); }
     .lz-footcol { padding-top: 24px; }

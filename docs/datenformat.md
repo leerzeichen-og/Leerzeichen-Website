@@ -20,7 +20,10 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
       "saeule": "erlebnisse",
       "punchline": "Eine Ausstellung, die …",
       "startseite": "top",
+      "zitat": "Wir wollten einen Weg, der …",
+      "zitat_von": "Herta Aubach, Bürgermeisterin",
       "teaser_quer": { …Bild-Objekt, siehe unten… },
+      "teaser_hoch": { …Bild-Objekt… },
       "objekt": { …Bild-Objekt… }
     }
   ]
@@ -30,6 +33,13 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
 - `saeule`: `erlebnisse` oder `gestaltung` (die zwei Säulen der Positionierung).
 - `startseite`: `top`, `erlebnisse`, `gestaltung` oder nicht gesetzt —
   bestimmt die vier Plätze im Startseiten-Scroller.
+- `zitat`/`zitat_von` (seit 21.9.2026, optional): **Kundenstimme** — die
+  Referenzen-Übersicht streut sie als schwarze Blöcke zwischen die Karten.
+  Klartext ohne Anführungszeichen (setzt die Website), `zitat_von` als eine
+  Zeile „Name, Rolle". Beide stehen auch im Beitrags-JSON.
+- `teaser_hoch` (seit 21.9.2026, optional): Hochformat-Teaser (1120×1520) für
+  die Hochformat-Karten der Collage; fehlt er, beschneidet die Website den
+  Quer-Teaser per CSS.
 - `objekt` (seit 16.9.2026): **freigestelltes Objekt** des Projekts —
   transparentes WebP/PNG, das stellvertretend fürs Projekt steht. Schwebt auf
   der Startseiten-Bühne (nur Projekte mit `objekt` fliegen dort mit, höchstens
@@ -46,6 +56,7 @@ Der vollständige Beitrag:
   "saeule": "erlebnisse",
   "schlagworte": ["Ausstellung", "Leitsystem"],
   "punchline": "…",
+  "zitat": "…", "zitat_von": "…",
   "texte": {
     "kurzbeschreibung": "…", "aufgabenstellung": "…", "loesung": "…",
     "detail_01": "…", "detail_02": "…", "zusammenfassung": "…",
@@ -55,7 +66,7 @@ Der vollständige Beitrag:
   "bilder": {
     "header":  { …Bild-Objekt… },
     "foto_01": { }, "foto_02": { }, "foto_04": { }, "foto_05": { },
-    "teaser_quer": { }
+    "teaser_quer": { }, "teaser_hoch": { }
   },
   "stand": "2026-09-16T12:00:00+02:00"
 }

@@ -34,8 +34,23 @@ require __DIR__ . '/../teile/kopf.php';
 </nav>
 
 <?php if ($projekte): ?>
-<div class="pj-liste">
-  <?php foreach ($projekte as $p) { echo pj_karte($p); } ?>
+<div class="pj-collage">
+  <?php
+  // Collage statt gleichmäßigem Raster (Schema-Grafik 21.9.2026): je
+  // Fünfergruppe hoch · hoch (versetzt) · quer · groß · hoch; nach der
+  // dritten Karte jeder Gruppe erscheint die nächste Kundenstimme.
+  $muster = ['hoch', 'hoch-tief', 'quer', 'gross', 'hoch'];
+  $zitate = array_values(array_filter($projekte,
+      fn($p) => trim((string) ($p['zitat'] ?? '')) !== ''));
+  $n = 0;
+  foreach ($projekte as $p) {
+      echo pj_karte($p, $muster[$n % count($muster)]);
+      $n++;
+      if ($n % count($muster) === 3 && $zitate) {
+          echo pj_zitat(array_shift($zitate));
+      }
+  }
+  ?>
 </div>
 <?php else: ?>
 <p class="platzhalter">Hier erscheinen die Projekte, sobald Space sie veröffentlicht hat.</p>

@@ -139,6 +139,8 @@ $projekte = [
         'jahr' => 2026, 'saeule' => 'erlebnisse', 'startseite' => 'top',
         'schlagworte' => ['Erlebnisweg', 'Ausstellung', 'Leitsystem'],
         'punchline' => 'Ein Bachlauf wird zum Museum: acht Stationen machen sichtbar, was unter der Oberfläche passiert.',
+        'zitat' => 'Wir wollten einen Weg, der ohne Personal auskommt. Bekommen haben wir einen Ort, an dem Familien freiwillig einen halben Tag bleiben.',
+        'zitat_von' => 'Herta Aubach, Bürgermeisterin (erfunden)',
         'texte' => [
             'kurzbeschreibung' => "Der Mühlbach von Nebelbach war immer da — gesehen hat ihn niemand. Der Erlebnisweg „Verborgene Wasserwelt“ holt auf 2,4 Kilometern ans Licht, was unter der Oberfläche lebt und arbeitet.\n\nAcht Stationen verbinden Spielorte, Beobachtungsplätze und eine begehbare Wasserkammer. Die Gestaltung folgt dem Bach: Alles fließt talwärts, nichts steht im Weg.",
             'aufgabenstellung' => "Die Gemeinde wollte den Ortskern mit dem Naherholungsgebiet verbinden und Familien einen Grund geben, länger zu bleiben. Der Weg sollte ohne Personal auskommen, das ganze Jahr funktionieren und die Aufsichtspflicht nicht überfordern.",
@@ -185,6 +187,8 @@ $projekte = [
         'jahr' => 2026, 'saeule' => 'gestaltung', 'startseite' => 'gestaltung',
         'schlagworte' => ['Corporate Design', 'Verpackung'],
         'punchline' => 'Ein Familienbetrieb bekommt ein Gesicht, das im Kühlregal genauso trägt wie am Hoftor.',
+        'zitat' => 'Zum ersten Mal schaut alles aus einem Guss aus — und unsere Druckerei kann jede neue Sorte selbst anlegen.',
+        'zitat_von' => 'Josef Penzendorfer, Geschäftsführung (erfunden)',
         'texte' => [
             'kurzbeschreibung' => "Drei Generationen, vierzig Produkte, kein gemeinsamer Auftritt: Die Molkerei Sonnseit wuchs schneller als ihre Gestaltung. Das neue Corporate Design bringt Hof, Kühlregal und Lieferwagen wieder unter ein Dach.",
             'aufgabenstellung' => "Der Betrieb wollte im Handel als Marke erkennbar werden, ohne die Stammkundschaft ab Hof zu verlieren. Das Design musste auf Becher, Glas und Karton funktionieren — und von der hauseigenen Druckerei verarbeitbar sein.",
@@ -241,6 +245,8 @@ foreach ($projekte as $nr => $p) {
             'Testmotiv: Header von ' . $p['titel']),
         'teaser_quer' => td_bildobjekt($ziel, $slug, 'teaser', 2288, 1520 / 2288, $farben,
             'Testmotiv: Teaser von ' . $p['titel']),
+        'teaser_hoch' => td_bildobjekt($ziel, $slug, 'teaser-hoch', 1120, 1520 / 1120, $farben,
+            'Testmotiv: Hochformat-Teaser von ' . $p['titel']),
         'objekt'      => td_objekt($ziel, $slug, $nr, $farben,
             'Freigestelltes Testobjekt von ' . $p['titel']),
     ];
@@ -249,25 +255,33 @@ foreach ($projekte as $nr => $p) {
             $farben, 'Testmotiv ' . $name . ' von ' . $p['titel']);
     }
 
-    file_put_contents(
-        $ziel . '/daten/projekte/' . $slug . '.json',
-        td_json([
-            'slug' => $slug, 'titel' => $p['titel'], 'kunde' => $p['kunde'],
-            'jahr' => $p['jahr'], 'saeule' => $p['saeule'],
-            'schlagworte' => $p['schlagworte'], 'punchline' => $p['punchline'],
-            'texte' => $p['texte'], 'credits' => $p['credits'],
-            'bilder' => $bilder, 'stand' => date('c'),
-        ])
-    );
+    $beitrag = [
+        'slug' => $slug, 'titel' => $p['titel'], 'kunde' => $p['kunde'],
+        'jahr' => $p['jahr'], 'saeule' => $p['saeule'],
+        'schlagworte' => $p['schlagworte'], 'punchline' => $p['punchline'],
+        'texte' => $p['texte'], 'credits' => $p['credits'],
+        'bilder' => $bilder, 'stand' => date('c'),
+    ];
+    if (!empty($p['zitat'])) {
+        $beitrag['zitat']     = $p['zitat'];
+        $beitrag['zitat_von'] = $p['zitat_von'] ?? '';
+    }
+    file_put_contents($ziel . '/daten/projekte/' . $slug . '.json', td_json($beitrag));
 
     $zeile = [
         'slug' => $slug, 'titel' => $p['titel'], 'kunde' => $p['kunde'],
         'jahr' => $p['jahr'], 'saeule' => $p['saeule'], 'punchline' => $p['punchline'],
         'teaser_quer' => $bilder['teaser_quer'],
+        'teaser_hoch' => $bilder['teaser_hoch'],
         'objekt' => $bilder['objekt'],
     ];
     if (!empty($p['startseite'])) {
         $zeile['startseite'] = $p['startseite'];
+    }
+    // Kundenstimme (optional) — die Übersicht streut sie zwischen die Karten.
+    if (!empty($p['zitat'])) {
+        $zeile['zitat']     = $p['zitat'];
+        $zeile['zitat_von'] = $p['zitat_von'] ?? '';
     }
     $index[] = $zeile;
 }

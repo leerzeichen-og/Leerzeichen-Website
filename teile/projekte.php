@@ -86,13 +86,33 @@ function pj_bild(?array $bild, string $klasse, string $sizes, bool $zuerst = fal
         . '>';
 }
 
-/** Eine Projektkarte (Referenzen-Liste, „Weitere Projekte", später der Scroller). */
-function pj_karte(array $eintrag): string
+/**
+ * Eine Projektkarte (Referenzen-Liste, „Weitere Projekte", später der Scroller).
+ * $variante steuert die Collage der Referenzen-Übersicht: 'hoch' (Hochformat,
+ * nimmt teaser_hoch, wenn Space ihn geliefert hat — sonst wird der Quer-Teaser
+ * per CSS beschnitten), 'quer', 'gross' (doppelt breit); der Zusatz '-tief'
+ * rückt die Karte nach unten (Versatz im Raster). Ohne Variante: schlichte
+ * Karte fürs gleichmäßige Raster (Landingpages, „Weitere Projekte").
+ */
+function pj_karte(array $eintrag, string $variante = ''): string
 {
+    $tief = str_ends_with($variante, '-tief');
+    $form = $tief ? substr($variante, 0, -5) : $variante;
+
+    $bild  = $eintrag['teaser_quer'] ?? null;
+    $sizes = '(max-width: 900px) 100vw, 33vw';
+    if ($form === 'hoch' && !empty($eintrag['teaser_hoch']['quellen'])) {
+        $bild = $eintrag['teaser_hoch'];
+    }
+    if ($form === 'gross') {
+        $sizes = '(max-width: 900px) 100vw, 66vw';
+    }
+
+    $klassen = 'pj-karte' . ($form !== '' ? ' pj-k-' . e($form) : '') . ($tief ? ' pj-k-tief' : '');
     $url = '/referenzen/' . e($eintrag['slug'] ?? '') . '/';
-    $out = '<a class="pj-karte" href="' . $url . '">';
+    $out = '<a class="' . $klassen . '" href="' . $url . '">';
     $out .= '<span class="pj-karte-bildwrap">'
-          . pj_bild($eintrag['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 33vw');
+          . pj_bild($bild, 'pj-karte-bild', $sizes);
     $saeule = PJ_SAEULEN[$eintrag['saeule'] ?? ''][0] ?? null;
     if ($saeule) {
         $out .= '<span class="chip pj-karte-chip">' . e($saeule) . '</span>';
@@ -106,4 +126,23 @@ function pj_karte(array $eintrag): string
         $out .= '<span class="pj-karte-punchline">' . e($eintrag['punchline']) . '</span>';
     }
     return $out . '</a>';
+}
+
+/**
+ * Kundenstimme als schwarzer, leicht gedrehter Block zwischen den Karten der
+ * Referenzen-Übersicht. Kommt aus den Feldern zitat/zitat_von des Eintrags
+ * (optional, gepflegt in Space) — ohne Zitat gibt es keinen Block.
+ */
+function pj_zitat(array $eintrag): string
+{
+    // Anführungszeichen setzt die Ausgabe selbst — doppelte vermeiden.
+    $text = trim(trim((string) ($eintrag['zitat'] ?? '')), "„“\"");
+    if ($text === '') {
+        return '';
+    }
+    $out = '<figure class="pj-zitat"><blockquote><p>„' . e($text) . '“</p></blockquote>';
+    if (!empty($eintrag['zitat_von'])) {
+        $out .= '<figcaption>' . e((string) $eintrag['zitat_von']) . '</figcaption>';
+    }
+    return $out . '</figure>';
 }
