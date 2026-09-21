@@ -109,6 +109,12 @@ $nav = [
     ['agentur',            'Agentur'],
     ['kontakt',            'Kontakt'],
 ];
+
+// HTML nie ungefragt aus dem Browser-Cache: Ohne diesen Header raten Browser
+// die Gültigkeit und zeigen tagelang alte Seiten — samt alter ?v=-Adressen,
+// womit auch lz_asset() ins Leere läuft (passiert am 21.9.2026, Referenzen).
+// „no-cache" heißt: speichern erlaubt, aber vor jeder Anzeige nachfragen.
+header('Cache-Control: no-cache');
 ?>
 <!doctype html>
 <html lang="de-AT">
