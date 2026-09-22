@@ -22,7 +22,7 @@ if ($filter !== '') {
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="lz-sec" style="padding-top:calc(90px + var(--space-7));padding-bottom:0">
+<section class="seiten-kopf">
 <h1 class="titel-seite">Referenzen</h1>
 
 <nav class="pj-pillen" aria-label="Nach Säule filtern">
@@ -32,7 +32,9 @@ require __DIR__ . '/../teile/kopf.php';
      <?= $filter === $schluessel ? 'aria-current="true"' : '' ?>><?= e($label) ?></a>
   <?php endforeach; ?>
 </nav>
+</section>
 
+<section class="lz-sec" style="padding-top:0">
 <?php if ($projekte): ?>
 <div class="pj-collage">
   <?php

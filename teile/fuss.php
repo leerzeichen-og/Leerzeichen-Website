@@ -43,5 +43,6 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
     <span>© <?= date('Y') ?> in Neumarkt an der Ybbs – Mostviertel – Niederösterreich – Österreich – Europa – Erde</span>
   </div>
 </footer>
+<script src="<?= e(lz_asset('/assets/einblenden.js')) ?>" defer></script>
 </body>
 </html>

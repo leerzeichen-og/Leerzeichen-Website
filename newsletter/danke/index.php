@@ -7,12 +7,17 @@ $titel        = 'Fast geschafft — Empty Space | leerzeichen';
 $beschreibung = 'Bitte bestätigen Sie Ihre Newsletter-Anmeldung über die Mail, die wir Ihnen geschickt haben.';
 $brotkrumen   = [['Newsletter', '/newsletter/danke/']];
 
+$voll_breit   = true;
+
 require __DIR__ . '/../../teile/kopf.php';
 ?>
 
-<section class="abschnitt">
-  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Fast geschafft.</h1>
-  <p class="lz-lead" style="max-width:52ch">Wir haben Ihnen eine Mail geschickt.
+<section class="seiten-kopf">
+  <span class="chip">Empty Space</span>
+  <h1 class="titel-seite">Fast geschafft.</h1>
+</section>
+<section class="text-spalte">
+  <p>Wir haben Ihnen eine Mail geschickt.
     Ein Klick auf den Link darin, und Sie sind dabei. Schauen Sie notfalls im
     Spam-Ordner nach — manchmal landen wir dort.</p>
 </section>

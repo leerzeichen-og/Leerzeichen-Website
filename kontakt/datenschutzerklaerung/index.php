@@ -6,11 +6,16 @@ $titel        = 'Datenschutzerklärung | leerzeichen multimedia og';
 $beschreibung = 'Datenschutzerklärung der leerzeichen multimedia og, Neumarkt an der Ybbs.';
 $brotkrumen   = [['Kontakt', '/kontakt/'], ['Datenschutzerklärung', '/kontakt/datenschutzerklaerung/']];
 
+$voll_breit   = true;
+
 require __DIR__ . '/../../teile/kopf.php';
 ?>
 
-<section class="abschnitt">
-  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">Datenschutzerklärung</h1>
+<section class="seiten-kopf">
+  <span class="chip">Rechtliches</span>
+  <h1 class="titel-seite">Datenschutzerklärung</h1>
+</section>
+<section class="text-spalte">
   <p class="platzhalter">Der Text folgt — hier einsetzen, sobald er vorliegt.</p>
 </section>
 

@@ -6,11 +6,16 @@ $titel        = 'AGB | leerzeichen multimedia og';
 $beschreibung = 'AGB der leerzeichen multimedia og, Neumarkt an der Ybbs.';
 $brotkrumen   = [['Kontakt', '/kontakt/'], ['AGB', '/kontakt/agb/']];
 
+$voll_breit   = true;
+
 require __DIR__ . '/../../teile/kopf.php';
 ?>
 
-<section class="abschnitt">
-  <h1 class="titel-seite" style="margin-bottom:var(--space-5)">AGB</h1>
+<section class="seiten-kopf">
+  <span class="chip">Rechtliches</span>
+  <h1 class="titel-seite">AGB</h1>
+</section>
+<section class="text-spalte">
   <p class="platzhalter">Der Text folgt — hier einsetzen, sobald er vorliegt.</p>
 </section>
 

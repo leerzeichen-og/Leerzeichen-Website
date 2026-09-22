@@ -48,10 +48,13 @@ $ctaKnopf = 'Kommen Sie vorbei';
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="lz-sec" style="padding-top:calc(90px + var(--space-8))">
-  <h1 class="titel-seite" style="max-width:24ch">Ohne Leerzeichen wäre dieser Satz
+<section class="seiten-kopf">
+  <span class="chip">Agentur</span>
+  <h1 class="titel-seite">Ohne Leerzeichen wäre dieser Satz
     kaum zu lesen.</h1>
-  <p class="lz-lead" style="margin-top:var(--space-6);max-width:52ch">Der kleinste
+</section>
+<section class="text-spalte">
+  <p>Der kleinste
     Eingriff entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den
     Blick lenkt und das Wichtige stehen lässt. Dem folgend begleiten wir seit
     <?= e(FIRMA_GEGRUENDET) ?> Projekte von der ersten Skizze bis zur Übergabe —

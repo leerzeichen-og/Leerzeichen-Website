@@ -22,9 +22,6 @@
      Differenz) — das Bild füllt deshalb den ganzen Bildschirm. */
   --pj-kopfhoehe: 0px;
 
-  /* Wie weit Badge und Überschrift im Headerbild nach unten rücken. */
-  --pj-header-tiefer: clamp(40px, 10vh, 100px);
-
   --pj-textspalte: 44rem;        /* Lesebreite der Textblöcke */
   --pj-luft: clamp(48px, 7vw, 120px);
 
@@ -75,10 +72,11 @@
 .pj-header-inhalt {
   position: absolute;
   z-index: 2;
-  top: calc(clamp(72px, 12vh, 160px) + var(--pj-header-tiefer));
-  left: var(--pj-rand);
-  right: var(--pj-rand);
-  max-width: 34rem;
+  /* Titel-Position des editorialen Grundrasters (Tokens aus site.css).
+     Das Bild ist randlos — die Einrückung rechnet deshalb ab Fensterkante. */
+  top: var(--titel-oben);
+  left: calc(50% - 50vw + var(--titel-links));
+  right: calc(50% - 50vw + var(--rand));
   color: #fff;
 }
 
@@ -97,8 +95,12 @@
 
 .pj .pj-titel {
   margin: 0;
-  font-size: clamp(1.7rem, 3.4vw, 3rem);
-  line-height: 1.12;
+  /* Light und in der Größe der Säulen-Seiten — wie jede Überschrift. */
+  font-weight: 300;
+  font-size: clamp(2.2rem, 4.6vw, 4.4rem);
+  line-height: 1.06;
+  max-width: 22ch;
+  text-wrap: balance;
   color: #fff;
   text-shadow: 0 1px 24px rgba(0, 0, 0, .35);
 }
@@ -154,14 +156,15 @@
   margin: var(--pj-luft) auto var(--pj-luft) 50%;
   padding-right: var(--pj-rand);
   transform: translateX(-25%);
-  font-size: clamp(.95rem, 1.05vw, 1.06rem);
-  line-height: 1.65;
+  /* Fließtext-Standard der Website (site.css): 23 px, ruhige Zeilen. */
+  font-size: var(--text-fliess);
+  line-height: 1.55;
 }
 
 .pj .pj-text p { margin: 0 0 1em; }
 .pj .pj-text p:last-child { margin-bottom: 0; }
 
-.pj-lead { font-size: clamp(1rem, 1.2vw, 1.15rem); }
+.pj-lead { font-size: var(--text-fliess); }
 
 @media (max-width: 900px) {
   .pj-text {
@@ -407,8 +410,13 @@
   padding: clamp(32px, 4.5vw, 60px) clamp(28px, 5vw, 76px);
   background: var(--tinte);
   color: var(--papier);
-  transform: rotate(-1.6deg);
+  /* Drehung als Variable, damit die Einblendung (.blende) sie mitnimmt
+     statt sie zu überschreiben. */
+  --pj-zitat-dreh: rotate(-1.6deg);
+  transform: var(--pj-zitat-dreh);
 }
+.pj-zitat.blende    { transform: translateY(26px) var(--pj-zitat-dreh); }
+.pj-zitat.blende-da { transform: var(--pj-zitat-dreh); }
 
 .pj-zitat blockquote { margin: 0; }
 .pj-zitat p {
@@ -432,7 +440,7 @@
   .pj-collage > * { grid-column: 1 / -1; }
   .pj-k-tief { padding-top: 0; }
   .pj-collage .pj-karte-bild { aspect-ratio: 2288 / 1520; }
-  .pj-zitat { transform: rotate(-1deg); }
+  .pj-zitat { --pj-zitat-dreh: rotate(-1deg); }
 }
 
 /* ---- Bewegung sparsam ------------------------------------------------------ */

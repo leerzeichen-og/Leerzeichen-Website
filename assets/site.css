@@ -73,6 +73,15 @@
        zweimal 45 px Polster; am Telefon kleiner, siehe unten). */
     --kopf-frei: 130px;
 
+    /* Editoriales Grundraster (22.9.2026): Überschriften stehen auf allen
+       Seiten gleich — etwa 25 % der Bildschirmbreite vom linken Rand, von
+       oben im Abstand der Projekt-Detailansicht, immer im Light-Schnitt in
+       der Größe der Säulen-Seiten (.titel-seite). Fließtext etwas größer
+       als der Säulen-Teasertext (--text-lg, 21 px). */
+    --titel-oben:  calc(clamp(72px, 12vh, 160px) + clamp(40px, 10vh, 100px));
+    --titel-links: max(var(--rand), 25vw);
+    --text-fliess: 1.4375rem;   /* 23 px */
+
     /* Aliasse für ältere Teile (projekt.css) — nicht neu verwenden. */
     --tinte:     var(--text-strong);
     --papier:    var(--paper);
@@ -208,6 +217,45 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     font-weight: 300;
     font-size: clamp(2.2rem, 4.6vw, 4.4rem);
     line-height: 1.06;
+    max-width: 22ch;
+    text-wrap: balance;
+}
+
+/* Seitenkopf des editorialen Grundrasters: Chip (optional) über dem Titel,
+   eingerückt auf --titel-links. Danach folgt meist eine .text-spalte. */
+.seiten-kopf {
+    padding: var(--titel-oben) var(--rand) 0 var(--titel-links);
+}
+.seiten-kopf .chip { margin-bottom: var(--space-5); }
+
+/* Textspalte unter dem Seitenkopf: Fließtext in Lesebreite (8–10 Wörter),
+   an der Titel-Einrückung ausgerichtet. */
+.text-spalte {
+    padding: var(--space-7) var(--rand) var(--space-9) var(--titel-links);
+}
+.text-spalte p {
+    margin: 0 0 var(--space-5);
+    max-width: 52ch;
+    font-size: var(--text-fliess);
+    line-height: 1.55;
+    color: var(--text-body);
+    text-wrap: pretty;
+}
+.text-spalte p:last-child { margin-bottom: 0; }
+.text-spalte a { text-decoration: underline; }
+
+/* Text-Einblendung beim Scrollen: Die Klassen vergibt NUR das Skript
+   (assets/einblenden.js) — ohne JavaScript und bei reduzierter Bewegung
+   bleibt alles sofort sichtbar. Die Startseiten-Bühne ist ausgenommen,
+   sie hat ihre eigene Choreografie. */
+.blende {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+}
+.blende-da {
+    opacity: 1;
+    transform: none;
 }
 
 /* Dunkler Seiten-Hero (Landingpages): Ink-Motiv, Chip, Light-Titel.
@@ -219,15 +267,16 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     background-position: center top;
     background-repeat: no-repeat;
     color: #fff;
-    padding: calc(var(--kopf-frei) + var(--space-6)) var(--rand) var(--space-9);
+    /* Titel-Position wie überall: --titel-oben von oben, --titel-links von links. */
+    padding: var(--titel-oben) var(--rand) var(--space-9) var(--titel-links);
     min-height: clamp(520px, 88vh, 1100px);
     min-height: clamp(520px, 88svh, 1100px);   /* svh: stabil trotz Handy-Browserleiste */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
-.seiten-hero .titel-seite { color: #fff; max-width: 22ch; margin-top: var(--space-5); }
+.seiten-hero .titel-seite { color: #fff; margin-top: var(--space-5); }
 .seiten-hero .lz-lead { color: rgba(255, 255, 255, .8); }
 
 /* Prinzipien-Raster: offene Blöcke mit Oberlinie (Fassung „frei") */
@@ -560,8 +609,9 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 
 @media (max-width: 900px) {
     /* Kompakter Kopf: kleineres Logo und engere Navigation, damit die
-       Freihaltung auch reicht, wenn die Navigation zweizeilig umbricht. */
-    :root { --kopf-frei: 118px; }
+       Freihaltung auch reicht, wenn die Navigation zweizeilig umbricht.
+       Die Titel-Einrückung von 25 % wäre am Telefon zu raumgreifend. */
+    :root { --kopf-frei: 118px; --titel-links: var(--rand); }
     .lz-header { padding: 18px var(--rand); }
     .lz-header .lz-logo { height: 30px; }
     .lz-nav { gap: 8px 18px; }
