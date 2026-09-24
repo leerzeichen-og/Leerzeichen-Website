@@ -117,7 +117,7 @@ require __DIR__ . '/teile/kopf.php';
   <div class="buehne-blick">
     <div class="buehne-objekte">
       <?php foreach ($flieger as $i => $p): $b = $bahnen[$i]; ?>
-      <div class="buehne-obj"
+      <div class="buehne-obj <?= $b['vx'] >= 0 ? 'fliegt-rechts' : 'fliegt-links' ?>"
            data-w="<?= $b['w'] ?>" data-h="<?= $b['h'] ?>"
            data-x="<?= $b['x'] ?>" data-y0="<?= $b['y0'] ?>"
            data-tiefe="<?= $b['tiefe'] ?>" data-vx="<?= $b['vx'] ?>"

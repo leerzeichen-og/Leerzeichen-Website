@@ -122,6 +122,9 @@
   width: 68px;
   height: 76px;
   margin-top: clamp(28px, 6vh, 64px);
+  /* Der gedrehte Pfeil liegt mittig in seiner Box — die halbe Box abzüglich
+     halber Strichbreite nach links, dann sitzt er exakt an der Textkante. */
+  margin-left: -27px;
   color: #fff;
   opacity: .85;
   pointer-events: none;

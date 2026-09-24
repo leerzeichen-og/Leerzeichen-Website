@@ -584,7 +584,12 @@ body.menue-offen { overflow: hidden; }
 
 /* Zweispaltige Karte wie im Design-Briefing, aber nie auf voller Breite.
    Die Kuvert-Grafik ragt oben über den Rahmen in die Box hinein. */
-.nl-bereich { padding-top: calc(var(--space-9) + 200px); }
+/* Oben Platz fürs hineinragende Kuvert, unten Luft zum schwarzen CTA —
+   auch während die Postkarte noch einfliegt (sie startet 56 px tiefer). */
+.nl-bereich {
+    padding-top: calc(var(--space-9) + 200px);
+    padding-bottom: calc(var(--space-9) + 80px);
+}
 
 .nl-karte {
     max-width: 1080px;
@@ -598,9 +603,10 @@ body.menue-offen { overflow: hidden; }
     position: relative;
 }
 
-/* Die Postkarte fliegt als GANZES ein (leicht gedreht), nicht in Einzelteilen —
-   die Drehung steckt in der Blende, damit sie sich beim Landen auflöst. */
-.nl-karte.blende { transform: translateY(80px) rotate(1.8deg); transition-duration: .9s; }
+/* Die Postkarte fliegt als GANZES ein (spürbar gedreht), nicht in
+   Einzelteilen — die Drehung steckt NUR in der Blende: gelandet steht sie
+   gerade (.blende-da setzt transform zurück). */
+.nl-karte.blende { transform: translateY(56px) rotate(2.6deg); transition-duration: .9s; }
 
 .nl-kuvert {
     position: absolute;
@@ -641,14 +647,14 @@ body.menue-offen { overflow: hidden; }
     color: var(--text-body);
     line-height: 1.5;
 }
-/* Listenzeichen: der lange Leerzeichen-Pfeil (statt Plus). */
+/* Listenzeichen: der von-bis-Pfeil (assets/icons, statt Plus). */
 .lz-nllist li::before {
     content: "";
     position: absolute;
-    left: 0; top: .4em;
-    width: 30px;
-    height: 8px;
-    background: url("/assets/long-long-pfeil.svg") no-repeat left center / contain;
+    left: 0; top: .35em;
+    width: 27px;
+    height: 12px;
+    background: url("/assets/icons/gegenseitige-abhaengigkeit.svg") no-repeat left center / contain;
 }
 .lz-nllist strong {
     font-size: var(--text-sm);
@@ -690,6 +696,67 @@ body.menue-offen { overflow: hidden; }
     line-height: 1.5;
 }
 .nl-zustimmung input { margin-top: 3px; accent-color: var(--ink); }
+
+/* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
+
+/* Große Kontaktzeilen im dunklen Hero: Telefon und Mail zum Anfassen. */
+.kontakt-wege {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: var(--space-7);
+}
+.kontakt-wege a {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 300;
+    font-size: clamp(1.7rem, 3.2vw, 2.75rem);
+    line-height: 1.15;
+}
+.kontakt-wege a svg { width: 1em; flex: none; }
+.kontakt-wege a:hover { color: #fff; text-decoration: underline; }
+
+/* Lage-Sektion: Text und Wegskizze links, Büro-Foto rechts. */
+.kontakt-lage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: var(--space-8);
+    align-items: start;
+}
+.kontakt-lage-text h2 { margin: 0 0 var(--space-5); }
+.kontakt-lage-text p {
+    margin: 0 0 var(--space-5);
+    max-width: 44ch;
+    font-size: var(--text-fliess);
+    line-height: 1.55;
+    color: var(--text-body);
+}
+.kontakt-foto { margin: 0; position: relative; }
+.kontakt-foto img { width: 100%; height: auto; border-radius: var(--radius-xs); }
+
+/* Die Wegskizze: reduziert, schwarz auf weiß, gesperrte Beschriftung. */
+.kontakt-skizze {
+    display: block;
+    width: min(460px, 100%);
+    height: auto;
+    margin-top: var(--space-7);
+    color: var(--ink);
+}
+.kontakt-skizze .skizze-wort {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    letter-spacing: .14em;
+    font-weight: 500;
+    fill: currentColor;
+}
+.kontakt-skizze .skizze-hell { fill: var(--paper); }
+
+@media (max-width: 900px) {
+    .kontakt-lage { grid-template-columns: 1fr; gap: var(--space-6); }
+}
 
 /* --- Abschluss-CTA (teile/cta.php) ------------------------------------------ */
 
