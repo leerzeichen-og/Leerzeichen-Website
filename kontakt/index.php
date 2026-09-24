@@ -39,24 +39,6 @@ require __DIR__ . '/../teile/kopf.php';
       Erdgeschoss, erste Tür rechts.</p>
     <p>Unser Büro liegt im historischen Rathaus, direkt am Marktplatz.</p>
     <p><a class="knopf" href="<?= e($routenplaner) ?>" rel="noopener noreferrer" target="_blank">Routenplaner <?= lz_pfeil() ?></a></p>
-
-    <?php // Reduzierte Wegskizze: Marktplatz, Rathaus, der Weg zur Tür. ?>
-    <svg class="kontakt-skizze" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg"
-      role="img" aria-label="Wegskizze: Über den Marktplatz zum Rathaus, Erdgeschoss, erste Tür rechts">
-      <!-- Marktplatz: offene Fläche -->
-      <rect x="40" y="120" width="300" height="150" fill="none" stroke="currentColor" stroke-width="2"/>
-      <text x="60" y="250" class="skizze-wort">MARKTPLATZ</text>
-      <!-- Rathaus: der schwarze Block an der Nordseite -->
-      <rect x="300" y="30" width="180" height="90" fill="currentColor"/>
-      <text x="322" y="82" class="skizze-wort skizze-hell">RATHAUS</text>
-      <!-- Weg: gestrichelt über den Platz zur Tür -->
-      <path d="M 70 200 C 180 190, 280 175, 356 132" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round"/>
-      <path d="M 348 143 L 356 132 L 342 130" fill="none" stroke="currentColor" stroke-width="2"/>
-      <!-- Die Tür -->
-      <circle cx="358" cy="126" r="5" fill="currentColor"/>
-      <text x="374" y="140" class="skizze-wort">ERSTE TÜR RECHTS</text>
-    </svg>
   </div>
 
   <figure class="kontakt-foto">

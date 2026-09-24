@@ -46,6 +46,10 @@
 
     var klemm = function (v) { return Math.min(1, Math.max(0, v)); };
 
+    // Höhe der Umlaufbahn in vh: Das Anzeigefenster reicht von −50 (weit
+    // über dem Bild, Platz fürs größte Objekt) bis 150 (weit darunter).
+    var SPANNE = 200;
+
     // --- Wörter der Fragen in Masken zerlegen — je Zeile (span.buehne-zeile),
     //     damit die im Markup festgelegten Umbrüche erhalten bleiben.
     fragen.forEach(function (f) {
@@ -174,7 +178,12 @@
             var ziel = s.y0 - p * s.tiefe;
             s.y += (ziel - s.y) * Math.min(1, dt * 8);
             if (Math.abs(ziel - s.y) < 0.01) s.y = ziel;
-            s.el.style.transform = 'translate3d(' + s.x + 'vw,' + s.y + 'vh,0)';
+            // Umlaufbahn: erst zur Anzeige wird die Höhe in die Spanne
+            // −50…150 vh gefaltet — wer oben hinausfliegt, kommt unten
+            // wieder herein (geglättet wird die UNgefaltete Höhe, sonst
+            // würde jeder Umlauf als schnelle Durchfahrt animiert).
+            var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
+            s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
         });
         requestAnimationFrame(fliegen);
     }

@@ -244,6 +244,32 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 .text-spalte p:last-child { margin-bottom: 0; }
 .text-spalte a { text-decoration: underline; }
 
+/* Rechtstexte (AGB, Impressum, Datenschutzerklärung): kompakter als der
+   Fließtext-Standard — hier zählt Überblick, nicht Lesegenuss. */
+.rechtstext {
+    padding: var(--space-7) var(--rand) var(--space-9) var(--titel-links);
+}
+.rechtstext h2 {
+    margin: var(--space-8) 0 var(--space-4);
+    font-weight: 500;
+    font-size: 1.375rem;
+    line-height: 1.3;
+    max-width: 66ch;
+}
+.rechtstext h2:first-child { margin-top: 0; }
+.rechtstext p, .rechtstext ul {
+    margin: 0 0 var(--space-4);
+    max-width: 76ch;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--text-body);
+}
+.rechtstext ul { padding-left: 1.2em; }
+.rechtstext a { text-decoration: underline; }
+/* Randnummer am Absatzanfang (1.1, 3.4, …) */
+.rechtstext p > strong:first-child { color: var(--ink); }
+.rechtstext .stand { color: var(--text-muted); margin-top: var(--space-7); }
+
 /* Text-Einblendung beim Scrollen: Die Klassen vergibt NUR das Skript
    (assets/einblenden.js) — ohne JavaScript und bei reduzierter Bewegung
    bleibt alles sofort sichtbar. Die Startseiten-Bühne ist ausgenommen,
@@ -604,9 +630,12 @@ body.menue-offen { overflow: hidden; }
 }
 
 /* Die Postkarte fliegt als GANZES ein (spürbar gedreht), nicht in
-   Einzelteilen — die Drehung steckt NUR in der Blende: gelandet steht sie
-   gerade (.blende-da setzt transform zurück). */
-.nl-karte.blende { transform: translateY(56px) rotate(2.6deg); transition-duration: .9s; }
+   Einzelteilen — gelandet steht sie GERADE. Achtung Spezifität: Die
+   Transform-Regel braucht :not(.blende-da), sonst schlüge sie die
+   allgemeine Lande-Regel (.blende-da, eine Klasse) und die Karte bliebe
+   dauerhaft schief — genau so live passiert (24.9.2026). */
+.nl-karte.blende { transition-duration: .9s; }
+.nl-karte.blende:not(.blende-da) { transform: translateY(56px) rotate(3deg); }
 
 .nl-kuvert {
     position: absolute;
@@ -737,23 +766,6 @@ body.menue-offen { overflow: hidden; }
 .kontakt-foto { margin: 0; position: relative; }
 .kontakt-foto img { width: 100%; height: auto; border-radius: var(--radius-xs); }
 
-/* Die Wegskizze: reduziert, schwarz auf weiß, gesperrte Beschriftung. */
-.kontakt-skizze {
-    display: block;
-    width: min(460px, 100%);
-    height: auto;
-    margin-top: var(--space-7);
-    color: var(--ink);
-}
-.kontakt-skizze .skizze-wort {
-    font-family: var(--font-sans);
-    font-size: 13px;
-    letter-spacing: .14em;
-    font-weight: 500;
-    fill: currentColor;
-}
-.kontakt-skizze .skizze-hell { fill: var(--paper); }
-
 @media (max-width: 900px) {
     .kontakt-lage { grid-template-columns: 1fr; gap: var(--space-6); }
 }
@@ -795,6 +807,10 @@ body.menue-offen { overflow: hidden; }
 
 .lz-footcol a { color: var(--ink); text-decoration: underline; }
 .lz-footcol a:hover { color: var(--petrol-ink); }
+
+/* Kreativwirtschaft-Austria-Zeichen unten in der rechten Spalte. */
+.lz-foot-badge { display: inline-block; margin-top: var(--space-4); }
+.lz-foot-badge img { width: 72px; height: 72px; }
 
 .lz-footbase {
     display: flex;

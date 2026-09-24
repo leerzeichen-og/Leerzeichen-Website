@@ -183,8 +183,10 @@
 }
 
 /* Die Fotos treten beim Scrollen sanft auf (einblenden.js) — etwas tiefer
-   und langsamer als Text, das wirkt schwerer. */
-.pj-foto.blende { transform: translateY(48px); transition-duration: .9s; }
+   und langsamer als Text, das wirkt schwerer. :not(.blende-da), damit die
+   Lande-Regel nicht an der Spezifität scheitert (siehe .nl-karte). */
+.pj-foto.blende { transition-duration: .9s; }
+.pj-foto.blende:not(.blende-da) { transform: translateY(48px); }
 
 /* ---- Die beiden Details nebeneinander ------------------------------------ */
 

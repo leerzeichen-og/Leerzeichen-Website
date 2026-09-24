@@ -37,6 +37,11 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
         <a href="/referenzen/">Corporate Design</a>, Logos, Leitsysteme,
         Mitarbeitermagazine, Bücher, Kataloge, Microsites und Landingpages.
         <a href="/kontakt/">Lassen Sie uns reden!</a></p>
+      <p><a class="lz-foot-badge" href="https://www.kreativwirtschaft.at/"
+          rel="noopener noreferrer" target="_blank">
+        <img src="/assets/bilder/Creative_Industry_CAT.svg" width="72" height="72"
+          alt="Creative Industry Austria — Mitglied der Kreativwirtschaft Austria" loading="lazy">
+      </a></p>
     </div>
   </div>
   <div class="lz-footbase">

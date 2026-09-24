@@ -36,19 +36,23 @@ $fragen = [
 // tiefe ≈ Bühnenhöhe (980vh): die Objekte ziehen etwa im Seitentempo vorbei
 // (kein Schwindel), leichte Unterschiede geben dezente Tiefe. y0 staffelt
 // sie über die Strecke — es sind immer nur zwei, drei zugleich im Bild.
+// Die Objekte laufen auf einer UMLAUFBAHN (buehne.js, Spanne 200 vh): Wer
+// oben hinausfliegt, kommt unten wieder herein — die Dichte bleibt dadurch
+// über die ganze Scrollstrecke gleich, und ständig fliegt eines von unten
+// ins Bild (Roman, 24.9.2026). y0 verteilt die zehn gleichmäßig über die
+// Spanne, die leicht unterschiedlichen Tiefen lassen sie gegeneinander
+// wandern, damit die Verteilung lebendig bleibt.
 $bahnen = [
-    // Die ersten vier starten im Bild (Roman, 24.9.2026: mehr Dichte am
-    // Anfang, Größen um die Hälfte angehoben) — es soll nach Arbeit aussehen.
-    ['w' => 31, 'h' => 22, 'x' => 8,  'y0' => 30,  'tiefe' => 900, 'vx' => 0.28],
-    ['w' => 24, 'h' => 19, 'x' => 64, 'y0' => 58,  'tiefe' => 880, 'vx' => -0.22],
-    ['w' => 20, 'h' => 26, 'x' => 40, 'y0' => 4,   'tiefe' => 920, 'vx' => 0.20],
-    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 10,  'tiefe' => 860, 'vx' => -0.26],
-    ['w' => 22, 'h' => 24, 'x' => 14, 'y0' => 165, 'tiefe' => 940, 'vx' => 0.18],
-    ['w' => 28, 'h' => 19, 'x' => 54, 'y0' => 240, 'tiefe' => 900, 'vx' => -0.20],
-    ['w' => 18, 'h' => 18, 'x' => 30, 'y0' => 315, 'tiefe' => 980, 'vx' => 0.24],
-    ['w' => 25, 'h' => 16, 'x' => 82, 'y0' => 385, 'tiefe' => 940, 'vx' => -0.18],
-    ['w' => 21, 'h' => 15, 'x' => 47, 'y0' => 455, 'tiefe' => 900, 'vx' => 0.22],
-    ['w' => 26, 'h' => 17, 'x' => 5,  'y0' => 525, 'tiefe' => 860, 'vx' => -0.24],
+    ['w' => 31, 'h' => 22, 'x' => 6,  'y0' => 8,   'tiefe' => 900, 'vx' => 0.28],
+    ['w' => 24, 'h' => 19, 'x' => 62, 'y0' => 26,  'tiefe' => 870, 'vx' => -0.22],
+    ['w' => 20, 'h' => 26, 'x' => 34, 'y0' => 46,  'tiefe' => 930, 'vx' => 0.20],
+    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 66,  'tiefe' => 850, 'vx' => -0.26],
+    ['w' => 22, 'h' => 24, 'x' => 12, 'y0' => 88,  'tiefe' => 960, 'vx' => 0.18],
+    ['w' => 28, 'h' => 19, 'x' => 52, 'y0' => 108, 'tiefe' => 890, 'vx' => -0.20],
+    ['w' => 18, 'h' => 18, 'x' => 74, 'y0' => 128, 'tiefe' => 990, 'vx' => 0.24],
+    ['w' => 25, 'h' => 16, 'x' => 28, 'y0' => 150, 'tiefe' => 920, 'vx' => -0.18],
+    ['w' => 21, 'h' => 15, 'x' => 88, 'y0' => 168, 'tiefe' => 860, 'vx' => 0.22],
+    ['w' => 26, 'h' => 17, 'x' => 44, 'y0' => 186, 'tiefe' => 940, 'vx' => -0.24],
 ];
 // Immer zehn Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
 $objektProjekte = array_values(array_filter(pj_index(),
@@ -117,7 +121,7 @@ require __DIR__ . '/teile/kopf.php';
   <div class="buehne-blick">
     <div class="buehne-objekte">
       <?php foreach ($flieger as $i => $p): $b = $bahnen[$i]; ?>
-      <div class="buehne-obj <?= $b['vx'] >= 0 ? 'fliegt-rechts' : 'fliegt-links' ?>"
+      <div class="buehne-obj"
            data-w="<?= $b['w'] ?>" data-h="<?= $b['h'] ?>"
            data-x="<?= $b['x'] ?>" data-y0="<?= $b['y0'] ?>"
            data-tiefe="<?= $b['tiefe'] ?>" data-vx="<?= $b['vx'] ?>"

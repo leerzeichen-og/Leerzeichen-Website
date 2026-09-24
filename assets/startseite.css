@@ -70,51 +70,6 @@
     transition: opacity 420ms var(--ease-out);
 }
 
-/* Bewegungslinien hinter jedem Objekt (Roman, 24.9.2026, löst das
-   Puls-Rechteck ab): drei feine Striche unterschiedlicher Länge auf der
-   Seite ENTGEGEN der Flugrichtung — die Klasse fliegt-rechts/fliegt-links
-   vergibt index.php aus dem Vorzeichen von vx. Sie flattern sanft
-   (Länge und Deckung atmen), je Position in eigenem Takt. */
-.buehne-obj::before {
-    content: "";
-    position: absolute;
-    top: 28%;
-    height: 44%;
-    width: 46%;
-    color: rgba(17, 17, 17, .38);
-    animation: buehne-schweif 3.6s ease-in-out infinite;
-    pointer-events: none;
-}
-/* Flug nach rechts: Schweif links vom Objekt, Striche kleben am Objekt
-   (rechtsbündig) und atmen nach außen. */
-.buehne-obj.fliegt-rechts::before {
-    right: 94%;
-    transform-origin: right center;
-    background:
-        linear-gradient(currentColor 0 0) 100% 6%   / 82%  2px no-repeat,
-        linear-gradient(currentColor 0 0) 100% 50%  / 100% 2px no-repeat,
-        linear-gradient(currentColor 0 0) 100% 94%  / 60%  2px no-repeat;
-}
-.buehne-obj.fliegt-links::before {
-    left: 94%;
-    transform-origin: left center;
-    background:
-        linear-gradient(currentColor 0 0) 0 6%   / 82%  2px no-repeat,
-        linear-gradient(currentColor 0 0) 0 50%  / 100% 2px no-repeat,
-        linear-gradient(currentColor 0 0) 0 94%  / 60%  2px no-repeat;
-}
-.buehne-obj:nth-child(2n)::before { animation-duration: 4.4s; animation-delay: -1.2s; }
-.buehne-obj:nth-child(3n)::before { animation-duration: 3.1s; animation-delay: -2s; }
-.buehne-obj:nth-child(5n)::before { animation-duration: 5s;   animation-delay: -.6s; }
-
-@keyframes buehne-schweif {
-    0%, 100% { transform: scaleX(.7);  opacity: .3; }
-    50%      { transform: scaleX(1.08); opacity: .7; }
-}
-
-/* Ist eine Karte offen, verschwinden die Linien der übrigen Objekte mit. */
-.buehne-objekte.hat-auswahl .buehne-obj:not(.ist-auswahl)::before { visibility: hidden; }
-
 .buehne-obj img {
     width: 100%;
     height: 100%;
@@ -450,6 +405,5 @@
    statischen Fassung, aber auch Astronaut/Karten stehen dann still. */
 @media (prefers-reduced-motion: reduce) {
     .buehne-obj img, .buehne-astro img { animation: none; }
-    .buehne-obj::before { animation: none; }
     .buehne-karte { animation: none; }
 }
