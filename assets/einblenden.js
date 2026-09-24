@@ -23,11 +23,15 @@
     var AUSWAHL = [
         '.titel-seite', '.seiten-kopf .chip', '.seiten-hero .chip',
         '.text-spalte p', '.lz-lead', '.lz-h2',
-        '.prinzip', '.lz-saeule', '.lz-nllist li', '.nl-karte',
-        // .pj-text selbst trägt den Spaltenversatz (translateX) — deshalb
-        // werden dort die Absätze eingeblendet, nicht der Block.
+        '.prinzip', '.lz-saeule',
+        // Die Newsletter-Karte fliegt als GANZES ein (Postkarte) —
+        // ihre Einzelteile bekommen deshalb keine eigene Blende.
+        '.nl-karte',
+        // .pj-text selbst trägt den Spaltenversatz — deshalb werden dort
+        // die Absätze eingeblendet, nicht der Block; Fotos treten mit auf.
         '.pj-header-inhalt', '.pj-text p', '.pj-zitat', '.pj-karte',
-        '.buero-bild', '.buero-details > div', '.portrait',
+        '.pj .pj-foto',
+        '.buero-kachel', '.buero-text', '.portrait',
     ].join(',');
 
     var ziele = [];

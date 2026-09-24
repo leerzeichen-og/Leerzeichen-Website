@@ -22,7 +22,10 @@
      Differenz) — das Bild füllt deshalb den ganzen Bildschirm. */
   --pj-kopfhoehe: 0px;
 
-  --pj-textspalte: 44rem;        /* Lesebreite der Textblöcke */
+  --pj-textspalte: 50rem;        /* Lesebreite der Textblöcke */
+  /* Linke Kante der Textspalte — rechts der Mitte, wie im Layout; Details
+     und Pfeil richten sich an derselben Kante aus. */
+  --pj-text-links: calc(50% - var(--pj-textspalte) / 4);
   --pj-luft: clamp(48px, 7vw, 120px);
 
   color: var(--pj-ink);
@@ -108,69 +111,60 @@
 /* Falls ein Projekt (noch) kein Headerbild hat. */
 .pj .pj-titel-ohne-bild { margin: 0 0 1rem; }
 
-/* ---- Scrollhinweis: drei fallende Leerzeichen-Balken --------------------- */
-/* Rein visuell (aria-hidden); bei prefers-reduced-motion steht er still.    */
+/* ---- Scrollhinweis: zarter Pfeil nach unten ------------------------------- */
+/* Unter dem Titel, an dessen linker Kante (Roman, 24.9.2026). Rein visuell
+   (aria-hidden); der lange Leerzeichen-Pfeil zeigt gedreht nach unten und
+   nickt sanft in Scrollrichtung. */
 
-.pj .pj-scrollhinweis {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: clamp(20px, 4vh, 52px);
-  transform: translateX(-50%);
+.pj-runter {
+  display: block;
+  position: relative;
+  width: 68px;
+  height: 76px;
+  margin-top: clamp(28px, 6vh, 64px);
   color: #fff;
+  opacity: .85;
   pointer-events: none;
 }
-
-.pj .pj-scrollhinweis.is-balken { width: 44px; height: 34px; }
-
-.pj .pj-scrollhinweis.is-balken i {
+.pj-runter svg {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 2px;
-  background: currentColor;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, .5);
-  animation: pj-fallen 2.1s cubic-bezier(.4, 0, .2, 1) infinite;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  /* Nach der Drehung zeigt die örtliche X-Achse nach unten — das Nicken
+     wandert also in Scrollrichtung. */
+  transform: translate(-50%, -50%) rotate(90deg);
+  animation: pj-nicken 2.4s ease-in-out infinite;
 }
 
-.pj .pj-scrollhinweis.is-balken i:nth-child(2) { animation-delay: .28s; }
-.pj .pj-scrollhinweis.is-balken i:nth-child(3) { animation-delay: .56s; }
-
-@keyframes pj-fallen {
-  0%   { transform: translateY(0);    opacity: 0; }
-  25%  {                              opacity: 1; }
-  100% { transform: translateY(32px); opacity: 0; }
+@keyframes pj-nicken {
+  0%, 100% { transform: translate(-50%, -50%) rotate(90deg) translateX(0); }
+  50%      { transform: translate(-50%, -50%) rotate(90deg) translateX(12px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pj .pj-scrollhinweis i { animation: none; opacity: .9; }
-  .pj .pj-scrollhinweis.is-balken i:nth-child(2) { top: 8px;  opacity: .5; }
-  .pj .pj-scrollhinweis.is-balken i:nth-child(3) { top: 16px; opacity: .25; }
+  .pj-runter svg { animation: none; }
 }
 
 /* ---- Textblöcke: schmale Spalte rechts der Mitte, wie im Layout ---------- */
 
 .pj-text {
   max-width: var(--pj-textspalte);
-  margin: var(--pj-luft) auto var(--pj-luft) 50%;
-  padding-right: var(--pj-rand);
-  transform: translateX(-25%);
-  /* Fließtext-Standard der Website (site.css): 23 px, ruhige Zeilen. */
-  font-size: var(--text-fliess);
-  line-height: 1.55;
+  margin: var(--pj-luft) auto var(--pj-luft) var(--pj-text-links);
+  /* Auf den Projektseiten deutlich größer als der Website-Standard —
+     die Texte sind hier die Hauptdarsteller (Roman, 24.9.2026). */
+  font-size: clamp(1.45rem, 1.9vw, 1.8rem);
+  line-height: 1.5;
 }
 
 .pj .pj-text p { margin: 0 0 1em; }
 .pj .pj-text p:last-child { margin-bottom: 0; }
 
-.pj-lead { font-size: var(--text-fliess); }
+.pj-lead { font-size: clamp(1.55rem, 2.1vw, 2rem); }
 
 @media (max-width: 900px) {
   .pj-text {
     margin: var(--pj-luft) 0;
-    padding-right: 0;
-    transform: none;
     max-width: none;
   }
 }
@@ -185,23 +179,36 @@
   margin: var(--pj-luft) calc(50% - 50vw);
 }
 
+/* Die Fotos treten beim Scrollen sanft auf (einblenden.js) — etwas tiefer
+   und langsamer als Text, das wirkt schwerer. */
+.pj-foto.blende { transform: translateY(48px); transition-duration: .9s; }
+
 /* ---- Die beiden Details nebeneinander ------------------------------------ */
 
 .pj-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(24px, 4vw, 64px);
-  max-width: calc(var(--pj-textspalte) * 1.5);
-  margin: var(--pj-luft) auto var(--pj-luft) 50%;
-  padding-right: var(--pj-rand);
-  transform: translateX(-25%);
+  gap: clamp(28px, 5vw, 80px);
+  /* Doppelt so breit wie die Textspalte (Roman, 24.9.2026): linke Kante wie
+     die Absätze, nach rechts darf der Block aus der Inhaltsbox bis zum
+     Fensterrand wachsen — nur so kommen beide Spalten auf Lesebreite. */
+  max-width: calc(2 * var(--pj-textspalte) + clamp(28px, 5vw, 80px));
+  margin: var(--pj-luft) calc(50% - 50vw + var(--rand)) var(--pj-luft) var(--pj-text-links);
 }
 
 .pj-details .pj-text {
   margin: 0;
-  padding-right: 0;
-  transform: none;
   max-width: none;
+}
+
+/* Erst ab breiten Fenstern nebeneinander — darunter wären die zwei Spalten
+   schmäler als die übrigen Absätze, genau das soll ja nicht sein. */
+@media (max-width: 1700px) {
+  .pj-details {
+    grid-template-columns: 1fr;
+    max-width: var(--pj-textspalte);
+    margin-right: auto;
+  }
 }
 
 @media (max-width: 900px) {
@@ -303,7 +310,7 @@
 
 .pj-karte { text-decoration: none; color: inherit; display: block; }
 
-.pj-karte-bildwrap { position: relative; display: block; }
+.pj-karte-bildwrap { position: relative; display: block; border-radius: var(--radius-xs); }
 
 .pj-karte-chip {
     position: absolute;
@@ -321,23 +328,24 @@
 
 .pj-karte-kunde {
   display: block;
-  margin-top: .7rem;
-  font-size: .78rem;
+  margin-top: .9rem;
+  font-size: .8rem;
   letter-spacing: .04em;
   color: var(--gedaempft);
 }
 
+/* Titelgröße im Maß der übrigen Seiten (--text-lg), nicht Miniatur. */
 .pj-karte-titel {
   display: block;
-  margin-top: .15rem;
-  font-size: .95rem;
-  line-height: 1.35;
+  margin-top: .2rem;
+  font-size: var(--text-lg, 1.3125rem);
+  line-height: 1.3;
 }
 
 .pj-karte-punchline {
   display: block;
-  margin-top: .2rem;
-  font-size: .85rem;
+  margin-top: .35rem;
+  font-size: 1rem;
   color: var(--gedaempft);
 }
 
@@ -368,9 +376,9 @@
 
 /* ---- Collage der Referenzen-Übersicht -------------------------------------- */
 /* Sechs Rasterspalten, die Karten-Varianten aus pj_karte() belegen 2 oder 4:
-   je Fünfergruppe füllen hoch·hoch·quer die erste und groß·hoch die zweite
-   Zeile. '-tief' versetzt eine Karte nach unten — der Versatz aus der
-   Schema-Grafik. */
+   je Fünfergruppe füllen drei Hochformate die erste Zeile, groß+hoch die
+   zweite — die Bildhöhen der zweiten Zeile sind fast gleich, alles beginnt
+   an einer ausgerichteten Oberkante (Roman, 24.9.2026). */
 
 .pj-collage {
   display: grid;
@@ -384,7 +392,6 @@
 .pj-k-hoch,
 .pj-k-quer  { grid-column: span 2; }
 .pj-k-gross { grid-column: span 4; }
-.pj-k-tief  { padding-top: clamp(28px, 5vw, 88px); }
 
 /* Hochformat: nutzt den teaser_hoch aus Space; liegt nur der Quer-Teaser vor,
    beschneidet ihn dieser Rahmen (object-fit: cover an der Karte). */
@@ -438,7 +445,6 @@
      Beschnitt wäre am Telefon zu raumgreifend), kein Versatz, Zitat gerade. */
   .pj-collage { grid-template-columns: 1fr; }
   .pj-collage > * { grid-column: 1 / -1; }
-  .pj-k-tief { padding-top: 0; }
   .pj-collage .pj-karte-bild { aspect-ratio: 2288 / 1520; }
   .pj-zitat { --pj-zitat-dreh: rotate(-1deg); }
 }

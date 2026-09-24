@@ -32,7 +32,9 @@
     top: 0; left: 0; right: 0;
     z-index: 3;
     pointer-events: none;
-    min-height: 88vh;
+    /* Der Claim sitzt unten (flex-end): 150 px tiefer heißt mehr Mindesthöhe,
+       gedeckelt kurz vor der Fensterkante (Roman, 24.9.2026). */
+    min-height: min(calc(88vh + 150px), calc(100vh - 32px));
     display: flex;
     align-items: flex-end;
     padding: calc(130px + var(--space-8)) 55px var(--space-9);
@@ -67,6 +69,29 @@
     display: block;
     transition: opacity 420ms var(--ease-out);
 }
+
+/* Zart pulsierendes Rechteck hinter jedem Objekt (Roman, 24.9.2026):
+   gibt den Fliegern eine kleine Bühne und macht sie aktiver, ohne zu schreien.
+   Je Position ein anderer Takt, damit nichts im Gleichschritt atmet. */
+.buehne-obj::before {
+    content: "";
+    position: absolute;
+    inset: -8% -10%;
+    border: 1.5px solid rgba(17, 17, 17, .32);
+    animation: buehne-puls 7s ease-in-out infinite;
+    pointer-events: none;
+}
+.buehne-obj:nth-child(2n)::before { animation-duration: 9s;  animation-delay: -2s; }
+.buehne-obj:nth-child(3n)::before { animation-duration: 8s;  animation-delay: -4s; animation-direction: reverse; }
+.buehne-obj:nth-child(5n)::before { animation-duration: 11s; animation-delay: -1s; }
+
+@keyframes buehne-puls {
+    0%, 100% { transform: scale(.985) rotate(-.6deg); opacity: .4; }
+    50%      { transform: scale(1.035) rotate(.9deg); opacity: .85; }
+}
+
+/* Ist eine Karte offen, verschwinden die Rahmen der übrigen Objekte mit. */
+.buehne-objekte.hat-auswahl .buehne-obj:not(.ist-auswahl)::before { visibility: hidden; }
 
 .buehne-obj img {
     width: 100%;
@@ -370,6 +395,7 @@
 }
 
 .lz-teamgrid img.team-foto-bild {
+    border-radius: var(--radius-xs);
     width: 100%;
     height: auto;
     border-radius: var(--radius-xs);
@@ -402,5 +428,6 @@
    statischen Fassung, aber auch Astronaut/Karten stehen dann still. */
 @media (prefers-reduced-motion: reduce) {
     .buehne-obj img, .buehne-astro img { animation: none; }
+    .buehne-obj::before { animation: none; }
     .buehne-karte { animation: none; }
 }

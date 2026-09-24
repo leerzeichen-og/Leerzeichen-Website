@@ -130,19 +130,55 @@ header('Cache-Control: no-cache');
 <?php foreach ($styles ?? [] as $css): ?>
 <link rel="stylesheet" href="<?= e(lz_asset($css)) ?>">
 <?php endforeach; ?>
+<script src="<?= e(lz_asset('/assets/kopf.js')) ?>" defer></script>
 <?php foreach ($jsonld as $block): ?>
 <script type="application/ld+json"><?= json_encode($block, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>
 </head>
 <body>
-<header class="lz-header">
-  <a href="/" aria-label="Zur Startseite">
-    <img class="lz-logo" src="/assets/logo/leerzeichen-logo-neg.svg" alt="<?= e(FIRMA_NAME) ?>" width="316" height="41">
+<?php
+// Die Kopfzeile wird ZWEIMAL gezeichnet (deckungsgleich): die echte im
+// Mischmodus „difference" (färbt sich gegen den Hintergrund um) und eine
+// nicht bedienbare Schicht im Mischmodus „color" direkt darüber — sie
+// entsättigt das Differenz-Ergebnis, Logo und Navigation bleiben damit
+// schwarz/weiß statt bunt (Roman, 24.9.2026). $bedienbar steuert, ob Links
+// und Knopf echt sind (die Kopie darf weder Klicks noch Fokus bekommen).
+function lz_kopf_inhalt(array $nav, string $aktiv, bool $bedienbar): void
+{
+    $a = $bedienbar ? 'a href="/"' : 'a';
+?>
+  <<?= $a ?> aria-label="Zur Startseite">
+    <img class="lz-logo" src="/assets/logo/leerzeichen-logo-neg.svg" alt="<?= $bedienbar ? e(FIRMA_NAME) : '' ?>" width="316" height="41">
   </a>
-  <nav class="lz-nav" aria-label="Hauptnavigation">
+  <nav class="lz-nav"<?= $bedienbar ? ' aria-label="Hauptnavigation"' : '' ?>>
+    <?php foreach ($nav as [$pfad, $label]): ?>
+    <a<?= $bedienbar ? ' href="/' . e($pfad) . '/"' : '' ?><?= $aktiv === $pfad ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
+    <?php endforeach; ?>
+  </nav>
+  <?php // Burger fürs Telefon — bleibt versteckt, bis kopf.js ihn verdrahtet. ?>
+  <?php if ($bedienbar): ?>
+  <button type="button" class="lz-burger" aria-expanded="false" aria-controls="lz-menue"
+    aria-label="Menü öffnen" hidden><i></i><i></i><i></i></button>
+  <?php else: ?>
+  <span class="lz-burger" hidden><i></i><i></i><i></i></span>
+  <?php endif; ?>
+<?php
+}
+?>
+<header class="lz-header">
+  <?php lz_kopf_inhalt($nav, $nav_aktiv, true) ?>
+</header>
+<div class="lz-header lz-header-farblos" aria-hidden="true">
+  <?php lz_kopf_inhalt($nav, $nav_aktiv, false) ?>
+</div>
+
+<?php // Vollbild-Menü fürs Telefon: schwarz, weiße Links; auf und zu über
+      // den Burger (kopf.js). Ohne JavaScript bleibt die Zeilen-Navigation. ?>
+<div id="lz-menue" class="lz-menue">
+  <nav aria-label="Hauptnavigation">
     <?php foreach ($nav as [$pfad, $label]): ?>
     <a href="/<?= e($pfad) ?>/"<?= $nav_aktiv === $pfad ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
     <?php endforeach; ?>
   </nav>
-</header>
+</div>
 <main<?= empty($voll_breit) ? ' class="inhalt"' : '' ?>>

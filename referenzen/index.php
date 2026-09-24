@@ -38,10 +38,10 @@ require __DIR__ . '/../teile/kopf.php';
 <?php if ($projekte): ?>
 <div class="pj-collage">
   <?php
-  // Collage statt gleichmäßigem Raster (Schema-Grafik 21.9.2026): je
-  // Fünfergruppe hoch · hoch (versetzt) · quer · groß · hoch; nach der
+  // Collage mit ausgerichteten Zeilen (Roman, 24.9.2026): je Fünfergruppe
+  // drei Hochformate, dann groß + hoch (fast gleiche Bildhöhen); nach der
   // dritten Karte jeder Gruppe erscheint die nächste Kundenstimme.
-  $muster = ['hoch', 'hoch-tief', 'quer', 'gross', 'hoch'];
+  $muster = ['hoch', 'hoch', 'hoch', 'gross', 'hoch'];
   $zitate = array_values(array_filter($projekte,
       fn($p) => trim((string) ($p['zitat'] ?? '')) !== ''));
   $n = 0;

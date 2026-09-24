@@ -73,7 +73,8 @@
             el: el,
             x: parseFloat(el.dataset.x), y0: parseFloat(el.dataset.y0),
             tiefe: parseFloat(el.dataset.tiefe), vx: parseFloat(el.dataset.vx),
-            w: parseFloat(el.dataset.w), h: parseFloat(el.dataset.h)
+            w: parseFloat(el.dataset.w), h: parseFloat(el.dataset.h),
+            y: parseFloat(el.dataset.y0)   // angezeigte Höhe (geglättet, s. fliegen)
         };
     });
 
@@ -166,7 +167,14 @@
             });
         }
         zustand.forEach(function (s) {
-            s.el.style.transform = 'translate3d(' + s.x + 'vw,' + (s.y0 - p * s.tiefe) + 'vh,0)';
+            // Die Höhe folgt dem Scroll-Ziel GEGLÄTTET (Exponentialfilter):
+            // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
+            // Scrollen her — ungefiltert sprangen die Objekte sichtbar
+            // (Roman, 24.9.2026). So wird aus jedem Sprung eine weiche Fahrt.
+            var ziel = s.y0 - p * s.tiefe;
+            s.y += (ziel - s.y) * Math.min(1, dt * 8);
+            if (Math.abs(ziel - s.y) < 0.01) s.y = ziel;
+            s.el.style.transform = 'translate3d(' + s.x + 'vw,' + s.y + 'vh,0)';
         });
         requestAnimationFrame(fliegen);
     }

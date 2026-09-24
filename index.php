@@ -37,17 +37,20 @@ $fragen = [
 // (kein Schwindel), leichte Unterschiede geben dezente Tiefe. y0 staffelt
 // sie über die Strecke — es sind immer nur zwei, drei zugleich im Bild.
 $bahnen = [
-    // Die ersten beiden starten im Bild — schon ohne Scrollen fliegt etwas.
-    ['w' => 21, 'h' => 15, 'x' => 10, 'y0' => 34,  'tiefe' => 900, 'vx' => 0.28],
-    ['w' => 16, 'h' => 13, 'x' => 66, 'y0' => 70,  'tiefe' => 880, 'vx' => -0.22],
-    ['w' => 13, 'h' => 17, 'x' => 36, 'y0' => 175, 'tiefe' => 920, 'vx' => 0.20],
-    ['w' => 18, 'h' => 12, 'x' => 79, 'y0' => 245, 'tiefe' => 860, 'vx' => -0.26],
-    ['w' => 15, 'h' => 16, 'x' => 14, 'y0' => 320, 'tiefe' => 940, 'vx' => 0.18],
-    ['w' => 19, 'h' => 13, 'x' => 54, 'y0' => 390, 'tiefe' => 900, 'vx' => -0.20],
-    ['w' => 12, 'h' => 12, 'x' => 28, 'y0' => 455, 'tiefe' => 980, 'vx' => 0.24],
-    ['w' => 17, 'h' => 11, 'x' => 84, 'y0' => 515, 'tiefe' => 940, 'vx' => -0.18],
+    // Die ersten vier starten im Bild (Roman, 24.9.2026: mehr Dichte am
+    // Anfang, Größen um die Hälfte angehoben) — es soll nach Arbeit aussehen.
+    ['w' => 31, 'h' => 22, 'x' => 8,  'y0' => 30,  'tiefe' => 900, 'vx' => 0.28],
+    ['w' => 24, 'h' => 19, 'x' => 64, 'y0' => 58,  'tiefe' => 880, 'vx' => -0.22],
+    ['w' => 20, 'h' => 26, 'x' => 40, 'y0' => 4,   'tiefe' => 920, 'vx' => 0.20],
+    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 10,  'tiefe' => 860, 'vx' => -0.26],
+    ['w' => 22, 'h' => 24, 'x' => 14, 'y0' => 165, 'tiefe' => 940, 'vx' => 0.18],
+    ['w' => 28, 'h' => 19, 'x' => 54, 'y0' => 240, 'tiefe' => 900, 'vx' => -0.20],
+    ['w' => 18, 'h' => 18, 'x' => 30, 'y0' => 315, 'tiefe' => 980, 'vx' => 0.24],
+    ['w' => 25, 'h' => 16, 'x' => 82, 'y0' => 385, 'tiefe' => 940, 'vx' => -0.18],
+    ['w' => 21, 'h' => 15, 'x' => 47, 'y0' => 455, 'tiefe' => 900, 'vx' => 0.22],
+    ['w' => 26, 'h' => 17, 'x' => 5,  'y0' => 525, 'tiefe' => 860, 'vx' => -0.24],
 ];
-// Immer acht Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
+// Immer zehn Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
 $objektProjekte = array_values(array_filter(pj_index(),
     fn($p) => !empty($p['objekt']['quellen'])));
 $flieger = [];
@@ -225,7 +228,10 @@ require __DIR__ . '/teile/kopf.php';
     <?php endforeach; ?>
   </div>
 
-  <?= lz_laufband($saeulen_boxen[1]['liste'], 'laufband-retour kipp-b') ?>
+  <?php // 100 px Luft zwischen Säulen-Texten und dem zweiten Band (Roman, 24.9.2026). ?>
+  <div style="margin-top:100px">
+    <?= lz_laufband($saeulen_boxen[1]['liste'], 'laufband-retour kipp-b') ?>
+  </div>
 </section>
 
 <?php require __DIR__ . '/teile/newsletter.php'; ?>

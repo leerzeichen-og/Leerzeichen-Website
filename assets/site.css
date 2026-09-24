@@ -352,10 +352,69 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 }
 .portrait { margin: 0; }
 .portrait img { width: 100%; height: auto; border-radius: var(--radius-xs); }
-.portrait figcaption { margin-top: var(--space-3); font-size: var(--text-lg); line-height: 1.4; }
+.portrait figcaption { margin-top: var(--space-5); font-size: var(--text-lg); line-height: 1.4; }
 .portrait figcaption strong { font-weight: 700; }
 
+/* Kontaktzeichen unter den Portraits: Mail und Telefon als runde Knöpfe.
+   Die Adressen setzt erst JavaScript zusammen (SPAM-Schutz, agentur/index.php). */
+.portrait-kontakt { display: flex; gap: 10px; margin-top: var(--space-4); }
+.portrait-kontakt a {
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+}
+.portrait-kontakt a:hover { background: var(--ink); color: #fff; }
+.portrait-kontakt svg { width: 17px; height: 17px; display: block; }
+
+/* Stärken (Agentur): größere, plakative Fassung der Prinzipien-Blöcke —
+   Light-Ziffer, kräftiger Titel, Fließtextgröße (Roman, 24.9.2026). */
+.staerken { gap: var(--space-8); }
+.staerke-nr {
+    display: block;
+    font-weight: 300;
+    font-size: clamp(2.8rem, 4.4vw, 4.4rem);
+    line-height: 1;
+}
+.staerken .prinzip h3 {
+    margin: var(--space-5) 0 var(--space-4);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+}
+.staerken .prinzip p { font-size: var(--text-fliess); line-height: 1.5; }
+@media (min-width: 901px) {
+    /* Der mittlere Block sitzt tiefer — Spannung statt Reihenhaus. */
+    .staerken .prinzip:nth-child(2) { margin-top: var(--space-8); }
+}
+
 /* Das Büro in Bildern (Agenturseite) */
+/* Büro-Galerie (Agentur): ein großes Motiv, daneben ein hohes, darunter zwei
+   quadratische Details — ein Feld bleibt bewusst frei (wir heißen Leerzeichen).
+   Der Text steht als eigener Block darunter. */
+.buero-galerie {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: clamp(12px, 1.8vw, 24px);
+}
+.buero-kachel { margin: 0; position: relative; }
+.buero-kachel img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xs); }
+.buero-gross { grid-column: span 4; }
+.buero-gross img { aspect-ratio: 16 / 10; }
+.buero-hoch  { grid-column: span 2; }
+.buero-quad  { grid-column: span 2; }
+.buero-quad img { aspect-ratio: 1 / 1; }
+.buero-text { margin-top: var(--space-7); max-width: 52ch; }
+.buero-text h3 { margin: 0 0 var(--space-4); }
+.buero-text p { margin: 0; font-size: var(--text-fliess); line-height: 1.55; color: var(--text-body); }
+@media (max-width: 900px) {
+    .buero-gross, .buero-hoch { grid-column: 1 / -1; }
+    .buero-hoch img { aspect-ratio: 16 / 10; }
+    .buero-quad { grid-column: span 3; }
+}
+
 .buero-bild { position: relative; }
 .buero-bild img { width: 100%; height: auto; border-radius: var(--radius-xs); }
 .buero-tag {
@@ -431,6 +490,75 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 .lz-nav a:hover { color: #fff; text-decoration: underline; }
 .lz-nav a[aria-current="page"] { text-decoration: underline; }
 
+/* Farblos-Schicht: deckungsgleiche Kopie der Kopfzeile im Mischmodus „color".
+   Ihre weißen (also farblosen) Zeichen entsättigen das Differenz-Ergebnis
+   darunter — Logo und Navigation bleiben schwarz/weiß statt bunt. */
+.lz-header-farblos {
+    mix-blend-mode: color;
+    pointer-events: none;
+    user-select: none;
+    z-index: 31;
+}
+
+/* Burger fürs Telefon: drei Balken werden zum X (body.menue-offen).
+   Sichtbar erst, wenn kopf.js verdrahtet hat (html.hat-burger + [hidden] weg). */
+.lz-burger {
+    display: none;   /* eingeschränkt unten — die display-gegen-hidden-Falle */
+    position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+    flex: none;
+}
+.lz-burger i {
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    height: 2px;
+    background: currentColor;
+    transition: transform .32s var(--ease-out), opacity .18s linear;
+}
+.lz-burger i:nth-child(1) { top: 14px; }
+.lz-burger i:nth-child(2) { top: 21px; }
+.lz-burger i:nth-child(3) { top: 28px; }
+body.menue-offen .lz-burger i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.menue-offen .lz-burger i:nth-child(2) { opacity: 0; }
+body.menue-offen .lz-burger i:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Vollbild-Menü (Telefon): schwarz, weiße Links; liegt UNTER der Kopfzeile,
+   damit Logo und Burger (per Differenz weiß) sichtbar bleiben. */
+.lz-menue {
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    background: #000;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--kopf-frei) + var(--space-6)) var(--rand);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .35s var(--ease-out), visibility 0s linear .35s;
+}
+body.menue-offen .lz-menue {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+body.menue-offen { overflow: hidden; }
+.lz-menue nav { display: flex; flex-direction: column; gap: clamp(14px, 3.4vh, 30px); }
+.lz-menue a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 300;
+    font-size: clamp(2.2rem, 9vw, 3.4rem);
+    line-height: 1.1;
+}
+.lz-menue a[aria-current="page"] { text-decoration: underline; }
+
 /* --- Inhalt der Unterseiten (Referenzen usw.) ------------------------------ */
 
 .inhalt {
@@ -461,13 +589,18 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 .nl-karte {
     max-width: 1080px;
     margin: 0 auto;
-    border: 1px solid var(--border-default);
+    /* Kräftige schwarze Kontur — die Karte ist eine Postkarte (Roman, 24.9.2026). */
+    border: 2px solid var(--ink);
     border-radius: var(--radius-xs);
     padding: var(--space-8);
     padding-top: calc(var(--space-8) + 110px);
     background: var(--paper);
     position: relative;
 }
+
+/* Die Postkarte fliegt als GANZES ein (leicht gedreht), nicht in Einzelteilen —
+   die Drehung steckt in der Blende, damit sie sich beim Landen auflöst. */
+.nl-karte.blende { transform: translateY(80px) rotate(1.8deg); transition-duration: .9s; }
 
 .nl-kuvert {
     position: absolute;
@@ -502,20 +635,20 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-left: 24px;
+    padding-left: 46px;
     position: relative;
     font-size: var(--text-lg);
     color: var(--text-body);
     line-height: 1.5;
 }
+/* Listenzeichen: der lange Leerzeichen-Pfeil (statt Plus). */
 .lz-nllist li::before {
-    content: "+";
+    content: "";
     position: absolute;
-    left: 0; top: 0;
-    font-size: var(--text-lg);
-    line-height: 1.3;
-    font-weight: 500;
-    color: var(--ink);
+    left: 0; top: .4em;
+    width: 30px;
+    height: 8px;
+    background: url("/assets/long-long-pfeil.svg") no-repeat left center / contain;
 }
 .lz-nllist strong {
     font-size: var(--text-sm);
@@ -540,12 +673,13 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     font-size: 1rem;
     padding: .8rem .9rem;
     border-radius: var(--radius-xs);
-    border: 1.5px solid var(--border-control);
+    /* Wie die Postkarte selbst: schwarze, kräftige Kontur. */
+    border: 2px solid var(--ink);
     background: var(--paper);
     color: var(--ink);
     outline: none;
 }
-.lz-input:focus { border-color: var(--ink); }
+.lz-input:focus { background: var(--grey-100, #f4f4f4); }
 
 .nl-zustimmung {
     display: flex;
@@ -611,11 +745,15 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     /* Kompakter Kopf: kleineres Logo und engere Navigation, damit die
        Freihaltung auch reicht, wenn die Navigation zweizeilig umbricht.
        Die Titel-Einrückung von 25 % wäre am Telefon zu raumgreifend. */
-    :root { --kopf-frei: 118px; --titel-links: var(--rand); }
+    :root { --kopf-frei: 96px; --titel-links: var(--rand); }
     .lz-header { padding: 18px var(--rand); }
     .lz-header .lz-logo { height: 30px; }
     .lz-nav { gap: 8px 18px; }
     .lz-nav a { line-height: 1.35; font-size: 1rem; }
+    /* Mit verdrahtetem Burger (kopf.js) weicht die Zeilen-Navigation dem
+       Vollbild-Menü; :not([hidden]) wegen der display-gegen-hidden-Falle. */
+    html.hat-burger .lz-header .lz-nav { display: none; }
+    html.hat-burger .lz-burger:not([hidden]) { display: block; }
     .lz-footer { padding: 48px var(--rand) 64px; }
     .lz-footgrid { grid-template-columns: 1fr; gap: var(--space-6); }
     .lz-footcol { padding-top: 24px; }

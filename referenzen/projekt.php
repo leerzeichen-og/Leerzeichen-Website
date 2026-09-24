@@ -52,8 +52,8 @@ require __DIR__ . '/../teile/kopf.php';
       <a class="pj-badge" href="<?= e($saeule[1]) ?>"><?= e($saeule[0]) ?></a>
       <?php endif; ?>
       <h1 class="pj-titel"><?= e((string) ($projekt['titel'] ?? '')) ?></h1>
+      <span class="pj-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
     </div>
-    <span class="pj-scrollhinweis is-balken" aria-hidden="true"><i></i><i></i><i></i></span>
   </header>
   <?php else: ?>
   <h1 class="pj-titel-ohne-bild"><?= e((string) ($projekt['titel'] ?? '')) ?></h1>
