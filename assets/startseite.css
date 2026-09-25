@@ -254,20 +254,38 @@
 .buehne-karte {
     position: absolute;
     max-height: calc(100vh - 2 * var(--space-6));
-    overflow: auto;
     background: var(--paper);
-    border: 1.5px solid var(--ink);
+    border: 2px solid var(--ink);
     border-radius: var(--radius-xs);
     padding: var(--space-6);
     z-index: 5;
-    animation: buehne-pop 380ms cubic-bezier(.22, .61, .36, 1) both;
+    /* Wächst sichtbar AUS dem Objekt (transform-origin setzt buehne.js auf
+       die Objektmitte); die Kurve schießt leicht über — lebendig, nicht steif. */
+    opacity: 0;
+    transform: scale(.3);
+    transition: transform .45s cubic-bezier(.22, 1.3, .32, 1), opacity .22s linear;
 }
-@keyframes buehne-pop {
-    from { opacity: 0; transform: scale(.28); }
-    to   { opacity: 1; transform: none; }
+.buehne-karte.karte-da { opacity: 1; transform: none; }
+
+/* Zeiger zum Objekt: schwarzer Diamant an der zugewandten Kante, auf Höhe
+   bzw. Breite der Objektmitte (--zeiger-x/-y setzt buehne.js). */
+.buehne-karte::after {
+    content: "";
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background: var(--ink);
+}
+.buehne-karte.lage-oben::after   { left: var(--zeiger-x); bottom: -8px; transform: translateX(-50%) rotate(45deg); }
+.buehne-karte.lage-unten::after  { left: var(--zeiger-x); top: -8px;    transform: translateX(-50%) rotate(45deg); }
+.buehne-karte.lage-rechts::after { top: var(--zeiger-y);  left: -8px;   transform: translateY(-50%) rotate(45deg); }
+.buehne-karte.lage-links::after  { top: var(--zeiger-y);  right: -8px;  transform: translateY(-50%) rotate(45deg); }
+
+@media (prefers-reduced-motion: reduce) {
+    .buehne-karte { transition: none; opacity: 1; transform: none; }
 }
 
-.buehne-karte h3 { margin: 12px 0 0; }
+.buehne-karte h3 { margin: 14px 0 0; }
 .buehne-karte .lz-lead { margin: 14px 0 22px; max-width: min(26ch, 100%); }
 
 .buehne-schliessen {

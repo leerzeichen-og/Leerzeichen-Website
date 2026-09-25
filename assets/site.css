@@ -808,9 +808,10 @@ body.menue-offen { overflow: hidden; }
 .lz-footcol a { color: var(--ink); text-decoration: underline; }
 .lz-footcol a:hover { color: var(--petrol-ink); }
 
-/* Kreativwirtschaft-Austria-Zeichen unten in der rechten Spalte. */
+/* Kreativwirtschaft-Austria-Zeichen unten in der rechten Spalte —
+   groß genug, dass der Text im Kreis lesbar bleibt. */
 .lz-foot-badge { display: inline-block; margin-top: var(--space-4); }
-.lz-foot-badge img { width: 72px; height: 72px; }
+.lz-foot-badge img { width: 108px; height: 108px; }
 
 .lz-footbase {
     display: flex;

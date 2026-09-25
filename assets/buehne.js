@@ -82,8 +82,9 @@
         };
     });
 
-    var auswahl = null;     // Index des geöffneten Objekts (pausiert den Flug)
-    var karte   = null;     // DOM-Knoten der offenen Karte
+    var auswahl = null;      // Index des geöffneten Objekts (pausiert den Flug)
+    var karte   = null;      // DOM-Knoten der offenen Karte
+    var pBeimOeffnen = 0;    // Scroll-Stand beim Öffnen (Weiterscrollen schließt)
 
     // --- Scroll-Fortschritt 0–1 über die ganze Sektion ------------------------
     var p = 0, leseTicket = 0;
@@ -91,6 +92,11 @@
         leseTicket = 0;
         var gesamt = Math.max(1, buehne.offsetHeight - window.innerHeight);
         p = klemm(-buehne.getBoundingClientRect().top / gesamt);
+        // Scrollt jemand mit offener Karte weiter, zöge das Objekt unter dem
+        // Zeiger weg — dann lieber sauber schließen.
+        if (karte && Math.abs(p - pBeimOeffnen) > 0.008) {
+            schliessen();
+        }
         malenFortschritt();
     }
     function angefordert() { if (!leseTicket) leseTicket = requestAnimationFrame(lesen); }
@@ -202,28 +208,20 @@
         var el = objekte[i];
         var r  = el.getBoundingClientRect();
         var vw = window.innerWidth, vh = window.innerHeight;
-        var W  = Math.min(420, vw * 0.86), H = 330, m = 16;
-        var links = r.left + r.width / 2 > vw / 2;
-        var left  = links ? r.left - W - 24 : r.right + 24;
-        left = Math.min(vw - W - m, Math.max(m, left));
-        var top = Math.min(vh - H - m, Math.max(m, r.top + r.height / 2 - H / 2));
-        var ox = Math.min(W, Math.max(0, r.left + r.width / 2 - left));
-        var oy = Math.min(H, Math.max(0, r.top + r.height / 2 - top));
+        var W  = Math.min(400, vw * 0.86), rand = 16, luft = 22;
+        var zwischen = function (v, min, max) { return Math.min(max, Math.max(min, v)); };
 
         karte = document.createElement('div');
         karte.className = 'buehne-karte';
-        karte.style.left = left + 'px';
-        karte.style.top = top + 'px';
         karte.style.width = W + 'px';
-        karte.style.transformOrigin = ox + 'px ' + oy + 'px';
         karte.innerHTML =
-            '<div class="lz-eyebrow"></div>' +
+            '<span class="chip"></span>' +
             '<h3 class="lz-h3"></h3>' +
             '<p class="lz-lead"></p>' +
             '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
             '<a class="knopf"></a>' +
             '<button type="button" class="buehne-schliessen">schließen</button></div>';
-        karte.querySelector('.lz-eyebrow').textContent = el.dataset.kat;
+        karte.querySelector('.chip').textContent = el.dataset.kat;
         karte.querySelector('h3').textContent = el.dataset.titel;
         karte.querySelector('p').textContent = el.dataset.punchline;
         var link = karte.querySelector('a');
@@ -231,8 +229,43 @@
         link.href = el.dataset.url;
         karte.querySelector('.buehne-schliessen').addEventListener('click', schliessen);
 
+        // Erst unsichtbar anhängen und die ECHTE Höhe messen — vorher wurde
+        // sie geschätzt, und die Karte stand oft schief zum Objekt.
+        karte.style.visibility = 'hidden';
         blick.appendChild(karte);
+        var H = karte.offsetHeight;
+
+        // Wunschplätze der Reihe nach: ÜBER dem Objekt (mittig), sonst
+        // daneben, sonst darunter (Telefon). 84 px halten die Kopfzeile frei.
+        var ox = r.left + r.width / 2, oy = r.top + r.height / 2;
+        var left, top, lage;
+        if (r.top - H - luft >= 84) {
+            lage = 'oben';
+            top  = r.top - H - luft;
+            left = zwischen(ox - W / 2, rand, vw - W - rand);
+        } else if (r.right + luft + W <= vw - rand || r.left - luft - W >= rand) {
+            var rechts = r.right + luft + W <= vw - rand;
+            lage = rechts ? 'rechts' : 'links';
+            left = rechts ? r.right + luft : r.left - W - luft;
+            top  = zwischen(oy - H / 2, rand, vh - H - rand);
+        } else {
+            lage = 'unten';
+            top  = zwischen(r.bottom + luft, rand, vh - H - rand);
+            left = zwischen(ox - W / 2, rand, vw - W - rand);
+        }
+        karte.classList.add('lage-' + lage);
+        karte.style.left = left + 'px';
+        karte.style.top  = top + 'px';
+        // Zeiger und Wachstums-Ursprung sitzen auf der Objektmitte — die
+        // Karte kommt sichtbar AUS dem Objekt.
+        karte.style.setProperty('--zeiger-x', zwischen(ox - left, 20, W - 20) + 'px');
+        karte.style.setProperty('--zeiger-y', zwischen(oy - top, 20, H - 20) + 'px');
+        karte.style.transformOrigin = (ox - left) + 'px ' + (oy - top) + 'px';
+        karte.style.visibility = '';
+        requestAnimationFrame(function () { karte && karte.classList.add('karte-da'); });
+
         auswahl = i;
+        pBeimOeffnen = p;
         buehne.classList.add('hat-karte');
         huelle.classList.add('hat-auswahl');
         el.classList.add('ist-auswahl');
