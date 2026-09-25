@@ -68,12 +68,28 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
+<?php // Kundenstimme der Säule: schwarzer Zitat-Block wie auf der
+      // Referenzen-Übersicht (Daten aus index.json, sofern gepflegt). ?>
+<?php $stimme = array_values(array_filter($referenzen,
+    fn($p) => trim((string) ($p['zitat'] ?? '')) !== ''))[0] ?? null; ?>
+<?php if ($stimme): ?>
+<section class="lz-sec" style="display:grid;padding-top:var(--space-8);padding-bottom:0">
+  <?= pj_zitat($stimme) ?>
+</section>
+<?php endif; ?>
+
 <?php if ($referenzen): ?>
 <section class="lz-sec">
-  <h2 class="lz-h2">Referenzen</h2>
-  <div class="pj-liste" style="margin-top:var(--space-7)">
-    <?php foreach ($referenzen as $p) { echo pj_karte($p); } ?>
+  <h2 class="lz-h2">Ausgewählte Projekte</h2>
+  <div class="pj-collage" style="margin-top:var(--space-7)">
+    <?php // Zwei Karten in der Collage-Sprache der Übersicht: groß + hoch. ?>
+    <?php foreach (array_slice($referenzen, 0, 2) as $i => $p) {
+        echo pj_karte($p, $i === 0 ? 'gross' : 'hoch');
+    } ?>
   </div>
+  <p style="margin:var(--space-7) 0 0">
+    <a class="knopf" href="/referenzen/?saeule=gestaltung">Alle Gestaltungs-Projekte <?= lz_pfeil() ?></a>
+  </p>
 </section>
 <?php endif; ?>
 

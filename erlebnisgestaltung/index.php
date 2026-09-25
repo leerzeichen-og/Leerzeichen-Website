@@ -38,6 +38,10 @@ require __DIR__ . '/../teile/kopf.php';
   <p class="lz-lead" style="margin-top:var(--space-4);max-width:52ch">Wir arbeiten für
     Museen, Gemeinden, Ausflugsziele und Tourismusregionen. Oft an Kinder und ihre
     Familien gerichtet. Analog und begreifbar. Digital dort, wo es Sinn stiftet.</p>
+  <?php // Kreis-Video (Test, Roman 25.9.2026): rein dekorativ, stumm im
+        // Loop; bei reduzierter Bewegung hält es das Skript am Seitenende an. ?>
+  <video class="hero-kreis" src="/assets/videos/circle.mp4"
+    autoplay muted loop playsinline aria-hidden="true"></video>
 </section>
 
 <section class="lz-sec" style="padding-top:var(--space-7);padding-bottom:var(--space-7)">
@@ -46,16 +50,47 @@ require __DIR__ . '/../teile/kopf.php';
 
 <?php // Ansatz-Blöcke folgen mit dem ausgearbeiteten LP-Text (Website-Texte). ?>
 
+<?php // Kundenstimme der Säule: schwarzer Zitat-Block wie auf der
+      // Referenzen-Übersicht (Daten aus index.json, sofern gepflegt). ?>
+<?php $stimme = array_values(array_filter($referenzen,
+    fn($p) => trim((string) ($p['zitat'] ?? '')) !== ''))[0] ?? null; ?>
+<?php if ($stimme): ?>
+<section class="lz-sec" style="display:grid;padding-top:var(--space-8);padding-bottom:0">
+  <?= pj_zitat($stimme) ?>
+</section>
+<?php endif; ?>
+
 <?php if ($referenzen): ?>
 <section class="lz-sec">
-  <h2 class="lz-h2">Referenzen</h2>
-  <div class="pj-liste" style="margin-top:var(--space-7)">
-    <?php foreach ($referenzen as $p) { echo pj_karte($p); } ?>
+  <h2 class="lz-h2">Ausgewählte Projekte</h2>
+  <div class="pj-collage" style="margin-top:var(--space-7)">
+    <?php // Zwei Karten in der Collage-Sprache der Übersicht: groß + hoch. ?>
+    <?php foreach (array_slice($referenzen, 0, 2) as $i => $p) {
+        echo pj_karte($p, $i === 0 ? 'gross' : 'hoch');
+    } ?>
   </div>
+  <p style="margin:var(--space-7) 0 0">
+    <a class="knopf" href="/referenzen/?saeule=erlebnisse">Alle Erlebnis-Projekte <?= lz_pfeil() ?></a>
+  </p>
 </section>
 <?php endif; ?>
 
 <?php // FAQ-Block folgt aus der Wissensbasis (daten/faq/erlebnisse.json, Stufe 2). ?>
+
+<script>
+// Bei reduzierter Bewegung bleibt der Kreis stehen — sonst bekommt er einen
+// Anstoß, falls der Browser das autoplay-Attribut verschlafen hat.
+(function () {
+    var heroKreis = document.querySelector('.hero-kreis');
+    if (!heroKreis) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        heroKreis.pause();
+        heroKreis.removeAttribute('autoplay');
+    } else {
+        heroKreis.play().catch(function () {});
+    }
+})();
+</script>
 
 <?php require __DIR__ . '/../teile/newsletter.php'; ?>
 <?php require __DIR__ . '/../teile/cta.php'; ?>

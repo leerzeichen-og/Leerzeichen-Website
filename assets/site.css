@@ -288,6 +288,7 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
    Beginnt an der Bildschirmkante (die Kopfzeile ist fixiert und liegt
    negativ darüber) und füllt fast die ganze Höhe; der Inhalt sitzt unten. */
 .seiten-hero {
+    position: relative;
     background-color: #000;
     background-size: cover;
     background-position: center top;
@@ -303,6 +304,29 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     justify-content: flex-start;
 }
 .seiten-hero .titel-seite { color: #fff; margin-top: var(--space-5); }
+
+/* Kreis-Video im Säulen-Hero (Test auf der Erlebnisse-Seite): der helle
+   Block mit dem plastischen Kreis schwebt rechts neben dem Titel. */
+.hero-kreis {
+    position: absolute;
+    right: var(--rand);
+    /* Unten rechts, auf Höhe der Leads — oben gehört die Zeile dem Titel. */
+    bottom: var(--space-9);
+    width: min(340px, 23vw);
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-xs);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, .5);
+}
+@media (max-width: 1180px) {
+    /* Auf schmalen Fenstern unter den Text statt daneben. */
+    .hero-kreis {
+        position: static;
+        transform: none;
+        margin-top: var(--space-7);
+        width: min(300px, 62vw);
+    }
+}
 .seiten-hero .lz-lead { color: rgba(255, 255, 255, .8); }
 
 /* Prinzipien-Raster: offene Blöcke mit Oberlinie (Fassung „frei") */
