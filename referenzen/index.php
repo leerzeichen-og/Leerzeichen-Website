@@ -1,114 +1,79 @@
 <?php
-// Referenzen-Übersicht in ZWEI Ansichten (Vergleich für Roman, 7.10.2026):
-//   /referenzen/                 Collage mit Kundenstimmen (Stand 24.9.)
-//   /referenzen/?ansicht=filter  Vorschlag im Stil wearemucho.com/work:
-//                                großes ruhiges Raster, gefiltert über die
-//                                Schlagworte der Beiträge (?tag=…).
-// Beide Filter ohne JavaScript — die Pillen sind schlichte Links.
+// Referenzen-Übersicht im Mucho-Stil (Entscheidung Roman, 7.10.2026):
+// oben links der Einleitungssatz (zugleich die h1), rechts daneben die
+// Kategorien als zweispaltige Pillen-Liste (Sprungmarken, kein Filter) —
+// darunter je Kategorie eine Gruppe: Überschrift, daneben und darunter
+// die Beiträge. Ein Beitrag erscheint in JEDER seiner Kategorien.
+// Kategorien = Schlagworte der Beiträge (index.json).
 
 require_once __DIR__ . '/../teile/firma.php';
 require_once __DIR__ . '/../teile/projekte.php';
 
 $titel        = 'Referenzen — Projekte von leerzeichen';
-$beschreibung = 'Ausgewählte Projekte aus Ausstellungsgestaltung, Erlebnisplanung und Corporate Design.';
+$beschreibung = 'Wir arbeiten mit Betrieben, Museen und Gemeinden — am Erscheinungsbild, '
+              . 'an Büchern, Magazinen, Websites, Ausstellungen und Erlebniswegen.';
 $brotkrumen   = [['Referenzen', '/referenzen/']];
 $styles       = ['/assets/projekt.css'];
 $voll_breit   = true;
 
-$ansicht  = ($_GET['ansicht'] ?? '') === 'filter' ? 'filter' : 'collage';
 $projekte = pj_index();
 
-// Säulen-Filter (Collage-Ansicht).
-$filter = (string) ($_GET['saeule'] ?? '');
-$filter = isset(PJ_SAEULEN[$filter]) ? $filter : '';
-
-// Schlagwort-Filter (Filter-Ansicht): alle Schlagworte aus dem Index sammeln.
-$alleTags = [];
+// Gruppen: Kategorie → Beiträge (ein Beitrag steht in jeder seiner Kategorien).
+$gruppen = [];
 foreach ($projekte as $p) {
     foreach ((array) ($p['schlagworte'] ?? []) as $t) {
-        $alleTags[$t] = ($alleTags[$t] ?? 0) + 1;
+        $gruppen[$t][] = $p;
     }
 }
-ksort($alleTags, SORT_NATURAL | SORT_FLAG_CASE);
-$tag = (string) ($_GET['tag'] ?? '');
-$tag = isset($alleTags[$tag]) ? $tag : '';
+ksort($gruppen, SORT_NATURAL | SORT_FLAG_CASE);
 
-if ($ansicht === 'filter') {
-    if ($tag !== '') {
-        $projekte = array_filter($projekte,
-            fn($p) => in_array($tag, (array) ($p['schlagworte'] ?? []), true));
-    }
-} elseif ($filter !== '') {
-    $projekte = array_filter($projekte, fn($p) => ($p['saeule'] ?? '') === $filter);
+// Sprungmarken-Anker aus dem Kategorienamen (nur a-z, 0-9, Bindestrich).
+function pj_anker(string $name): string
+{
+    $s = strtr(mb_strtolower($name), ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss']);
+    return trim(preg_replace('/[^a-z0-9]+/', '-', $s) ?? '', '-');
 }
 
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="seiten-kopf">
-<h1 class="titel-seite">Referenzen</h1>
-
-<?php if ($ansicht === 'filter'): ?>
-<nav class="pj-pillen" aria-label="Nach Schlagwort filtern">
-  <a class="pj-pille" href="/referenzen/?ansicht=filter" <?= $tag === '' ? 'aria-current="true"' : '' ?>>Alle</a>
-  <?php foreach ($alleTags as $t => $anzahl): ?>
-  <a class="pj-pille" href="/referenzen/?ansicht=filter&amp;tag=<?= e(rawurlencode($t)) ?>"
-     <?= $tag === $t ? 'aria-current="true"' : '' ?>><?= e($t) ?></a>
-  <?php endforeach; ?>
-</nav>
-<?php else: ?>
-<nav class="pj-pillen" aria-label="Nach Säule filtern">
-  <a class="pj-pille" href="/referenzen/" <?= $filter === '' ? 'aria-current="true"' : '' ?>>Alle</a>
-  <?php foreach (PJ_SAEULEN as $schluessel => [$label, $url]): ?>
-  <a class="pj-pille" href="/referenzen/?saeule=<?= e($schluessel) ?>"
-     <?= $filter === $schluessel ? 'aria-current="true"' : '' ?>><?= e($label) ?></a>
-  <?php endforeach; ?>
-</nav>
-<?php endif; ?>
+<section class="pj-intro">
+  <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
+    am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
+    an Ausstellungen und Erlebniswegen.</h1>
+  <?php if ($gruppen): ?>
+  <nav class="pj-kategorien" aria-label="Kategorien">
+    <?php foreach ($gruppen as $name => $liste): ?>
+    <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
+    <?php endforeach; ?>
+  </nav>
+  <?php endif; ?>
 </section>
 
+<?php if (!$gruppen): ?>
+<section class="lz-sec">
+  <p class="platzhalter">Hier erscheinen die Projekte, sobald Space sie veröffentlicht hat.</p>
+</section>
+<?php else: ?>
 <section class="lz-sec" style="padding-top:0">
-<?php if (!$projekte): ?>
-<p class="platzhalter">Hier erscheinen die Projekte, sobald Space sie veröffentlicht hat.</p>
-
-<?php elseif ($ansicht === 'filter'): ?>
-<?php // Großes, ruhiges Zweierraster: Quer-Teaser, großer Titel, Schlagwort-Zeile. ?>
-<div class="pj-filterraster">
-  <?php foreach ($projekte as $p): ?>
-  <a class="pj-karte pj-fr-karte" href="/referenzen/<?= e($p['slug'] ?? '') ?>/">
-    <span class="pj-karte-bildwrap">
-      <?= pj_bild($p['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 50vw') ?>
-    </span>
-    <span class="pj-fr-titel"><?= e((string) ($p['titel'] ?? '')) ?></span>
-    <?php if (!empty($p['schlagworte'])): ?>
-    <span class="pj-fr-tags"><?= e(implode(' · ', (array) $p['schlagworte'])) ?></span>
-    <?php endif; ?>
-  </a>
+  <?php foreach ($gruppen as $name => $liste): ?>
+  <div class="pj-gruppe" id="<?= e(pj_anker($name)) ?>">
+    <h2 class="pj-gruppe-titel"><?= e($name) ?></h2>
+    <?php foreach ($liste as $p): ?>
+    <a class="pj-karte pj-fr-karte" href="/referenzen/<?= e($p['slug'] ?? '') ?>/">
+      <span class="pj-karte-bildwrap">
+        <?= pj_bild($p['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 50vw') ?>
+      </span>
+      <span class="pj-fr-titel"><?= e((string) ($p['titel'] ?? '')) ?></span>
+      <?php if (!empty($p['schlagworte'])): ?>
+      <span class="pj-fr-tags"><?= e(implode(' · ', (array) $p['schlagworte'])) ?></span>
+      <?php endif; ?>
+    </a>
+    <?php endforeach; ?>
+  </div>
   <?php endforeach; ?>
-</div>
-
-<?php else: ?>
-<div class="pj-collage">
-  <?php
-  // Collage mit ausgerichteten Zeilen (Roman, 24.9.2026): je Fünfergruppe
-  // drei Hochformate, dann groß + hoch (fast gleiche Bildhöhen); nach der
-  // dritten Karte jeder Gruppe erscheint die nächste Kundenstimme.
-  $muster = ['hoch', 'hoch', 'hoch', 'gross', 'hoch'];
-  $zitate = array_values(array_filter($projekte,
-      fn($p) => trim((string) ($p['zitat'] ?? '')) !== ''));
-  $n = 0;
-  foreach ($projekte as $p) {
-      echo pj_karte($p, $muster[$n % count($muster)]);
-      $n++;
-      if ($n % count($muster) === 3 && $zitate) {
-          echo pj_zitat(array_shift($zitate));
-      }
-  }
-  ?>
-</div>
-<?php endif; ?>
-
 </section>
+<?php endif; ?>
 
 <?php require __DIR__ . '/../teile/newsletter.php'; ?>
 <?php require __DIR__ . '/../teile/cta.php'; ?>

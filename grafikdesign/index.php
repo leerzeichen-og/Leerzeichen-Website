@@ -88,7 +88,7 @@ require __DIR__ . '/../teile/kopf.php';
     } ?>
   </div>
   <p style="margin:var(--space-7) 0 0">
-    <a class="knopf" href="/referenzen/?saeule=gestaltung">Alle Gestaltungs-Projekte <?= lz_pfeil() ?></a>
+    <a class="knopf" href="/referenzen/">Alle Gestaltungs-Projekte <?= lz_pfeil() ?></a>
   </p>
 </section>
 <?php endif; ?>
