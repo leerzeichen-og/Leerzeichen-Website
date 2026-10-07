@@ -60,7 +60,7 @@ require __DIR__ . '/../teile/kopf.php';
   <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
     wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
     entstehen muss. Unsere Arbeit lebt von Neugier. Unsere Gestaltung von
-    Präzision. Unser Maßstab ist, was hängen bleibt.</p>
+    Präzision. Unser Antrieb ist die Wirkung.</p>
   <p>Seit <?= e(FIRMA_GEGRUENDET) ?> setzen wir gemeinsam Zeichen.</p>
 </section>
 
