@@ -102,12 +102,15 @@ if (!empty($jsonld_extra)) {
 
 // Aktive Seite für die Navigation (erster Pfadteil der Adresse).
 $nav_aktiv = explode('/', trim(strtok($_SERVER['REQUEST_URI'] ?? '/', '?'), '/'))[0];
+// Die beiden Säulen-Seiten gehören im Menü zu „Leistungen" (Struktur 7.10.2026).
+if (in_array($nav_aktiv, ['erlebnisgestaltung', 'grafikdesign'], true)) {
+    $nav_aktiv = 'leistungen';
+}
 $nav = [
-    ['erlebnisgestaltung', 'Erlebnisse'],
-    ['grafikdesign',       'Gestaltung'],
-    ['referenzen',         'Referenzen'],
-    ['agentur',            'Agentur'],
-    ['kontakt',            'Kontakt'],
+    ['leistungen', 'Leistungen'],
+    ['referenzen', 'Referenzen'],
+    ['agentur',    'Agentur'],
+    ['kontakt',    'Kontakt'],
 ];
 
 // HTML nie ungefragt aus dem Browser-Cache: Ohne diesen Header raten Browser

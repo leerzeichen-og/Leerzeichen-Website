@@ -19,6 +19,7 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
       "jahr": 2026,
       "saeule": "erlebnisse",
       "punchline": "Eine Ausstellung, die …",
+      "schlagworte": ["Ausstellung", "Leitsystem"],
       "startseite": "top",
       "zitat": "Wir wollten einen Weg, der …",
       "zitat_von": "Herta Aubach, Bürgermeisterin",

@@ -21,11 +21,18 @@ $voll_breit   = true;
 
 
 // Die zwei Fragen (Fassung Roman, 7.10.2026 — die dritte ist entfallen).
-// Senkrechter Strich = fester Zeilenumbruch (dreizeilig auf jeder
-// Bildschirmbreite, auch 27 Zoll).
+// Senkrechter Strich = fester Zeilenumbruch. Schreibtisch und Telefon
+// brauchen UNTERSCHIEDLICHE Umbrüche (Roman) — beide Fassungen stehen im
+// Markup, buehne.js behält beim Start nur die passende.
 $fragen = [
-    'Wie wird aus Ihrem Projekt|ein Erlebnis, das neue|Besucher anzieht?',
-    'Wie wird aus Ihrem Betrieb|eine Marke,|die im Kopf bleibt?',
+    [
+        'desktop' => 'Wie wird aus Ihrem Projekt|ein Erlebnis, das neue|Besucher anzieht?',
+        'mobil'   => 'Wie wird aus Ihrem Projekt ein Erlebnis,|das neue Besucher|anzieht?',
+    ],
+    [
+        'desktop' => 'Wie wird aus Ihrem Betrieb|eine Marke, die im|Kopf bleibt?',
+        'mobil'   => 'Wie wird aus|Ihrem Betrieb|eine Marke, die|im Kopf bleibt?',
+    ],
 ];
 
 // Bahnen der Projekt-Objekte — IMMER acht (Beschluss Roman 17.9.2026).
@@ -96,7 +103,7 @@ $saeulen_boxen = [
 // Team-Text (Kurzfassung „Über uns") — steht jetzt im Splash-Akt der Bühne.
 $teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff '
           . 'entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den '
-          . 'Blick lenkt und dem Wichtigen Raum. Dem folgend begleiten wir seit '
+          . 'Blick lenkt und dem Wichtigen Raum gibt. Dem folgend begleiten wir seit '
           . FIRMA_GEGRUENDET . ' Projekte von der ersten Skizze bis zur Übergabe.';
 
 // Motive: greifen automatisch, sobald die Datei unter assets/bilder/ liegt.
@@ -138,9 +145,9 @@ require __DIR__ . '/teile/kopf.php';
     </div>
 
     <div class="buehne-fragen">
-      <?php foreach ($fragen as $f): ?>
-      <p class="buehne-frage"><?php foreach (explode('|', $f) as $zeile): ?><span class="buehne-zeile"><?= e($zeile) ?></span><?php endforeach; ?></p>
-      <?php endforeach; ?>
+      <?php foreach ($fragen as $f): foreach (['desktop', 'mobil'] as $fassung): ?>
+      <p class="buehne-frage" data-fassung="<?= $fassung ?>"><?php foreach (explode('|', $f[$fassung]) as $zeile): ?><span class="buehne-zeile"><?= e($zeile) ?></span><?php endforeach; ?></p>
+      <?php endforeach; endforeach; ?>
     </div>
 
     <?php // Schwarzer Akt: liegt unter dem Übergangsbild, wird von ihm
@@ -189,7 +196,7 @@ require __DIR__ . '/teile/kopf.php';
 <section id="buehne-statisch" class="buehne-statisch">
   <h1 class="lz-claim">Gemeinsam<br>Zeichen setzen.</h1>
   <?php foreach ($fragen as $f): ?>
-  <p class="buehne-statisch-frage"><?= e(str_replace('|', ' ', $f)) ?></p>
+  <p class="buehne-statisch-frage"><?= e(str_replace('|', ' ', $f['desktop'])) ?></p>
   <?php endforeach; ?>
   <p class="lz-lead buehne-statisch-antwort">Darauf finden wir gemeinsam Antworten.
     Seit <?= e(FIRMA_GEGRUENDET) ?> — gedruckt • gebaut • digital.</p>

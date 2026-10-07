@@ -7,6 +7,7 @@ require_once __DIR__ . '/teile/firma.php';
 
 $seiten = [
     '/',
+    '/leistungen/',
     '/erlebnisgestaltung/',
     '/grafikdesign/',
     '/referenzen/',

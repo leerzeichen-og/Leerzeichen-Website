@@ -17,6 +17,7 @@
         <ul class="lz-nllist">
           <li><strong>Ein Fokus-Thema pro Ausgabe</strong><span>Spannende Themen
             aus der Welt der Gestaltung, der Erlebnisse und Abenteuer</span></li>
+          <li><strong>Projekt-Schnipsel</strong><span>Erkenntnisse und Ergebnisse.</span></li>
           <li><strong>Farbe auf Papier</strong><span>Unser Quartals-Buchtipp
             zur analogen Erhellung</span></li>
         </ul>

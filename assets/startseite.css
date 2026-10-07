@@ -218,6 +218,19 @@
     text-align: center;
     color: var(--ink);
     max-width: 62ch;
+    position: relative;
+}
+/* Eigener weißer Nebel direkt hinter dem Block: Das Splash-Motiv skaliert
+   je Bildschirm anders — der Bodenverlauf allein ließ Überschrift und Text
+   mancherorts auf dunklen Ausläufern stehen (Roman, 7.10.2026). */
+.buehne-team-text::before {
+    content: "";
+    position: absolute;
+    inset: -64px -120px;
+    z-index: -1;
+    background: radial-gradient(ellipse at center,
+        rgba(255, 255, 255, .97) 54%,
+        rgba(255, 255, 255, 0) 84%);
 }
 .buehne-team-text h2 {
     margin: 0;

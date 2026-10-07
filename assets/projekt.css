@@ -412,6 +412,38 @@
 .pj-karte:hover .pj-karte-bild,
 .pj-karte:focus-visible .pj-karte-bild { transform: scale(1.045); }
 
+/* ---- Filter-Ansicht (Vorschlag im Mucho-Stil, ?ansicht=filter) -------------- */
+/* Großes ruhiges Zweierraster: Quer-Teaser, Titel in Light, darunter die
+   Schlagworte des Beitrags als gesperrte Zeile. */
+
+.pj-filterraster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 3vw, 56px);
+  row-gap: clamp(40px, 6vw, 100px);
+  margin-top: var(--space-8);
+}
+.pj-fr-titel {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  line-height: 1.15;
+}
+.pj-fr-tags {
+  display: block;
+  margin-top: .5rem;
+  font-size: .8rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gedaempft);
+}
+.pj-karte:hover .pj-fr-titel { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .pj-filterraster { grid-template-columns: 1fr; }
+}
+
 /* ---- Kundenstimme (Zitat-Block zwischen den Karten) ------------------------- */
 
 .pj-zitat {

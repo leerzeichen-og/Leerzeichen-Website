@@ -10,7 +10,7 @@ require_once __DIR__ . '/../teile/projekte.php';
 $titel        = 'Ausstellungen, Erlebniswege & Escape-Rooms | leerzeichen';
 $beschreibung = 'Wir gestalten Ausstellungen, Rundwege, Escape-Rooms, Spielplatzkonzepte '
               . 'und Kinderbegleitebenen — vom Konzept bis zur Eröffnung.';
-$brotkrumen   = [['Erlebnisse', '/erlebnisgestaltung/']];
+$brotkrumen   = [['Leistungen', '/leistungen/'], ['Erlebnisse', '/erlebnisgestaltung/']];
 $styles       = ['/assets/projekt.css'];
 $voll_breit   = true;
 

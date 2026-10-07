@@ -10,7 +10,7 @@ require_once __DIR__ . '/../teile/projekte.php';
 $titel        = 'Corporate Design, Magazine & Publikationen | leerzeichen';
 $beschreibung = 'Corporate Design, Mitarbeitermagazine, Bücher, Kataloge und digitale '
               . 'Auftritte für regionale Unternehmen. Seit 2008.';
-$brotkrumen   = [['Gestaltung', '/grafikdesign/']];
+$brotkrumen   = [['Leistungen', '/leistungen/'], ['Gestaltung', '/grafikdesign/']];
 $styles       = ['/assets/projekt.css'];
 $voll_breit   = true;
 

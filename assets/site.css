@@ -638,10 +638,13 @@ body.menue-offen { overflow: hidden; }
 /* Zweispaltige Karte wie im Design-Briefing, aber nie auf voller Breite.
    Die Kuvert-Grafik ragt oben über den Rahmen in die Box hinein. */
 /* Oben Platz fürs hineinragende Kuvert, unten Luft zum schwarzen CTA —
-   auch während die Postkarte noch einfliegt (sie startet 56 px tiefer). */
+   auch während die Postkarte noch einfliegt (sie startet 56 px tiefer).
+   overflow: clip, weil die GEDREHTE Karte im Einflug-Zustand sonst rechts
+   über die Seite hinausragt — am Telefon gab das Querscrollen (7.10.2026). */
 .nl-bereich {
     padding-top: calc(var(--space-9) + 200px);
     padding-bottom: calc(var(--space-9) + 80px);
+    overflow: clip;
 }
 
 .nl-karte {
@@ -753,6 +756,54 @@ body.menue-offen { overflow: hidden; }
     line-height: 1.5;
 }
 .nl-zustimmung input { margin-top: 3px; accent-color: var(--ink); }
+
+/* --- Leistungen: Brückenseite mit zwei Säulen-Kacheln (7.10.2026) ------------ */
+
+.leistungs-kacheln {
+    display: grid;
+    gap: clamp(20px, 2.5vw, 40px);
+}
+.leistung-kachel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: var(--space-4);
+    min-height: clamp(400px, 56vh, 620px);
+    padding: clamp(40px, 6vw, 96px) clamp(28px, 6vw, 96px);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-decoration: none;
+}
+.leistung-kachel h2 {
+    margin: var(--space-3) 0 0;
+    font-weight: 300;
+    font-size: clamp(1.9rem, 3.4vw, 3.4rem);
+    line-height: 1.08;
+    max-width: 22ch;
+    text-wrap: balance;
+}
+.leistung-kachel .leistung-text {
+    margin: 0;
+    max-width: 52ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: rgba(255, 255, 255, .82);
+}
+.leistung-kachel .leistung-liste {
+    margin: 0;
+    max-width: 60ch;
+    font-size: var(--text-sm, .9rem);
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .6);
+}
+.leistung-kachel .knopf { margin-top: var(--space-4); }
 
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
 

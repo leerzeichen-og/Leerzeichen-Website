@@ -21,6 +21,7 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
     </div>
     <div class="lz-footcol">
       <p><a href="/">Startseite</a><br>
+        <a href="/leistungen/">Leistungen</a><br>
         <a href="/referenzen/">Referenzen</a><br>
         <a href="/agentur/">Agentur</a><br>
         <a href="/kontakt/">Kontakt</a></p>

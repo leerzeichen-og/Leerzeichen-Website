@@ -23,6 +23,14 @@
     var blick    = buehne.querySelector('.buehne-blick');
     var huelle   = buehne.querySelector('.buehne-objekte');
     var objekte  = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-obj'));
+
+    // Jede Frage liegt in zwei Fassungen mit eigenen Umbrüchen vor
+    // (data-fassung desktop/mobil) — nur die passende bleibt im Spiel,
+    // die andere fliegt aus dem DOM. Entschieden wird einmal beim Laden.
+    var fassung = window.matchMedia('(max-width: 900px)').matches ? 'mobil' : 'desktop';
+    buehne.querySelectorAll('.buehne-frage').forEach(function (f) {
+        if (f.dataset.fassung && f.dataset.fassung !== fassung) f.remove();
+    });
     var fragen   = Array.prototype.slice.call(buehne.querySelectorAll('.buehne-frage'));
     var finale    = buehne.querySelector('.buehne-finale');
     var splash    = buehne.querySelector('.buehne-splash');

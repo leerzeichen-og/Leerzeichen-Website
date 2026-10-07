@@ -271,6 +271,7 @@ foreach ($projekte as $nr => $p) {
     $zeile = [
         'slug' => $slug, 'titel' => $p['titel'], 'kunde' => $p['kunde'],
         'jahr' => $p['jahr'], 'saeule' => $p['saeule'], 'punchline' => $p['punchline'],
+        'schlagworte' => $p['schlagworte'],
         'teaser_quer' => $bilder['teaser_quer'],
         'teaser_hoch' => $bilder['teaser_hoch'],
         'objekt' => $bilder['objekt'],
