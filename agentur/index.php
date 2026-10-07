@@ -39,10 +39,10 @@ function agentur_portrait(string $slug, string $variante): ?string
 $prinzipien = [
     ['Ansatz',
      'Form follows Function, wörtlich genommen. Was wir gestalten, funktioniert: im Druck, am Screen, in einer Ausstellung, die jahrelang von Kindern benutzt wird. Zeitlose Gestaltung ist unser Anspruch. Unsere Konzepte und Gestaltungen sollen langlebig ihre Wirkung entfalten.'],
-    ['Netzwerk',
-     'Für die Produktion holen wir Leute dazu, mit denen wir seit Jahren arbeiten: Experten und Unternehmen, die außergewöhnliche Projekte mit uns umsetzen. Medientechniker, Motion Designer, Druckereien, Werbetechniker, Lektorinnen, Illustratoren, Architekten. Wir nutzen unser Netzwerk und bleiben verantwortlich, bis das Projekt steht.'],
     ['Technik',
      'Vom Screendesign fürs Handydisplay über Bücher mit mehreren hundert Seiten bis zum 30-Meter-Print haben wir alles schon produziert. Technologisch legen wir uns nicht fest, analog wie digital. KI setzen wir dort ein, wo sie Arbeit abnimmt und Ihren Nutzen vergrößert.'],
+    ['Netzwerk',
+     'Für die Produktion holen wir Leute dazu, mit denen wir seit Jahren arbeiten: Experten und Unternehmen, die außergewöhnliche Projekte mit uns umsetzen. Medientechniker, Motion Designer, Druckereien, Werbetechniker, Lektorinnen, Illustratoren, Architekten. Wir nutzen unser Netzwerk und bleiben verantwortlich, bis das Projekt steht.'],
 ];
 
 $ctaTitel = 'Unser Büro ist einen Besuch wert.';
@@ -52,16 +52,17 @@ require __DIR__ . '/../teile/kopf.php';
 ?>
 
 <section class="seiten-kopf">
-  <span class="chip">Agentur</span>
-  <h1 class="titel-seite">Ohne Leerzeichen wäre dieser Satz
-    kaum zu lesen.</h1>
+  <h1 class="titel-seite">Wir gestalten.</h1>
 </section>
 <section class="text-spalte">
-  <p>Der kleinste
-    Eingriff entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den
-    Blick lenkt und das Wichtige stehen lässt. Dem folgend begleiten wir seit
-    <?= e(FIRMA_GEGRUENDET) ?> Projekte von der ersten Skizze bis zur Übergabe —
-    <?= e(FIRMA_NAME) ?> aus <?= e(FIRMA_ORT) ?>.</p>
+  <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
+    wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
+    entstehen muss.</p>
+  <p>Unsere Arbeit lebt von Neugier. Unsere Gestaltung von Präzision.
+    Unser Maßstab ist, was hängen bleibt.</p>
+  <p>Seit <?= e(FIRMA_GEGRUENDET) ?> bringen wir gemeinsam mit unseren
+    Kund:innen Neues in die Welt.</p>
+  <p>leerzeichen. Gemeinsam Zeichen setzen.</p>
 </section>
 
 <section class="lz-sec">

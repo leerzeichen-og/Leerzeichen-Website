@@ -19,10 +19,13 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="seiten-hero" style="background-image:linear-gradient(180deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,.62) 100%), url(/assets/bilder/leerzeichen-connected.webp)">
-  <span class="chip">Kontakt</span>
+<?php // Heller Einstieg (Fassung Roman, 7.10.2026 — der dunkle Hero ist raus):
+      // weißer Grund, schwarzer Text, die großen Kontaktzeilen direkt darunter. ?>
+<section class="seiten-kopf">
   <h1 class="titel-seite">Am besten, wir treffen uns.</h1>
-  <p class="lz-lead" style="margin-top:var(--space-5);max-width:52ch">Rufen Sie an, und
+</section>
+<section class="text-spalte" style="padding-bottom:var(--space-8)">
+  <p>Rufen Sie an, und
     wir vereinbaren einen Termin. Dann finden wir gemeinsam heraus, was Ihr Projekt
     braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
   <div class="kontakt-wege">
