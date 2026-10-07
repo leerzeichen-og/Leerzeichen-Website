@@ -20,12 +20,12 @@ $voll_breit   = true;
 
 
 
-// Die drei Fragen. Senkrechter Strich = fester Zeilenumbruch (dreizeilig auf
-// jeder Bildschirmbreite, auch 27 Zoll).
+// Die zwei Fragen (Fassung Roman, 7.10.2026 — die dritte ist entfallen).
+// Senkrechter Strich = fester Zeilenumbruch (dreizeilig auf jeder
+// Bildschirmbreite, auch 27 Zoll).
 $fragen = [
-    'Wie wird aus Ihrem Projekt|ein Erlebnis, das neue|Besucher bringt?',
-    'Wie wird aus Ihrem|Unternehmen ein Bild,|das man wiedererkennt?',
-    'Und wie wird aus beidem|eine Geschichte, die man|weitererzählt?',
+    'Wie wird aus Ihrem Projekt|ein Erlebnis, das neue|Besucher anzieht?',
+    'Wie wird aus Ihrem Betrieb|eine Marke,|die im Kopf bleibt?',
 ];
 
 // Bahnen der Projekt-Objekte — IMMER acht (Beschluss Roman 17.9.2026).
@@ -96,7 +96,7 @@ $saeulen_boxen = [
 // Team-Text (Kurzfassung „Über uns") — steht jetzt im Splash-Akt der Bühne.
 $teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff '
           . 'entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den '
-          . 'Blick lenkt und das Wichtige stehen lässt. Dem folgend begleiten wir seit '
+          . 'Blick lenkt und dem Wichtigen Raum. Dem folgend begleiten wir seit '
           . FIRMA_GEGRUENDET . ' Projekte von der ersten Skizze bis zur Übergabe.';
 
 // Motive: greifen automatisch, sobald die Datei unter assets/bilder/ liegt.

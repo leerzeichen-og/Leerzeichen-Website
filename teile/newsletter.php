@@ -15,11 +15,10 @@
         <p class="nl-untertitel">Der leerzeichen Newsletter. Wir schreiben über
           Dinge, die uns bei der Arbeit beschäftigen. Vier Mal im Jahr.</p>
         <ul class="lz-nllist">
-          <li><strong>Ein Fokus-Thema</strong><span>pro Ausgabe, etwa „Keine Angst
-            vor Feedback“ oder „Der Wert des Gedruckten“</span></li>
-          <li><strong>Projekt-Schnipsel</strong><span>Erkenntnisse und Ergebnisse.</span></li>
-          <li><strong>Designbegriffe erklärt</strong><span>damit Sie wissen,
-            wovon die Rede ist</span></li>
+          <li><strong>Ein Fokus-Thema pro Ausgabe</strong><span>Spannende Themen
+            aus der Welt der Gestaltung, der Erlebnisse und Abenteuer</span></li>
+          <li><strong>Farbe auf Papier</strong><span>Unser Quartals-Buchtipp
+            zur analogen Erhellung</span></li>
         </ul>
       </div>
       <form class="nl-form" action="mailto:<?= e(FIRMA_MAIL) ?>?subject=Empty%20Space%20Anmeldung" method="get">

@@ -109,7 +109,9 @@
     // dahinter wird hart auf den schwarzen Akt umgeschaltet (unsichtbar, weil
     // gerade alles zugedeckt ist) → Antwort mit Knöpfen → der Splash scrollt
     // herein, darauf schwebt das Team-Foto.
-    var FRAGEN_FENSTER = [[0.10, 0.26], [0.28, 0.44], [0.46, 0.62]];
+    // Zwei Fragen (seit 7.10.2026) — die Fenster teilen sich die Strecke
+    // bis zum Übergangsbild (uIn ab 0.56).
+    var FRAGEN_FENSTER = [[0.12, 0.32], [0.38, 0.56]];
 
     function malenFortschritt() {
         fragen.forEach(function (f, i) {

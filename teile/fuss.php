@@ -30,10 +30,11 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
     </div>
     <div class="lz-footcol">
       <p>Seit <?= e(FIRMA_GEGRUENDET) ?> gestaltet <strong>leerzeichen</strong> als
-        <a href="/agentur/">Agentur</a> in <?= e(FIRMA_ORT) ?> Erlebnisse für Tourismus,
-        Kultur und Gemeinden: <a href="/referenzen/">Ausstellungen</a>, Escape-Rooms,
+        <a href="/agentur/">Agentur</a> in <?= e(FIRMA_ORT) ?> Erlebnisse
+        <strong>für Tourismus, Kultur und Gemeinden:</strong>
+        <a href="/referenzen/">Ausstellungen</a>, Escape-Rooms,
         Treasure Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer,
-        Spielplätze und Kinderebenen. Für Unternehmen entwickeln wir
+        Spielplätze und Kinderebenen. <strong>Für Unternehmen</strong> entwickeln wir
         <a href="/referenzen/">Corporate Design</a>, Logos, Leitsysteme,
         Mitarbeitermagazine, Bücher, Kataloge, Microsites und Landingpages.
         <a href="/kontakt/">Lassen Sie uns reden!</a></p>

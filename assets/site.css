@@ -347,7 +347,10 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     flex-direction: column;
     gap: var(--space-5);
     margin-inline: calc(-1 * var(--rand));
-    padding: 28px 0;
+    /* Die Neigung (kipp-*) hebt die Bandenden um ~halbe Breite × tan(1,9°) —
+       auf breiten Schirmen braucht es entsprechend mehr Luft, sonst schneidet
+       overflow:hidden den Text an den Rändern ab (Befund 7.10.2026). */
+    padding: clamp(28px, 1.9vw, 56px) 0;
     overflow: hidden;
 }
 
@@ -700,11 +703,12 @@ body.menue-offen { overflow: hidden; }
     color: var(--text-body);
     line-height: 1.5;
 }
-/* Listenzeichen: der von-bis-Pfeil (assets/icons, statt Plus). */
+/* Listenzeichen: der von-bis-Pfeil (assets/icons, statt Plus) —
+   5 px angehoben, damit er exakt auf die Titelzeile zeigt. */
 .lz-nllist li::before {
     content: "";
     position: absolute;
-    left: 0; top: .35em;
+    left: 0; top: calc(.35em - 5px);
     width: 27px;
     height: 12px;
     background: url("/assets/icons/gegenseitige-abhaengigkeit.svg") no-repeat left center / contain;
