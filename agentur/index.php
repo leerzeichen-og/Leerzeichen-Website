@@ -55,17 +55,16 @@ require __DIR__ . '/../teile/kopf.php';
   <h1 class="titel-seite">Wir gestalten.</h1>
 </section>
 <section class="text-spalte">
-  <?php // Ein durchgehender Absatz — nach „entstehen muss." folgt der
-        // Neugier-Teil OHNE Absatzabstand (Korrektur Roman, 7.10.2026). ?>
   <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
     wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
-    entstehen muss. Unsere Arbeit lebt von Neugier. Unsere Gestaltung von
+    entstehen muss.</p>
+  <p>Unsere Arbeit lebt von Neugier. Unsere Gestaltung von
     Präzision. Unser Antrieb ist die Wirkung.</p>
   <p>Seit <?= e(FIRMA_GEGRUENDET) ?> setzen wir gemeinsam Zeichen.</p>
 </section>
 
 <section class="lz-sec">
-  <h2 class="lz-h2">Wir sind Leerzeichen.</h2>
+  <h2 class="lz-h3">Wir sind Leerzeichen.</h2>
   <div class="portraits">
     <?php foreach ($team as [$slug, $name, $rolle, $postName, $telefon]): $bild = agentur_portrait($slug, $portraitVariante); ?>
     <figure class="portrait">
