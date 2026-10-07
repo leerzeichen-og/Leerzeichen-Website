@@ -37,3 +37,31 @@
         a.addEventListener('click', function () { setzen(false); });
     });
 })();
+
+// Magnet-Effekt der Knöpfe (7.10.2026): Das Leerzeichen-Rechteck zieht sich
+// ein Stück zum Zeiger hin (CSS-Variablen --zieh-x/--zieh-y, ausgewertet in
+// site.css). Rein dekorativ — ohne JavaScript bleibt das Rechteck ruhig.
+(function () {
+    'use strict';
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;   // Touch: kein Zeiger
+
+    document.addEventListener('mousemove', function (e) {
+        var knopf = e.target.closest ? e.target.closest('.knopf') : null;
+        if (!knopf) return;
+        var r = knopf.getBoundingClientRect();
+        // Lage des ruhenden Rechtecks: rechte Kante, senkrecht mittig.
+        var zx = e.clientX - (r.right - 27);
+        var zy = e.clientY - (r.top + r.height / 2);
+        var deckel = 10;   // höchstens so viele Pixel Auslenkung
+        knopf.style.setProperty('--zieh-x', Math.max(-deckel, Math.min(deckel, zx / 4)) + 'px');
+        knopf.style.setProperty('--zieh-y', Math.max(-deckel, Math.min(deckel, zy / 4)) + 'px');
+    }, { passive: true });
+
+    document.addEventListener('mouseout', function (e) {
+        var knopf = e.target.closest ? e.target.closest('.knopf') : null;
+        if (!knopf || knopf.contains(e.relatedTarget)) return;
+        knopf.style.setProperty('--zieh-x', '0px');
+        knopf.style.setProperty('--zieh-y', '0px');
+    }, { passive: true });
+})();
