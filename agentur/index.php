@@ -55,9 +55,12 @@ require __DIR__ . '/../teile/kopf.php';
   <h1 class="titel-seite">Wir gestalten.</h1>
 </section>
 <section class="text-spalte">
+  <?php // Ein durchgehender Absatz — nach „entstehen muss." folgt der
+        // Neugier-Teil OHNE Absatzabstand (Korrektur Roman, 7.10.2026). ?>
   <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
     wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
-    entstehen muss.</p>
+    entstehen muss. Unsere Arbeit lebt von Neugier. Unsere Gestaltung von
+    Präzision. Unser Maßstab ist, was hängen bleibt.</p>
   <p>Seit <?= e(FIRMA_GEGRUENDET) ?> setzen wir gemeinsam Zeichen.</p>
 </section>
 
