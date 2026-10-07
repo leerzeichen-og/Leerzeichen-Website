@@ -58,11 +58,7 @@ require __DIR__ . '/../teile/kopf.php';
   <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
     wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
     entstehen muss.</p>
-  <p>Unsere Arbeit lebt von Neugier. Unsere Gestaltung von Präzision.
-    Unser Maßstab ist, was hängen bleibt.</p>
-  <p>Seit <?= e(FIRMA_GEGRUENDET) ?> bringen wir gemeinsam mit unseren
-    Kund:innen Neues in die Welt.</p>
-  <p>leerzeichen. Gemeinsam Zeichen setzen.</p>
+  <p>Seit <?= e(FIRMA_GEGRUENDET) ?> setzen wir gemeinsam Zeichen.</p>
 </section>
 
 <section class="lz-sec">

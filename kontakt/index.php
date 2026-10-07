@@ -25,8 +25,7 @@ require __DIR__ . '/../teile/kopf.php';
   <h1 class="titel-seite">Am besten, wir treffen uns.</h1>
 </section>
 <section class="text-spalte" style="padding-bottom:var(--space-8)">
-  <p>Rufen Sie an, und
-    wir vereinbaren einen Termin. Dann finden wir gemeinsam heraus, was Ihr Projekt
+  <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
     braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
   <div class="kontakt-wege">
     <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?> <?= lz_pfeil() ?></a>
