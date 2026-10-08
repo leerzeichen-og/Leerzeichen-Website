@@ -111,8 +111,21 @@ body {
 
 img { max-width: 100%; height: auto; display: block; }
 
+/* Links wechseln nie die Farbe (Beschluss Roman, 8.10.2026 — kein
+   Petrol-Hover). Alleinstehende Text-Links tragen .text-link (unten). */
 a { color: inherit; }
-a:hover { color: var(--petrol-ink); }
+
+/* Alleinstehende Text-Links (Muster der Kontakt-Seite): Pfeil rechts
+   daneben, beim Zeigen unterstrichen — nie ein Farbwechsel. */
+.text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
+    color: var(--ink);
+    text-decoration: none;
+}
+.text-link svg { width: 1em; flex: none; }
+.text-link:hover { text-decoration: underline; }
 
 h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tight); }
 
@@ -995,7 +1008,6 @@ body.menue-offen { overflow: hidden; }
 .lz-footcol p:last-child { margin-bottom: 0; }
 
 .lz-footcol a { color: var(--ink); text-decoration: underline; }
-.lz-footcol a:hover { color: var(--petrol-ink); }
 
 /* Kreativwirtschaft-Austria-Zeichen unten in der rechten Spalte —
    groß genug, dass der Text im Kreis lesbar bleibt. */

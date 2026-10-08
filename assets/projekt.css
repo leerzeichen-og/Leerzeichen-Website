@@ -476,8 +476,11 @@
 
 .pj-gruppe {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(20px, 3vw, 56px);
+  /* Dieselbe Teilung wie .kopf-gross-zeile (Kontakt-Raster) — dadurch
+     fluchtet der Einleitungssatz oben mit den Karten der rechten Spalte,
+     und die Bilder haben die Breite des Kontakt-Fotos. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  column-gap: var(--space-8);
   row-gap: clamp(40px, 6vw, 100px);
   align-items: start;
   /* Anker-Sprünge landen unter der fixierten Kopfzeile. */
@@ -505,14 +508,6 @@
   font-weight: 300;
   font-size: clamp(1.4rem, 2.2vw, 2.1rem);
   line-height: 1.15;
-}
-.pj-fr-tags {
-  display: block;
-  margin-top: .5rem;
-  font-size: .8rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--gedaempft);
 }
 .pj-karte:hover .pj-fr-titel { text-decoration: underline; }
 

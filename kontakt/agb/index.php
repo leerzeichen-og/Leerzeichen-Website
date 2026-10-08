@@ -20,7 +20,7 @@ require __DIR__ . '/../../teile/kopf.php';
 <section class="rechtstext">
   <p><strong><?= e(FIRMA_NAME) ?></strong>, <?= e(FIRMA_STRASSE) ?>, <?= e(FIRMA_PLZ) ?> <?= e(FIRMA_ORT) ?> ·
     FN 411366a · UID ATU68723429<br>
-    <a href="/assets/downloads/leerzeichen-agb.pdf">Als PDF herunterladen</a></p>
+    <a class="text-link" href="/assets/downloads/leerzeichen-agb.pdf">Als PDF herunterladen <?= lz_pfeil() ?></a></p>
 
   <h2>1. Geltung, Vertragsabschluss</h2>
   <p><strong>1.1</strong> Die Leerzeichen Multimedia OG (im Folgenden „Agentur“) erbringt ihre

@@ -96,9 +96,6 @@ require __DIR__ . '/../teile/kopf.php';
         <?= pj_bild($p['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 50vw') ?>
       </span>
       <span class="pj-fr-titel"><?= e((string) ($p['titel'] ?? '')) ?></span>
-      <?php if (!empty($p['schlagworte'])): ?>
-      <span class="pj-fr-tags"><?= e(implode(' · ', (array) $p['schlagworte'])) ?></span>
-      <?php endif; ?>
     </a>
     <?php endforeach; ?>
   </div>

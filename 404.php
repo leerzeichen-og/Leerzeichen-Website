@@ -14,8 +14,9 @@ require __DIR__ . '/teile/kopf.php';
 <section class="text-spalte">
   <p>Die Seite, die Sie suchen, gibt es nicht mehr oder hat einen
     neuen Namen bekommen.</p>
-  <p><a href="/">Zur Startseite</a> · <a href="/referenzen/">Referenzen</a> ·
-    <a href="/kontakt/">Kontakt</a></p>
+  <p><a class="text-link" href="/">Zur Startseite <?= lz_pfeil() ?></a><br>
+    <a class="text-link" href="/referenzen/">Referenzen <?= lz_pfeil() ?></a><br>
+    <a class="text-link" href="/kontakt/">Kontakt <?= lz_pfeil() ?></a></p>
 </section>
 
 <?php require __DIR__ . '/teile/fuss.php'; ?>
