@@ -45,7 +45,7 @@ $saeulen = [
                      'Escape-Rooms', 'Treasure Trails',
                      'Rundwege mit interaktiven Stationen', 'Outdoor-Abenteuer',
                      'Spielplatzkonzepte', 'Leitsysteme und Beschilderung',
-                     'Audio- und Printstationen im Raum'],
+                     'Immersive multimediale Rauminstallationen'],
         'url'    => '/erlebnisgestaltung/',
         'knopf'  => 'Zur Erlebnisgestaltung',
     ],
@@ -123,6 +123,47 @@ require __DIR__ . '/../teile/kopf.php';
   <?php endforeach; ?>
 </section>
 
+
+<?php // Stärken-Block: Überschrift links am Rand, Text versetzt rechts —
+      // dieselbe Sprache wie die Seitenköpfe. ?>
+<section class="lz-sec">
+  <h2>Das ist unsere Stärke.</h2>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <p>Die meisten Vorhaben bleiben nicht bei einem Format. Wir entwickeln
+        eine Ausstellung und gestalten danach die Plakate, den Folder und die
+        Website dazu. Oder wir schärfen das Erscheinungsbild eines Betriebs und
+        übersetzen es in einen Messestand oder eine interaktive Station.</p>
+      <p>Das können wir, weil wir beide Seiten kennen. Weil wir wissen, wie
+        Drucksachen produziert werden, wie Websites ihre Ziele erreichen und
+        was eine Station im Freien jahrelang aushält. Wir gestalten auf Papier
+        und im Raum. Wir bauen interaktive Tools analog und digital.</p>
+    </div>
+  </div>
+</section>
+
+<?php // Der Ablauf als Zeitstrahl: Überschrift links, rechts die acht
+      // Stationen an einer durchgehenden Linie. ?>
+<section class="lz-sec ablauf">
+  <h2>So gehen wir das an.</h2>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <p>Jedes Projekt ist anders. Der Ablauf sieht aber meistens so aus:</p>
+      <ol class="ablauf-liste">
+        <?php foreach ($ablauf as $i => [$schritt, $text]): ?>
+        <li class="ablauf-schritt">
+          <span class="ablauf-nr" aria-hidden="true"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
+          <div>
+            <h3><?= e($schritt) ?></h3>
+            <p><?= e($text) ?></p>
+          </div>
+        </li>
+        <?php endforeach; ?>
+      </ol>
+    </div>
+  </div>
+</section>
+
 <script>
 (function () {
     // Bei reduzierter Bewegung bleibt der Hero-Film auf dem ersten Bild,
@@ -178,48 +219,29 @@ require __DIR__ . '/../teile/kopf.php';
     addEventListener('scroll', zeichnen, { passive: true });
     addEventListener('resize', zeichnen);
     zeichnen();
+
+    // Zeitstrahl: Jeder Schritt tritt erst auf, wenn man ihn in die obere
+    // Bildschirmhälfte erscrollt hat — einmal da, bleibt er, und die
+    // Segmente setzen sich zur ganzen Linie zusammen. Ohne
+    // IntersectionObserver bleibt die Liste einfach sichtbar.
+    if ('IntersectionObserver' in window) {
+        var schritte = document.querySelectorAll('.ablauf-schritt');
+        schritte.forEach(function (el) { el.classList.add('wartet'); });
+        var io = new IntersectionObserver(function (eintraege) {
+            eintraege.forEach(function (e) {
+                if (e.isIntersecting) {
+                    e.target.classList.add('da');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { rootMargin: '10000px 0px -45% 0px' });
+        // Der riesige obere Rand zählt alles OBERHALB des Fensters als
+        // erreicht — wer schnell scrollt oder per Anker einsteigt, lässt
+        // sonst übersprungene Schritte dauerhaft unsichtbar zurück.
+        schritte.forEach(function (el) { io.observe(el); });
+    }
 })();
 </script>
-
-<?php // Stärken-Block: Überschrift links am Rand, Text versetzt rechts —
-      // dieselbe Sprache wie die Seitenköpfe. ?>
-<section class="lz-sec">
-  <h2>Das ist unsere Stärke.</h2>
-  <div class="kopf-gross-zeile">
-    <div class="kopf-gross-rechts">
-      <p>Die meisten Vorhaben bleiben nicht bei einem Format. Wir entwickeln
-        eine Ausstellung und gestalten danach die Plakate, den Folder und die
-        Website dazu. Oder wir schärfen das Erscheinungsbild eines Betriebs und
-        übersetzen es in einen Messestand oder eine interaktive Station.</p>
-      <p>Das können wir, weil wir beide Seiten kennen. Weil wir wissen, wie
-        Drucksachen produziert werden, wie Websites ihre Ziele erreichen und
-        was eine Station im Freien jahrelang aushält. Wir gestalten auf Papier
-        und im Raum. Wir bauen interaktive Tools analog und digital.</p>
-    </div>
-  </div>
-</section>
-
-<?php // Der Ablauf als Zeitstrahl: Überschrift links, rechts die acht
-      // Stationen an einer durchgehenden Linie. ?>
-<section class="lz-sec ablauf">
-  <h2>So gehen wir das an.</h2>
-  <div class="kopf-gross-zeile">
-    <div class="kopf-gross-rechts">
-      <p>Jedes Projekt ist anders. Der Ablauf sieht aber meistens so aus:</p>
-      <ol class="ablauf-liste">
-        <?php foreach ($ablauf as $i => [$schritt, $text]): ?>
-        <li class="ablauf-schritt">
-          <span class="ablauf-nr" aria-hidden="true"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
-          <div>
-            <h3><?= e($schritt) ?></h3>
-            <p><?= e($text) ?></p>
-          </div>
-        </li>
-        <?php endforeach; ?>
-      </ol>
-    </div>
-  </div>
-</section>
 
 <?php require __DIR__ . '/../teile/newsletter.php'; ?>
 <?php require __DIR__ . '/../teile/cta.php'; ?>

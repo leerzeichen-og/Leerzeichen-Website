@@ -853,7 +853,7 @@ body.menue-offen { overflow: hidden; }
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: clamp(520px, 74vh, 820px);
+    min-height: clamp(600px, 86vh, 980px);
     border: 3px solid #fff;
     border-radius: var(--radius-xs);
     overflow: hidden;
@@ -867,9 +867,12 @@ body.menue-offen { overflow: hidden; }
     flex-direction: column;
     align-items: flex-start;
     flex: 1;
-    gap: var(--space-4);
-    padding: clamp(32px, 4.5vw, 72px) clamp(24px, 4vw, 64px);
+    gap: var(--space-5);
+    padding: clamp(40px, 5vw, 88px) clamp(28px, 4.5vw, 72px);
 }
+/* Der Chip steht ohne Kasten — sein schwarzer Grund wäre auf der Kachel
+   unsichtbar, nur das Innen-Padding verschob den Text aus der Flucht. */
+.leistung-kachel .chip { background: none; padding: 0; }
 .leistung-kachel h2 {
     margin: var(--space-2, 8px) 0 0;
     font-weight: 300;
@@ -879,32 +882,32 @@ body.menue-offen { overflow: hidden; }
     text-wrap: balance;
 }
 .leistung-text {
-    max-width: 44ch;
-    font-size: var(--text-lg);
-    line-height: var(--leading-body);
-    color: rgba(255, 255, 255, .82);
+    max-width: 48ch;
+    font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, .85);
 }
-/* Das Leistungsverzeichnis bekommt Raum: echte Liste, zwei Spalten. */
+/* Das Leistungsverzeichnis bekommt Raum: echte Liste, zwei Spalten,
+   mit Luft nach oben und unten (Roman, 8.10.2026). */
 .leistung-liste {
     list-style: none;
-    margin: var(--space-3) 0 0;
+    margin: var(--space-7) 0 var(--space-8);
     padding: 0;
     width: 100%;
-    max-width: 44rem;
+    max-width: 46rem;
     columns: 2;
     column-gap: var(--space-6);
 }
 .leistung-liste li {
-    padding: .45em 0;
+    padding: .7em 0;
     font-size: var(--text-lg);
-    line-height: 1.35;
+    line-height: 1.4;
     border-bottom: 1px solid rgba(255, 255, 255, .22);
     break-inside: avoid;
 }
 /* margin-top: auto drückt den Knopf ans untere Ende — beide Boxen
    schließen damit bündig ab, egal wie lang das Verzeichnis ist. */
 .leistung-kachel .knopf { margin-top: auto; }
-.leistung-liste { margin-bottom: var(--space-6); }
 @media (max-width: 640px) {
     .leistung-liste { columns: 1; }
 }
@@ -953,47 +956,60 @@ body.menue-offen { overflow: hidden; }
     opacity: 0;
 }
 
-/* Der Ablauf als Zeitstrahl: acht Stationen an einer durchgehenden Linie,
-   je Schritt eine große Light-Nummer, Titel und kurzer Text. */
+/* Der Ablauf als Zeitstrahl: acht Stationen, je Schritt eine große
+   Light-Nummer, Titel und kurzer Text. Jeder Schritt bringt sein eigenes
+   Liniensegment mit (::after bis zum nächsten Punkt) — so setzt sich der
+   Strahl beim Scrollen Punkt für Punkt zur ganzen Liste zusammen. */
 .ablauf-liste {
     list-style: none;
     margin: var(--space-7) 0 0;
     padding: 0 0 0 clamp(28px, 3vw, 44px);
     position: relative;
 }
-.ablauf-liste::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 10px;
-    bottom: 10px;
-    width: 2px;
-    background: var(--ink);
-}
 .ablauf-schritt {
     position: relative;
     display: grid;
-    grid-template-columns: clamp(44px, 5vw, 64px) 1fr;
+    grid-template-columns: clamp(48px, 5.5vw, 76px) 1fr;
     gap: var(--space-5);
-    padding-bottom: var(--space-7);
+    padding-bottom: var(--space-8);
 }
 .ablauf-schritt:last-child { padding-bottom: 0; }
-/* Die Station sitzt mittig auf der Linie (Linienmitte = Listenkante + 1 px). */
+/* Die Station: Punktmitte liegt auf der Listenkante + 1 px. */
 .ablauf-schritt::before {
     content: "";
     position: absolute;
     left: calc(-1 * clamp(28px, 3vw, 44px) - 5px);
-    top: 8px;
+    top: 10px;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: var(--ink);
+    z-index: 1;
 }
+/* Das Liniensegment dieses Schritts: von seinem Punkt zum nächsten. */
+.ablauf-schritt::after {
+    content: "";
+    position: absolute;
+    left: calc(-1 * clamp(28px, 3vw, 44px));
+    top: 18px;
+    bottom: -14px;
+    width: 2px;
+    background: var(--ink);
+}
+.ablauf-schritt:last-child::after { display: none; }
 .ablauf-nr {
     font-weight: 300;
-    font-size: clamp(2rem, 3vw, 2.75rem);
+    font-size: clamp(2.2rem, 3.4vw, 3.2rem);
     line-height: 1;
 }
+/* Scroll-Choreografie (Skript der Leistungsseite): Schritte warten
+   unsichtbar und treten einzeln auf, sobald man sie erscrollt. */
+.ablauf-schritt.wartet {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .7s ease, transform .7s ease;
+}
+.ablauf-schritt.wartet.da { opacity: 1; transform: none; }
 .ablauf-schritt h3 {
     margin: .1em 0 .35em;
     font-weight: 600;
@@ -1016,8 +1032,8 @@ body.menue-offen { overflow: hidden; }
    Mischmodus von selbst weiß; Newsletter-Postkarte und Fuß behalten ihr
    helles Papier. Hier nur, was sonst auf Schwarz unsichtbar wäre. */
 body.seite-dunkel { background: #000; color: #fff; }
-.seite-dunkel .ablauf-liste::before,
-.seite-dunkel .ablauf-schritt::before { background: #fff; }
+.seite-dunkel .ablauf-schritt::before,
+.seite-dunkel .ablauf-schritt::after { background: #fff; }
 .seite-dunkel .ablauf .ablauf-schritt p { color: rgba(255, 255, 255, .72); }
 
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
