@@ -128,7 +128,7 @@ require __DIR__ . '/../teile/kopf.php';
 <?php // Stärken-Block: die zwei Absätze nebeneinander — der linke blendet
       // normal ein, der rechte tritt erst beim Weiterscrollen dazu
       // (Klasse staerke-zwei, Choreografie im Seitenskript). ?>
-<section class="lz-sec">
+<section class="lz-sec staerke">
   <h2>Das ist unsere Stärke.</h2>
   <div class="staerke-spalten">
     <p>Die meisten Vorhaben bleiben nicht bei einem Format. Wir entwickeln
@@ -145,7 +145,7 @@ require __DIR__ . '/../teile/kopf.php';
 <?php // Der Ablauf als Zeitstrahl: Überschrift links, rechts die acht
       // Stationen an einer durchgehenden Linie. ?>
 <section class="lz-sec ablauf">
-  <h2>So gehen wir das an.</h2>
+  <h2 class="titel-gross">So gehen wir das an.</h2>
   <div class="kopf-gross-zeile">
     <div class="kopf-gross-rechts">
       <p>Jedes Projekt ist anders. Der Ablauf sieht aber meistens so aus:</p>
@@ -196,11 +196,28 @@ require __DIR__ . '/../teile/kopf.php';
     // Transition-Zuschlag macht das Erscheinen weich. Spielt der Film nicht
     // (Autoplay blockiert), bleibt es beim Einblenden über das Scrollen.
     var video = hero.querySelector('.leistung-hero-video');
+
+    // Solange der Film läuft, ist die Seite nicht scrollbar — erst mit dem
+    // ersten Absatz geht es weiter. Drei Sicherheitsnetze geben wieder
+    // frei: das ended-Ereignis, ein blockiertes Autoplay (nach 1,5 s keine
+    // Wiedergabe) und eine harte Obergrenze von 9 s. Wer mitten auf der
+    // Seite einsteigt (Reload, Anker), wird gar nicht erst gesperrt.
+    var gesperrt = false;
+    if (video && !video.ended && scrollY < 50) {
+        gesperrt = true;
+        document.documentElement.style.overflow = 'hidden';
+    }
+    function freigeben() {
+        if (!gesperrt) { return; }
+        gesperrt = false;
+        document.documentElement.style.overflow = '';
+    }
     function ersterAbsatzFrei() {
+        freigeben();
         if (FENSTER[0][0] < 0) { return; }
         FENSTER[0][0] = -1;
-        // Der stehende Schlussframe dimmt zusätzlich ab (CSS film-fertig) —
-        // der Text darüber liest sich sonst nicht überall gut.
+        // Der stehende Schlussframe dimmt zusätzlich ab (CSS film-fertig),
+        // und der Scrollhinweis-Pfeil erscheint mit dem Text.
         hero.querySelector('.leistung-hero-leinwand').classList.add('film-fertig');
         abs[0].style.transition = 'opacity 1.2s ease';
         zeichnen();
@@ -209,6 +226,10 @@ require __DIR__ . '/../teile/kopf.php';
     if (video) {
         if (video.ended) { ersterAbsatzFrei(); }
         video.addEventListener('ended', ersterAbsatzFrei);
+        setTimeout(function () {
+            if (video.currentTime === 0) { ersterAbsatzFrei(); }
+        }, 1500);
+        setTimeout(ersterAbsatzFrei, 9000);
     }
     function zeichnen() {
         var r = hero.getBoundingClientRect();

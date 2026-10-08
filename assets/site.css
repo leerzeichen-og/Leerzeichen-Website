@@ -974,7 +974,8 @@ body.menue-offen { overflow: hidden; }
 .film-fertig .leistung-hero-video { opacity: .5; }
 .leistung-hero-inhalt { position: relative; z-index: 1; width: 100%; }
 /* Der Scrollhinweis-Pfeil, unten an der Logo-Kante (Baustein .pj-runter,
-   der −27-px-Versatz steckt hier im left). */
+   der −27-px-Versatz steckt hier im left). Im Scroll-Modus erscheint er
+   erst gemeinsam mit dem ersten Absatz (film-fertig). */
 .leistung-runter {
     position: absolute;
     left: calc(var(--rand) - 27px);
@@ -982,6 +983,8 @@ body.menue-offen { overflow: hidden; }
     margin: 0;
     z-index: 1;
 }
+.rollt .leistung-runter { opacity: 0; transition: opacity 1.2s ease; }
+.rollt .film-fertig .leistung-runter { opacity: .85; }
 
 /* Auf der dunklen Seite mischt die Kopfzeile nicht: Über dem Video wurde
    die Differenz grau und unlesbar — Logo und Navigation bleiben hier
@@ -1071,12 +1074,16 @@ body.menue-offen { overflow: hidden; }
 }
 .wartet.da { opacity: 1; transform: none; }
 
-/* „Das ist unsere Stärke.": die zwei Absätze nebeneinander im
-   Teaser-Format; der rechte tritt erst beim Weiterscrollen dazu. */
+/* „Das ist unsere Stärke.": die zwei Absätze nahe nebeneinander im
+   Teaser-Format; der rechte tritt erst beim Weiterscrollen dazu. Nach
+   der Sektion bleibt viel Luft — der Zeitstrahl soll erst deutlich
+   nach dem zweiten Absatz ins Bild kommen. */
+.staerke { padding-bottom: clamp(140px, 20vh, 260px); }
+.ablauf { padding-top: clamp(120px, 16vh, 220px); }
 .staerke-spalten {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-8);
+    gap: var(--space-6);
     margin-top: var(--space-7);
 }
 .staerke-spalten p {
