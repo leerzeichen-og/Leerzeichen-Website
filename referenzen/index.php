@@ -15,6 +15,9 @@ $beschreibung = 'Wir arbeiten mit Betrieben, Museen und Gemeinden — am Erschei
 $brotkrumen   = [['Referenzen', '/referenzen/']];
 $styles       = ['/assets/projekt.css'];
 $voll_breit   = true;
+// Feste schwarze Navigation mit weißem Verlauf dahinter — die mischende
+// Kopfzeile wurde über den Projektfotos grau und unlesbar (8.10.2026).
+$bodyKlasse   = 'navi-fest';
 
 $projekte = pj_index();
 

@@ -613,8 +613,39 @@ h2 {
     color: #fff;
     text-decoration: none;
 }
-.lz-nav a:hover { color: #fff; text-decoration: underline; }
-.lz-nav a[aria-current="page"] { text-decoration: underline; }
+/* Kräftige Unterstreichung (Beschluss Roman, 8.10.2026 — gefiel auf der
+   Leistungsseite); skip-ink lässt die Unterlängen wie gehabt frei. Der
+   Hover ändert nie die Farbe — nur die Linie kommt dazu. */
+.lz-nav a:hover,
+.lz-nav a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-skip-ink: auto;
+}
+
+/* Helle Seiten mit Bildern unter der Kopfzeile (body-Klasse navi-fest,
+   Referenzen): die Navigation mischt nicht — über Fotos wurde die
+   Differenz grau und unlesbar. Logo (Positiv) und Links sind konstant
+   schwarz; ein fixer weißer Verlauf hinter der Kopfzeile hält den Grund
+   hell, wenn Bilder darunter durchlaufen. */
+.navi-fest .lz-header { mix-blend-mode: normal; }
+.navi-fest .lz-header-farblos { display: none; }
+.navi-fest .lz-nav a,
+.navi-fest .lz-burger { color: var(--ink); }
+body.navi-fest::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, .96) 0%,
+        rgba(255, 255, 255, .78) 55%,
+        rgba(255, 255, 255, 0) 100%);
+    z-index: 29;
+    pointer-events: none;
+}
 
 /* Farblos-Schicht: deckungsgleiche Kopie der Kopfzeile im Mischmodus „color".
    Ihre weißen (also farblosen) Zeichen entsättigen das Differenz-Ergebnis
