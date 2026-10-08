@@ -937,7 +937,8 @@ body.menue-offen { overflow: hidden; }
 /* Mit JavaScript bekommt der Hero eine Scrollstrecke: die Leinwand bleibt
    stehen, die drei Absätze liegen übereinander und wechseln per Opacity
    (gesteuert im Seitenskript — Muster der Startseiten-Fragen). */
-.leistung-hero.rollt { height: 330vh; height: 330svh; }
+/* Großzügige Strecke, damit jeder Absatz in Ruhe gelesen werden kann. */
+.leistung-hero.rollt { height: 430vh; height: 430svh; }
 .leistung-hero.rollt .leistung-hero-leinwand {
     position: sticky;
     top: 0;

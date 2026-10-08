@@ -144,9 +144,27 @@ require __DIR__ . '/../teile/kopf.php';
     if (!hero) { return; }
     var abs = hero.querySelectorAll('.kopf-gross-rechts p');
     if (abs.length < 2) { return; }
-    var FENSTER = [[0.04, 0.34], [0.40, 0.68], [0.74, 1.10]];
-    var BLENDE = 0.08;   // Breite der Ein-/Ausblendzone im Fortschritt
+    // Lange Lesefenster mit echten Pausen dazwischen (Strecke: 430 svh).
+    var FENSTER = [[0.04, 0.30], [0.40, 0.66], [0.76, 1.10]];
+    var BLENDE = 0.07;   // Breite der Ein-/Ausblendzone im Fortschritt
     hero.classList.add('rollt');
+
+    // Sobald der Film zu Ende ist, erscheint der erste Absatz von selbst —
+    // sein Fenster beginnt dann schon bei 0, und ein einmaliger
+    // Transition-Zuschlag macht das Erscheinen weich. Spielt der Film nicht
+    // (Autoplay blockiert), bleibt es beim Einblenden über das Scrollen.
+    var video = hero.querySelector('.leistung-hero-video');
+    function ersterAbsatzFrei() {
+        if (FENSTER[0][0] < 0) { return; }
+        FENSTER[0][0] = -1;
+        abs[0].style.transition = 'opacity 1.2s ease';
+        zeichnen();
+        setTimeout(function () { abs[0].style.transition = ''; }, 1300);
+    }
+    if (video) {
+        if (video.ended) { ersterAbsatzFrei(); }
+        video.addEventListener('ended', ersterAbsatzFrei);
+    }
     function zeichnen() {
         var r = hero.getBoundingClientRect();
         var strecke = r.height - innerHeight;
