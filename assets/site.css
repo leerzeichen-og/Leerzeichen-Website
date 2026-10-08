@@ -852,25 +852,40 @@ body.menue-offen { overflow: hidden; }
 
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
 
-/* Große Kontaktzeilen auf hellem Grund: Telefon und Mail zum Anfassen. */
+/* Zweispaltiger Kontakt-Kopf (Screenshot Roman, 8.10.2026): Titel links,
+   rechts daneben Lead und die Kontaktzeilen — vertikal zueinander mittig. */
+.kontakt-kopf {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: center;
+    padding: var(--titel-oben) var(--rand) var(--space-9) var(--titel-links);
+}
+.kontakt-kopf-rechts p {
+    margin: 0;
+    max-width: 38ch;
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    color: var(--text-body);
+    text-wrap: pretty;
+}
 .kontakt-wege {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: var(--space-7);
+    gap: 8px;
+    margin-top: var(--space-6);
 }
 .kontakt-wege a {
-    display: inline-flex;
-    align-items: center;
-    gap: .5em;
     color: var(--ink);
     text-decoration: none;
     font-weight: 300;
-    font-size: clamp(1.7rem, 3.2vw, 2.75rem);
-    line-height: 1.15;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    line-height: 1.25;
 }
-.kontakt-wege a svg { width: 1em; flex: none; }
 .kontakt-wege a:hover { text-decoration: underline; }
+@media (max-width: 900px) {
+    .kontakt-kopf { grid-template-columns: 1fr; gap: var(--space-6); }
+}
 
 /* Lage-Sektion: Text und Wegskizze links, Büro-Foto rechts. */
 .kontakt-lage {

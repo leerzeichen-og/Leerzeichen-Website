@@ -19,17 +19,17 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<?php // Heller Einstieg (Fassung Roman, 7.10.2026 — der dunkle Hero ist raus):
-      // weißer Grund, schwarzer Text, die großen Kontaktzeilen direkt darunter. ?>
-<section class="seiten-kopf">
-  <h1 class="titel-seite">Am besten, wir treffen uns.</h1>
-</section>
-<section class="text-spalte" style="padding-bottom:var(--space-8)">
-  <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
-    braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
-  <div class="kontakt-wege">
-    <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?> <?= lz_pfeil() ?></a>
-    <a href="mailto:<?= e(FIRMA_MAIL) ?>"><?= e(FIRMA_MAIL) ?> <?= lz_pfeil() ?></a>
+<?php // Zweispaltiger Kopf (Screenshot Roman, 8.10.2026): links der Titel
+      // mit festem Umbruch, rechts daneben Lead und die Kontaktzeilen. ?>
+<section class="kontakt-kopf">
+  <h1 class="titel-seite">Am besten,<br>wir treffen uns.</h1>
+  <div class="kontakt-kopf-rechts">
+    <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
+      braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
+    <div class="kontakt-wege">
+      <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?></a>
+      <a href="mailto:<?= e(FIRMA_MAIL) ?>"><?= e(FIRMA_MAIL) ?></a>
+    </div>
   </div>
 </section>
 
