@@ -24,9 +24,11 @@
         '.titel-seite', '.titel-gross', '.pj-intro-satz', '.pj-gruppe-titel',
         '.seiten-kopf .chip', '.seiten-hero .chip',
         '.text-spalte p', '.kopf-gross-rechts p', '.lz-lead', '.lz-h2',
-        // Nur der LINKE Stärken-Absatz — den rechten (.staerke-zwei)
-        // choreografiert die Leistungsseite selbst.
-        '.staerke-spalten p:first-child',
+        // Stärken-Absätze — außer .staerke-zwei, den choreografiert die
+        // Leistungsseite selbst (erst beim Weiterscrollen).
+        '.staerke-spalten p:not(.staerke-zwei)',
+        // Bausteine der Säulen-Seiten (Kontur-Boxen, Merkmale, FAQ).
+        '.feld', '.merkmal', '.faq details',
         // Die .ablauf-schritte steuert die Leistungsseite selbst (einzeln
         // erscrollen, Zeitstrahl setzt sich zusammen) — hier NICHT listen.
         '.prinzip', '.lz-saeule',
