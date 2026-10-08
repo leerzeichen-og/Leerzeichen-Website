@@ -63,18 +63,18 @@ require __DIR__ . '/../teile/kopf.php';
     <a class="pj-filter-pille" href="/referenzen/?filter=<?= e($schluessel) ?>"<?= $filter === $schluessel ? ' aria-current="true"' : '' ?>><?= e($label) ?></a>
     <?php endforeach; ?>
   </nav>
+  <?php if ($gruppen): ?>
+  <nav class="pj-kategorien" aria-label="Kategorien">
+    <?php foreach ($gruppen as $name => $liste): ?>
+    <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
+    <?php endforeach; ?>
+  </nav>
+  <?php endif; ?>
   <div class="kopf-gross-zeile">
     <div class="kopf-gross-rechts">
       <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
         am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
         an Ausstellungen und Erlebniswegen.</h1>
-      <?php if ($gruppen): ?>
-      <nav class="pj-kategorien" aria-label="Kategorien">
-        <?php foreach ($gruppen as $name => $liste): ?>
-        <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
-        <?php endforeach; ?>
-      </nav>
-      <?php endif; ?>
     </div>
   </div>
 </section>

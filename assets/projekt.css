@@ -451,8 +451,8 @@
 
 /* ---- Referenzen im Mucho-Stil (Fassung 8.10.2026) --------------------------- */
 /* Kopf im Kontakt-Muster (.kopf-gross aus site.css): links oben die
-   Bereichs-Filter am Headline-Platz, der Einleitungssatz (h1) versetzt in
-   der rechten Spalte, die Kategorien als Fließzeile darunter. Danach je
+   Bereichs-Filter am Headline-Platz, gleich darunter die Kategorien als
+   Fließzeile, der Einleitungssatz (h1) versetzt in der rechten Spalte. Danach je
    Kategorie eine Gruppe: Überschrift in der ersten Rasterzelle, die
    Beiträge daneben und darunter. */
 
@@ -464,11 +464,14 @@
   max-width: 30ch;
   text-wrap: pretty;
 }
+/* Gleich unter den Bereichs-Filtern; die Breite begrenzt die Zeile auf
+   rund fünf Pillen, dann geht es in der nächsten weiter. */
 .pj-kategorien {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: var(--space-6);
+  max-width: 48rem;
+  margin-top: var(--space-5);
 }
 
 .pj-gruppe {
