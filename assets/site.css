@@ -154,22 +154,15 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 .lz-dark .lz-lead { color: rgba(255, 255, 255, .78); }
 
 /* Knöpfe: Ink auf hellem Grund, Paper auf dunklem. */
-/* Knopf (Versuch 7.10.2026, Anregung blossom.at): Text plus das
-   Leerzeichen-Rechteck mit Weißraum — beim Zeigen wächst das gefüllte
-   Rechteck zum Logo-Rahmen auf, und der lange Pfeil fährt hinein. Alles
-   hängt an currentColor: .knopf-hell/.knopf-umriss setzen nur die Farbe.
-   Der kleine Magnet-Effekt (Rechteck folgt dem Zeiger) kommt aus kopf.js
-   über die Variablen --zieh-x/--zieh-y — ohne JavaScript einfach null. */
 .knopf {
-    position: relative;
     display: inline-flex;
     align-items: center;
-    min-height: 44px;              /* Tippfläche bleibt groß */
-    padding: .6rem 0;
-    padding-right: 58px;           /* Weißraum + Platz für den Pfeil */
-    border: 0;
-    background: none;
-    color: var(--ink);
+    gap: .6rem;
+    padding: .85rem 1.5rem;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-control);
+    background: var(--ink);
+    color: #fff;
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     font-weight: 700;
@@ -177,62 +170,33 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
+    transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
 }
-/* Die Inline-Pfeile der bisherigen Knöpfe übernimmt das Rechteck. */
-.knopf svg { display: none; }
+.knopf:hover { background: #262626; color: #fff; }
 
-/* Das Leerzeichen: ruhend ein kleines gefülltes Rechteck — beim Zeigen
-   streckt es sich zum Pfeilschaft, und die Spitze wächst heraus
-   (Fassung Roman, 8.10.2026: Rechteck wird zum Pfeil, kein Rahmen). */
-.knopf::after {
-    content: "";
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    width: 16px;
-    height: 11px;
-    background: currentColor;
-    transform: translate(var(--zieh-x, 0px), calc(-50% + var(--zieh-y, 0px)));
-    transition: width .3s var(--ease-out), height .3s var(--ease-out),
-        transform .2s var(--ease-out);
-}
-/* Die Pfeilspitze: ein Dreieck aus Rahmenlinien in der Knopffarbe. */
-.knopf::before {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    width: 0;
-    height: 0;
-    border-left: 12px solid currentColor;
-    border-top: 9px solid transparent;
-    border-bottom: 9px solid transparent;
-    opacity: 0;
-    transform: translate(calc(var(--zieh-x, 0px) - 8px), calc(-50% + var(--zieh-y, 0px))) scale(.5);
-    transition: opacity .18s linear, transform .3s var(--ease-out);
-}
-.knopf:hover::after,
-.knopf:focus-visible::after {
-    width: 26px;
-    height: 7px;
-}
-.knopf:hover::before,
-.knopf:focus-visible::before {
-    opacity: 1;
-    transform: translate(var(--zieh-x, 0px), calc(-50% + var(--zieh-y, 0px))) scale(1);
-}
-.knopf:hover { color: inherit; }
+.knopf svg { height: .8em; width: auto; flex: 0 0 auto; }
 
-/* Farbvarianten: nur noch die Farbe — Rechteck und Pfeil erben sie. */
-.knopf-hell,
-.knopf-umriss { color: #fff; }
-.knopf-hell:hover,
-.knopf-umriss:hover { color: #fff; }
-.knopf-umriss-dunkel { color: var(--ink); }
-
-@media (prefers-reduced-motion: reduce) {
-    .knopf::after, .knopf::before { transition: none; }
+.knopf-hell {
+    background: var(--paper);
+    border-color: var(--paper);
+    color: var(--ink);
 }
+.knopf-hell:hover { background: var(--grey-200); color: var(--ink); }
+
+/* Umriss-Varianten: auf dunklem Grund weiß, auf hellem Grund Ink. */
+.knopf-umriss {
+    background: transparent;
+    border-color: #fff;
+    color: #fff;
+}
+.knopf-umriss:hover { background: rgba(255, 255, 255, .14); color: #fff; }
+
+.knopf-umriss-dunkel {
+    background: transparent;
+    border-color: var(--ink);
+    color: var(--ink);
+}
+.knopf-umriss-dunkel:hover { background: var(--grey-100); color: var(--ink); }
 
 /* Chip: kleines schwarzes Etikett (Kategorien, Bildbeschriftungen) */
 .chip {
