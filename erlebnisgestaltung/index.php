@@ -2,9 +2,8 @@
 // Landingpage Säule „Erlebnisse" (Texte Roman, 8.10.2026) — Gestaltungsbasis
 // ist die Leistungsseite: durchgehend schwarze Seite, Kontur-Boxen, große
 // Light-Titel. Aufbau: Hero (mit Kreis-Video) · Was wir gestalten (fünf
-// Kontur-Boxen) · Zwischen Haptik und Technik (drei Merkmale) · Ausgewählte
-// Projekte (aus dem Space-Portfolio, Referenzen-Karten) · Wer mitbaut ·
-// Häufige Fragen (<details> + FAQPage-JSON-LD) · Newsletter · CTA.
+// Liste mit Projekt-Fliegern + Knopf) · Wie wir gestalten (Merkmale) ·
+// Häufige Fragen (<details> + FAQPage-JSON-LD) · CTA · Newsletter.
 require_once __DIR__ . '/../teile/firma.php';
 require_once __DIR__ . '/../teile/projekte.php';
 
@@ -105,7 +104,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Was wir gestalten.</h2>
+  <h2 class="titel-gross">Was wir<br>gestalten</h2>
   <?php // Zentrierte Liste; die Projektbilder schweben abwechselnd links
         // und rechts außerhalb und verlinken (nur sie) zum Portfolio-Eintrag. ?>
   <div class="feld-fluss">
@@ -127,10 +126,13 @@ require __DIR__ . '/../teile/kopf.php';
     </div>
     <?php endforeach; ?>
   </div>
+  <p class="feld-knopf">
+    <a class="knopf knopf-hell" href="/referenzen/?filter=erlebnis">Alle Erlebnis-Projekte <?= lz_pfeil() ?></a>
+  </p>
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Zwischen Haptik und<br>Technik.</h2>
+  <h2 class="titel-gross">Wie wir<br>gestalten</h2>
   <div class="merkmale">
     <?php foreach ($merkmale as [$mTitel, $mText]): ?>
     <div class="merkmal">
@@ -141,45 +143,8 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
-<?php if ($referenzen): ?>
 <section class="lz-sec viel-luft">
-  <h2>Ausgewählte Projekte.</h2>
-  <div class="saeulen-projekte">
-    <?php foreach ($referenzen as $p): ?>
-    <a class="pj-karte pj-fr-karte" href="/referenzen/<?= e($p['slug'] ?? '') ?>/">
-      <span class="pj-karte-bildwrap">
-        <?= pj_bild($p['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 50vw') ?>
-      </span>
-      <span class="pj-fr-titel"><?= e((string) ($p['titel'] ?? '')) ?></span>
-      <?php if (!empty($p['punchline'])): ?>
-      <span class="pj-karte-punchline"><?= e($p['punchline']) ?></span>
-      <?php endif; ?>
-    </a>
-    <?php endforeach; ?>
-  </div>
-  <p style="margin:var(--space-8) 0 0">
-    <a class="knopf knopf-hell" href="/referenzen/?filter=erlebnis">Alle Erlebnis-Projekte <?= lz_pfeil() ?></a>
-  </p>
-</section>
-<?php endif; ?>
-
-<?php // „Wer mitbaut.": zwei Absätze nebeneinander im Teaser-Format —
-      // das Stärke-Muster der Leistungsseite. ?>
-<section class="lz-sec staerke viel-luft">
-  <h2>Wer mitbaut.</h2>
-  <div class="staerke-spalten">
-    <p>Für die Produktion arbeiten wir mit Tischlereien, Holzbauern,
-      Medientechnikern und Werbetechnikern zusammen, die wir seit Jahren
-      kennen. Wir koordinieren alle Beteiligten, begleiten die Montage vor
-      Ort und bleiben verantwortlich, bis das Projekt eröffnet ist.</p>
-    <p>Bei Förderungen helfen wir weiter. Wir haben Kontakte zu
-      LEADER-Regionen und zu Ansprechpartnern für Förderungen und sagen
-      früh, was für Ihr Projekt in Frage kommt.</p>
-  </div>
-</section>
-
-<section class="lz-sec viel-luft">
-  <h2>Häufige Fragen.</h2>
+  <h2 class="titel-gross">Häufige Fragen.</h2>
   <div class="faq">
     <?php foreach ($fragen as [$frage, $antwort]): ?>
     <details>

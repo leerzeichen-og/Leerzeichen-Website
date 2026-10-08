@@ -4,9 +4,8 @@
 // durchgehend schwarze Seite nach dem Vorbild der Leistungsseite.
 // Gestaltungsänderungen bitte immer auf BEIDEN Säulen-Seiten gleich anwenden.
 // Aufbau: Hero (mit Kreis-Video) · Was wir gestalten (fünf Kontur-Boxen) ·
-// Unser Ansatz (vier Merkmale) · Ausgewählte Projekte (Space-Portfolio,
-// Referenzen-Karten) · Zusammenarbeit · Häufige Fragen (<details> +
-// FAQPage-JSON-LD) · Newsletter · CTA.
+// Wie wir gestalten (Merkmale) · Häufige Fragen (<details> +
+// FAQPage-JSON-LD) · CTA · Newsletter.
 require_once __DIR__ . '/../teile/firma.php';
 require_once __DIR__ . '/../teile/projekte.php';
 
@@ -112,7 +111,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Was wir gestalten.</h2>
+  <h2 class="titel-gross">Was wir<br>gestalten</h2>
   <?php // Zentrierte Liste; die Projektbilder schweben abwechselnd links
         // und rechts außerhalb und verlinken (nur sie) zum Portfolio-Eintrag. ?>
   <div class="feld-fluss">
@@ -134,10 +133,13 @@ require __DIR__ . '/../teile/kopf.php';
     </div>
     <?php endforeach; ?>
   </div>
+  <p class="feld-knopf">
+    <a class="knopf knopf-hell" href="/referenzen/?filter=gestaltung">Alle Gestaltungs-Projekte <?= lz_pfeil() ?></a>
+  </p>
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Unser Ansatz.</h2>
+  <h2 class="titel-gross">Wie wir<br>gestalten</h2>
   <div class="merkmale">
     <?php foreach ($merkmale as [$mTitel, $mText]): ?>
     <div class="merkmal">
@@ -148,44 +150,8 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
-<?php if ($referenzen): ?>
 <section class="lz-sec viel-luft">
-  <h2>Ausgewählte Projekte.</h2>
-  <div class="saeulen-projekte">
-    <?php foreach ($referenzen as $p): ?>
-    <a class="pj-karte pj-fr-karte" href="/referenzen/<?= e($p['slug'] ?? '') ?>/">
-      <span class="pj-karte-bildwrap">
-        <?= pj_bild($p['teaser_quer'] ?? null, 'pj-karte-bild', '(max-width: 900px) 100vw, 50vw') ?>
-      </span>
-      <span class="pj-fr-titel"><?= e((string) ($p['titel'] ?? '')) ?></span>
-      <?php if (!empty($p['punchline'])): ?>
-      <span class="pj-karte-punchline"><?= e($p['punchline']) ?></span>
-      <?php endif; ?>
-    </a>
-    <?php endforeach; ?>
-  </div>
-  <p style="margin:var(--space-8) 0 0">
-    <a class="knopf knopf-hell" href="/referenzen/?filter=gestaltung">Alle Gestaltungs-Projekte <?= lz_pfeil() ?></a>
-  </p>
-</section>
-<?php endif; ?>
-
-<?php // „Zusammenarbeit.": zwei Absätze nebeneinander im Teaser-Format —
-      // das Stärke-Muster (Umbruch im Text von uns gesetzt). ?>
-<section class="lz-sec staerke viel-luft">
-  <h2>Zusammenarbeit.</h2>
-  <div class="staerke-spalten">
-    <p>Für die Produktion arbeiten wir mit Druckereien, Lektorinnen,
-      Fotografen, Illustratoren und Übersetzern zusammen, die wir seit
-      Jahren kennen.</p>
-    <p>Wir kennen die Drucktechnik, von Farbprofilen bis zur Veredelung,
-      und wissen, welches Papier welche Wirkung erzielt. Am Ende bekommen
-      Sie die fertigen Drucksorten geliefert.</p>
-  </div>
-</section>
-
-<section class="lz-sec viel-luft">
-  <h2>Häufige Fragen.</h2>
+  <h2 class="titel-gross">Häufige Fragen.</h2>
   <div class="faq">
     <?php foreach ($fragen as [$frage, $antwort]): ?>
     <details>
