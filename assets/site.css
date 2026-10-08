@@ -10,6 +10,9 @@
 /* --- Tokens: Farben ----------------------------------------------------- */
 
 :root {
+    /* Erlaubt Übergänge zu height/block-size: auto (FAQ-Aufklapper);
+       Browser ohne Unterstützung ignorieren die Zeile einfach. */
+    interpolate-size: allow-keywords;
     --ink:      #000000;
     --paper:    #FFFFFF;
 
@@ -1014,39 +1017,69 @@ body.menue-offen { overflow: hidden; }
 .seite-dunkel .lz-header-farblos { display: none; }
 
 /* --- Bausteine der Säulen-Seiten (dunkel, 8.10.2026) ----------------------- */
-/* Leistungsfelder: Kontur-Boxen in der Sprache der Leistungsseite —
-   Titel und kurzer Text, zwei nebeneinander. */
-.felder {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-    gap: clamp(20px, 2.5vw, 40px);
+/* Sektionen mit viel Luft nach oben (Abstand zum Block davor). */
+.viel-luft { padding-top: clamp(120px, 16vh, 220px); }
+
+/* Leistungsfelder: luftiger Fluss untereinander — je Eintrag Text und ein
+   frei schwebendes Bild (verlinkt aufs Projekt), abwechselnd gespiegelt. */
+.feld-fluss {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(110px, 16vh, 220px);
     margin-top: var(--space-8);
 }
-.feld {
-    border: 2px solid currentColor;
-    border-radius: var(--radius-xs);
-    padding: clamp(28px, 3.2vw, 52px);
+.feld-eintrag {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 120px);
+    align-items: center;
 }
-.feld h3 {
+.feld-eintrag h3 {
     margin: 0 0 .6em;
     font-weight: 600;
-    font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+    font-size: clamp(1.5rem, 2.1vw, 2rem);
     line-height: 1.2;
     text-wrap: balance;
 }
-.feld p {
+.feld-eintrag p {
     margin: 0;
     max-width: 52ch;
     font-size: var(--text-lg);
     line-height: var(--leading-body);
     opacity: .82;
 }
+/* Das schwebende Bild: klein, leicht gedreht, am Rand der Spalte. */
+.feld-bild {
+    justify-self: end;
+    width: min(100%, clamp(280px, 32vw, 480px));
+    transform: rotate(2deg);
+}
+.feld-bild img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xs);
+    transition: transform .5s var(--ease-out, ease-out);
+}
+.feld-bild:hover img,
+.feld-bild:focus-visible img { transform: scale(1.04); }
+/* Jeder zweite Eintrag gespiegelt: Bild links, gegenläufig gedreht. */
+.feld-dreh .feld-text { order: 2; }
+.feld-dreh .feld-bild { order: 1; justify-self: start; transform: rotate(-2deg); }
+@media (max-width: 900px) {
+    .feld-eintrag { grid-template-columns: 1fr; gap: var(--space-6); }
+    .feld-dreh .feld-text { order: 1; }
+    .feld-dreh .feld-bild { order: 2; }
+    .feld-bild { justify-self: start; width: min(100%, 420px); }
+}
 
-/* Merkmale: drei offene Spalten mit kräftiger Oberlinie. */
+/* Merkmale: untereinander mit kräftiger Oberlinie und deutlichem Abstand —
+   sie treten einzeln auf (Erscroll-Choreografie in hero-film.js). */
 .merkmale {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    gap: clamp(28px, 3.5vw, 64px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(90px, 12vh, 180px);
+    max-width: 60rem;
     margin-top: var(--space-8);
 }
 .merkmal { border-top: 2px solid currentColor; padding-top: var(--space-5); }
@@ -1064,14 +1097,15 @@ body.menue-offen { overflow: hidden; }
 }
 
 /* Projekt-Karten der Säulen-Seiten: Referenzen-Sprache (Quer-Teaser,
-   großer Light-Titel, Punchline), zwei nebeneinander. */
+   Light-Titel, Punchline) — klein, rund vier nebeneinander. */
 .saeulen-projekte {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-    column-gap: clamp(20px, 3vw, 56px);
-    row-gap: clamp(40px, 6vw, 88px);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+    column-gap: clamp(20px, 2.5vw, 44px);
+    row-gap: clamp(36px, 5vw, 72px);
     margin-top: var(--space-8);
 }
+.saeulen-projekte .pj-fr-titel { font-size: clamp(1.1rem, 1.4vw, 1.35rem); }
 
 /* Häufige Fragen: native Aufklapper (<details>), ganz ohne JavaScript. */
 .faq {
@@ -1095,6 +1129,18 @@ body.menue-offen { overflow: hidden; }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after { content: "+"; flex: none; font-weight: 300; font-size: 1.5em; line-height: .8; }
 .faq details[open] summary::after { content: "–"; }
+/* Die Antworten gehen weich auf (Browser mit ::details-content und
+   interpolate-size, s. :root; ältere klappen einfach hart — kein Bruch). */
+.faq details::details-content {
+    opacity: 0;
+    block-size: 0;
+    overflow-y: clip;
+    transition: content-visibility .45s allow-discrete, opacity .45s ease, block-size .45s ease;
+}
+.faq details[open]::details-content {
+    opacity: 1;
+    block-size: auto;
+}
 .faq details p {
     margin: 0 0 var(--space-5);
     max-width: 60ch;
@@ -1112,8 +1158,15 @@ body.menue-offen { overflow: hidden; }
 /* Mit JavaScript bekommt der Hero eine Scrollstrecke: die Leinwand bleibt
    stehen, die drei Absätze liegen übereinander und wechseln per Opacity
    (gesteuert im Seitenskript — Muster der Startseiten-Fragen). */
-/* Großzügige Strecke, damit jeder Absatz in Ruhe gelesen werden kann. */
+/* Die Leinwand füllt den ganzen Bildschirm (Beschluss Roman, 8.10.2026). */
+.leistung-hero-leinwand { min-height: 100vh; min-height: 100svh; }
+/* Der Chip der Säulen-Seiten braucht Luft zur Headline darunter. */
+.leistung-hero-leinwand .chip { margin-bottom: var(--space-5); }
+
+/* Großzügige Strecke, damit jeder Absatz in Ruhe gelesen werden kann;
+   bei zwei Absätzen (Säulen-Seiten) ist sie kürzer. */
 .leistung-hero.rollt { height: 430vh; height: 430svh; }
+.leistung-hero.rollt-kurz { height: 300vh; height: 300svh; }
 .leistung-hero.rollt .leistung-hero-leinwand {
     position: sticky;
     top: 0;
@@ -1230,6 +1283,9 @@ body.menue-offen { overflow: hidden; }
    Mischmodus von selbst weiß; Newsletter-Postkarte und Fuß behalten ihr
    helles Papier. Hier nur, was sonst auf Schwarz unsichtbar wäre. */
 body.seite-dunkel { background: #000; color: #fff; }
+/* Der Abschluss-CTA bekommt auf den dunklen Seiten viel Luft nach oben
+   und unten (Beschluss Roman, 8.10.2026). */
+.seite-dunkel .kontakt-cta { margin: clamp(120px, 16vh, 220px) 0; }
 .seite-dunkel .ablauf-schritt::before,
 .seite-dunkel .ablauf-schritt::after { background: #fff; }
 .seite-dunkel .ablauf .ablauf-schritt p { color: rgba(255, 255, 255, .72); }

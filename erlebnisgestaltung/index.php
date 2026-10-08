@@ -78,11 +78,17 @@ $ctaKnopf = 'Reden wir darüber';
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="seiten-hero" style="background-image:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.9) 72%), url(/assets/bilder/ink-splash.webp)">
-  <span class="chip">Erlebnisse &amp; Abenteuer</span>
-  <h1 class="titel-gross">Inhalte begehbar machen.</h1>
-  <div class="kopf-gross-zeile">
-    <div class="kopf-gross-rechts">
+<?php // Hero im Leistungs-Muster: Film läuft einmal, dimmt ab, die zwei
+      // Absätze wechseln beim Scrollen (Maschine: assets/hero-film.js). ?>
+<section class="leistung-hero" id="l-hero">
+  <div class="seiten-hero leistung-hero-leinwand">
+    <video class="leistung-hero-video" src="/assets/videos/leerzeichen-abenteuer.mp4"
+      autoplay muted playsinline aria-hidden="true"></video>
+    <div class="leistung-hero-inhalt">
+      <span class="chip">Erlebnisse &amp; Abenteuer</span>
+      <h1 class="titel-gross">Inhalte<br>begehbar<br>machen.</h1>
+      <div class="kopf-gross-zeile">
+        <div class="kopf-gross-rechts">
       <p>Wir gestalten Ausstellungen, Themenwege und Spielplätze mit eigener
         Geschichte — Orte, an denen Menschen stehen bleiben, staunen und etwas
         mitnehmen.</p>
@@ -92,27 +98,37 @@ require __DIR__ . '/../teile/kopf.php';
         Ausflug machen. Unsere Auftraggeber sind Museen, Gemeinden,
         Tourismusregionen und Ausflugsziele.</p>
     </div>
+      </div>
+    </div>
+    <span class="pj-runter leistung-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
   </div>
-  <?php // Kreis-Video (Roman, 25.9.2026): rein dekorativ, stumm im Loop;
-        // bei reduzierter Bewegung hält es das Skript am Seitenende an. ?>
-  <video class="hero-kreis" src="/assets/videos/circle.mp4"
-    autoplay muted loop playsinline aria-hidden="true"></video>
 </section>
 
 <section class="lz-sec">
-  <h2 class="titel-gross">Was wir gestalten.</h2>
-  <div class="felder">
-    <?php foreach ($felder as [$feldTitel, $feldText]): ?>
-    <div class="feld">
-      <h3><?= e($feldTitel) ?></h3>
-      <p><?= e($feldText) ?></p>
+  <h2>Was wir gestalten.</h2>
+  <?php // Luftiger Fluss: je Leistungsfeld ein frei schwebendes Bild, das
+        // reihum auf eines der Säulen-Projekte verlinkt. ?>
+  <div class="feld-fluss">
+    <?php foreach ($felder as $i => [$feldTitel, $feldText]): ?>
+    <?php $feldProjekt = $referenzen ? $referenzen[$i % count($referenzen)] : null; ?>
+    <div class="feld-eintrag<?= $i % 2 ? ' feld-dreh' : '' ?>">
+      <div class="feld-text">
+        <h3><?= e($feldTitel) ?></h3>
+        <p><?= e($feldText) ?></p>
+      </div>
+      <?php if ($feldProjekt): ?>
+      <a class="feld-bild" href="/referenzen/<?= e($feldProjekt['slug'] ?? '') ?>/"
+         aria-label="Zum Projekt <?= e((string) ($feldProjekt['titel'] ?? '')) ?>">
+        <?= pj_bild($feldProjekt['teaser_quer'] ?? null, '', '(max-width: 900px) 100vw, 32vw') ?>
+      </a>
+      <?php endif; ?>
     </div>
     <?php endforeach; ?>
   </div>
 </section>
 
-<section class="lz-sec">
-  <h2 class="titel-gross">Zwischen Haptik und Technik.</h2>
+<section class="lz-sec viel-luft">
+  <h2 class="titel-gross">Zwischen Haptik und<br>Technik.</h2>
   <div class="merkmale">
     <?php foreach ($merkmale as [$mTitel, $mText]): ?>
     <div class="merkmal">
@@ -125,7 +141,7 @@ require __DIR__ . '/../teile/kopf.php';
 
 <?php if ($referenzen): ?>
 <section class="lz-sec">
-  <h2 class="titel-gross">Ausgewählte Projekte.</h2>
+  <h2>Ausgewählte Projekte.</h2>
   <div class="saeulen-projekte">
     <?php foreach ($referenzen as $p): ?>
     <a class="pj-karte pj-fr-karte" href="/referenzen/<?= e($p['slug'] ?? '') ?>/">
@@ -161,7 +177,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec">
-  <h2 class="titel-gross">Häufige Fragen.</h2>
+  <h2>Häufige Fragen.</h2>
   <div class="faq">
     <?php foreach ($fragen as [$frage, $antwort]): ?>
     <details>
@@ -174,22 +190,11 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
-<script>
-// Bei reduzierter Bewegung bleibt der Kreis stehen — sonst bekommt er einen
-// Anstoß, falls der Browser das autoplay-Attribut verschlafen hat.
-(function () {
-    var heroKreis = document.querySelector('.hero-kreis');
-    if (!heroKreis) return;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        heroKreis.pause();
-        heroKreis.removeAttribute('autoplay');
-    } else {
-        heroKreis.play().catch(function () {});
-    }
-})();
-</script>
 
-<?php require __DIR__ . '/../teile/newsletter.php'; ?>
+<script src="<?= e(lz_asset('/assets/hero-film.js')) ?>" defer></script>
+
+<?php // CTA oberhalb des Newsletters (Beschluss Roman, 8.10.2026). ?>
 <?php require __DIR__ . '/../teile/cta.php'; ?>
+<?php require __DIR__ . '/../teile/newsletter.php'; ?>
 
 <?php require __DIR__ . '/../teile/fuss.php'; ?>

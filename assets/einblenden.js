@@ -27,8 +27,9 @@
         // Stärken-Absätze — außer .staerke-zwei, den choreografiert die
         // Leistungsseite selbst (erst beim Weiterscrollen).
         '.staerke-spalten p:not(.staerke-zwei)',
-        // Bausteine der Säulen-Seiten (Kontur-Boxen, Merkmale, FAQ).
-        '.feld', '.merkmal', '.faq details',
+        // Bausteine der Säulen-Seiten (die Merkmale choreografiert
+        // hero-film.js — einzeln erscrollen, hier NICHT listen).
+        '.feld-eintrag', '.faq details',
         // Die .ablauf-schritte steuert die Leistungsseite selbst (einzeln
         // erscrollen, Zeitstrahl setzt sich zusammen) — hier NICHT listen.
         '.prinzip', '.lz-saeule',
