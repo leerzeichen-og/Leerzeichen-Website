@@ -166,7 +166,7 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     align-items: center;
     min-height: 44px;              /* Tippfläche bleibt groß */
     padding: .6rem 0;
-    padding-right: 76px;           /* Weißraum + Platz fürs wachsende Rechteck */
+    padding-right: 58px;           /* Weißraum + Platz für den Pfeil */
     border: 0;
     background: none;
     color: var(--ink);
@@ -181,45 +181,45 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
 /* Die Inline-Pfeile der bisherigen Knöpfe übernimmt das Rechteck. */
 .knopf svg { display: none; }
 
-/* Das Leerzeichen: ruhend klein und gefüllt, beim Zeigen offener Rahmen. */
+/* Das Leerzeichen: ruhend ein kleines gefülltes Rechteck — beim Zeigen
+   streckt es sich zum Pfeilschaft, und die Spitze wächst heraus
+   (Fassung Roman, 8.10.2026: Rechteck wird zum Pfeil, kein Rahmen). */
 .knopf::after {
     content: "";
     position: absolute;
-    right: 0;
+    right: 12px;
     top: 50%;
     width: 16px;
     height: 11px;
     background: currentColor;
-    border: 2px solid currentColor;
     transform: translate(var(--zieh-x, 0px), calc(-50% + var(--zieh-y, 0px)));
-    transition: width .35s var(--ease-out), height .35s var(--ease-out),
-        background-color .25s linear, transform .2s var(--ease-out);
+    transition: width .3s var(--ease-out), height .3s var(--ease-out),
+        transform .2s var(--ease-out);
 }
-/* Der Pfeil, der im Rahmen erscheint — über mask in der Knopffarbe. */
+/* Die Pfeilspitze: ein Dreieck aus Rahmenlinien in der Knopffarbe. */
 .knopf::before {
     content: "";
     position: absolute;
-    right: 14px;
+    right: 0;
     top: 50%;
-    width: 26px;
-    height: 7px;
-    background: currentColor;
-    -webkit-mask: url("/assets/bilder/long-long-pfeil.svg") no-repeat center / contain;
-    mask: url("/assets/bilder/long-long-pfeil.svg") no-repeat center / contain;
+    width: 0;
+    height: 0;
+    border-left: 12px solid currentColor;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
     opacity: 0;
-    transform: translate(calc(var(--zieh-x, 0px) - 10px), calc(-50% + var(--zieh-y, 0px)));
-    transition: opacity .22s linear, transform .35s var(--ease-out);
+    transform: translate(calc(var(--zieh-x, 0px) - 8px), calc(-50% + var(--zieh-y, 0px))) scale(.5);
+    transition: opacity .18s linear, transform .3s var(--ease-out);
 }
 .knopf:hover::after,
 .knopf:focus-visible::after {
-    width: 54px;
-    height: 36px;
-    background-color: transparent;
+    width: 26px;
+    height: 7px;
 }
 .knopf:hover::before,
 .knopf:focus-visible::before {
     opacity: 1;
-    transform: translate(var(--zieh-x, 0px), calc(-50% + var(--zieh-y, 0px)));
+    transform: translate(var(--zieh-x, 0px), calc(-50% + var(--zieh-y, 0px))) scale(1);
 }
 .knopf:hover { color: inherit; }
 
