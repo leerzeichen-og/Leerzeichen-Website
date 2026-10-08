@@ -1020,80 +1020,90 @@ body.menue-offen { overflow: hidden; }
 /* Sektionen mit viel Luft nach oben (Abstand zum Block davor). */
 .viel-luft { padding-top: clamp(120px, 16vh, 220px); }
 
-/* Leistungsfelder: luftiger Fluss untereinander — je Eintrag Text und ein
-   frei schwebendes Bild (verlinkt aufs Projekt), abwechselnd gespiegelt. */
-.feld-fluss {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(110px, 16vh, 220px);
-    margin-top: var(--space-8);
-}
+/* Leistungsfelder: Listen-Layout nach pixelart-Vorbild (Roman, 8.10.2026) —
+   Einträge untereinander mit Hairline-Trennern; je Eintrag das Bild links,
+   Titel und Text daneben, der lange Pfeil rechts. Der ganze Eintrag
+   verlinkt reihum auf eines der Säulen-Projekte. */
+.feld-fluss { margin-top: var(--space-7); }
 .feld-eintrag {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    gap: clamp(40px, 6vw, 120px);
+    grid-template-columns: clamp(200px, 26vw, 360px) minmax(0, 1fr) clamp(56px, 7vw, 96px);
+    gap: clamp(28px, 4vw, 72px);
     align-items: center;
+    padding: clamp(40px, 6vh, 72px) 0;
+    border-top: 1px solid rgba(255, 255, 255, .3);
+    color: inherit;
+    text-decoration: none;
 }
-.feld-eintrag h3 {
-    margin: 0 0 .6em;
-    font-weight: 600;
-    font-size: clamp(1.5rem, 2.1vw, 2rem);
-    line-height: 1.2;
-    text-wrap: balance;
-}
-.feld-eintrag p {
-    margin: 0;
-    max-width: 52ch;
-    font-size: var(--text-lg);
-    line-height: var(--leading-body);
-    opacity: .82;
-}
-/* Das schwebende Bild: klein, leicht gedreht, am Rand der Spalte. */
-.feld-bild {
-    justify-self: end;
-    width: min(100%, clamp(280px, 32vw, 480px));
-    transform: rotate(2deg);
-}
+.feld-fluss .feld-eintrag:last-child { border-bottom: 1px solid rgba(255, 255, 255, .3); }
 .feld-bild img {
     display: block;
     width: 100%;
     height: auto;
     border-radius: var(--radius-xs);
-    transition: transform .5s var(--ease-out, ease-out);
 }
-.feld-bild:hover img,
-.feld-bild:focus-visible img { transform: scale(1.04); }
-/* Jeder zweite Eintrag gespiegelt: Bild links, gegenläufig gedreht. */
-.feld-dreh .feld-text { order: 2; }
-.feld-dreh .feld-bild { order: 1; justify-self: start; transform: rotate(-2deg); }
+.feld-text h3 {
+    margin: 0 0 .5em;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.4vw, 2.4rem);
+    line-height: 1.15;
+    text-wrap: balance;
+}
+.feld-text p {
+    margin: 0;
+    max-width: 56ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    opacity: .82;
+}
+.feld-pfeil {
+    justify-self: end;
+    width: clamp(48px, 5vw, 72px);
+    transition: transform .3s ease;
+}
+.feld-pfeil svg { display: block; width: 100%; height: auto; }
+a.feld-eintrag:hover .feld-pfeil,
+a.feld-eintrag:focus-visible .feld-pfeil { transform: translateX(12px); }
+a.feld-eintrag:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; }
 @media (max-width: 900px) {
-    .feld-eintrag { grid-template-columns: 1fr; gap: var(--space-6); }
-    .feld-dreh .feld-text { order: 1; }
-    .feld-dreh .feld-bild { order: 2; }
-    .feld-bild { justify-self: start; width: min(100%, 420px); }
+    /* Gestapelt: Bild oben, Text darunter; der Pfeil entfällt. */
+    .feld-eintrag { grid-template-columns: 1fr; gap: var(--space-5); padding: var(--space-7) 0; }
+    .feld-pfeil { display: none; }
 }
 
-/* Merkmale: untereinander mit kräftiger Oberlinie und deutlichem Abstand —
-   sie treten einzeln auf (Erscroll-Choreografie in hero-film.js). */
+/* Merkmale: Kategorie-Raster nach pixelart-Vorbild — je Zelle eine
+   kräftige Oberlinie, der Titel links und der Text daneben; zwei Zellen
+   nebeneinander. Sie treten einzeln auf (Choreografie in hero-film.js). */
 .merkmale {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(90px, 12vh, 180px);
-    max-width: 60rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    column-gap: clamp(40px, 6vw, 120px);
+    row-gap: clamp(56px, 8vh, 110px);
     margin-top: var(--space-8);
 }
-.merkmal { border-top: 2px solid currentColor; padding-top: var(--space-5); }
+.merkmal {
+    display: grid;
+    grid-template-columns: minmax(130px, .8fr) minmax(0, 1.4fr);
+    gap: clamp(20px, 3vw, 48px);
+    align-items: start;
+    border-top: 2px solid currentColor;
+    padding-top: var(--space-5);
+}
 .merkmal h3 {
-    margin: 0 0 .6em;
+    margin: 0;
     font-weight: 600;
-    font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
     line-height: 1.25;
+    text-wrap: balance;
 }
 .merkmal p {
     margin: 0;
     font-size: var(--text-lg);
     line-height: var(--leading-body);
     opacity: .82;
+}
+@media (max-width: 640px) {
+    .merkmal { grid-template-columns: 1fr; gap: var(--space-4); }
 }
 
 /* Projekt-Karten der Säulen-Seiten: Referenzen-Sprache (Quer-Teaser,
