@@ -79,7 +79,8 @@ require __DIR__ . '/../teile/kopf.php';
       // ohne JavaScript stehen alle drei normal untereinander. ?>
 <section class="leistung-hero" id="l-hero">
   <div class="seiten-hero leistung-hero-leinwand">
-    <video class="leistung-hero-video" src="/assets/videos/leerzeichen-abenteuer.mp4"
+    <?php // Probe (Roman, 8.10.2026): circle.mp4 statt des Schiff-Films. ?>
+    <video class="leistung-hero-video" src="/assets/videos/circle.mp4"
       autoplay muted playsinline aria-hidden="true"></video>
     <div class="leistung-hero-inhalt">
       <h1 class="titel-gross">Information<br>braucht Form.</h1>
