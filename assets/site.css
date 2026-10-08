@@ -623,41 +623,19 @@ h2 {
     text-decoration-skip-ink: auto;
 }
 
-/* Feste (nicht mischende) Navigation — ein Klassenpaar für Seiten, auf
-   denen die Differenz-Kopfzeile über Fotos grau und unlesbar wurde:
-   navi-fest  = helle Fassung: Positiv-Logo und schwarze Links, dahinter
-                ein fixer weißer Verlauf (derzeit ohne Einsatzseite);
-   navi-dunkel = dunkle Fassung (Projektseiten): Navigation konstant weiß,
-                dahinter ein fixer dunkler Verlauf — über dem Headerbild
-                fällt er nicht auf, über hellem Inhalt dunkelt er die
-                Zone hinter der Kopfzeile sanft ab. */
-.navi-fest .lz-header,
-.navi-dunkel .lz-header { mix-blend-mode: normal; }
-.navi-fest .lz-header-farblos,
-.navi-dunkel .lz-header-farblos { display: none; }
-.navi-fest .lz-nav a,
-.navi-fest .lz-burger { color: var(--ink); }
-body.navi-fest::before,
-body.navi-dunkel::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 150px;
-    background: linear-gradient(180deg,
-        rgba(255, 255, 255, .96) 0%,
-        rgba(255, 255, 255, .78) 55%,
-        rgba(255, 255, 255, 0) 100%);
-    z-index: 29;
-    pointer-events: none;
-}
-body.navi-dunkel::before {
-    background: linear-gradient(180deg,
-        rgba(0, 0, 0, .62) 0%,
-        rgba(0, 0, 0, .3) 55%,
-        rgba(0, 0, 0, 0) 100%);
-}
+/* Wechselnde Navigation (Projektseiten, 8.10.2026): statt Pixel-Differenz
+   schaltet ein kleines Skript (referenzen/projekt.php) die Kopfzeile hart
+   um — weiß, solange ein dunkles Element (Headerbild, Foto, Zitat) unter
+   ihr liegt, sonst schwarz (Logo über invert; ohne Mischmodus ist der
+   Filter unproblematisch). Ohne JavaScript bleibt die Differenz-Kopfzeile. */
+html.navi-wechsel .lz-header { mix-blend-mode: normal; }
+html.navi-wechsel .lz-header-farblos { display: none; }
+html.navi-wechsel .lz-nav a,
+html.navi-wechsel .lz-burger { transition: color .25s ease; }
+html.navi-wechsel .lz-logo { transition: filter .25s ease; }
+html.navi-wechsel.navi-ink .lz-nav a,
+html.navi-wechsel.navi-ink .lz-burger { color: var(--ink); }
+html.navi-wechsel.navi-ink .lz-logo { filter: invert(1); }
 
 /* Farblos-Schicht: deckungsgleiche Kopie der Kopfzeile im Mischmodus „color".
    Ihre weißen (also farblosen) Zeichen entsättigen das Differenz-Ergebnis

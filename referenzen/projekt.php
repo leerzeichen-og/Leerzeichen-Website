@@ -28,9 +28,6 @@ $brotkrumen   = [
     [(string) ($projekt['titel'] ?? ''), '/referenzen/' . $projekt['slug'] . '/'],
 ];
 $styles       = ['/assets/projekt.css'];
-// Konstant weiße Navigation mit dunklem Verlauf dahinter — die mischende
-// Kopfzeile wurde über den Projektfotos grau und unlesbar (8.10.2026).
-$bodyKlasse   = 'navi-dunkel';
 // CreativeWork fürs Projekt. Den Kunden nennt die description mit —
 // schema.org hat kein eigenes Feld für Auftraggeber.
 $jsonld_extra = array_filter([
@@ -119,4 +116,31 @@ require __DIR__ . '/../teile/kopf.php';
   <?php endif; ?>
 
 </div>
+
+<script>
+// Wechselnde Kopfzeile (8.10.2026): Die Pixel-Differenz machte die
+// Navigation über den Fotos grau und unlesbar. Stattdessen schaltet sie
+// hart um — weiß, solange ein dunkles Element (Headerbild, Foto, Zitat)
+// unter ihr liegt, sonst schwarz (CSS: html.navi-wechsel/.navi-ink).
+// Ohne JavaScript bleibt die Differenz-Kopfzeile wie bisher.
+(function () {
+    var kopf = document.querySelector('.lz-header');
+    var dunkle = document.querySelectorAll('.pj-header, .pj .pj-foto, .pj-zitat');
+    if (!kopf || !dunkle.length) { return; }
+    document.documentElement.classList.add('navi-wechsel');
+    function pruefen() {
+        var hoehe = kopf.offsetHeight;
+        var hell = true;
+        dunkle.forEach(function (el) {
+            var r = el.getBoundingClientRect();
+            if (r.top < hoehe && r.bottom > 0) { hell = false; }
+        });
+        document.documentElement.classList.toggle('navi-ink', hell);
+    }
+    addEventListener('scroll', pruefen, { passive: true });
+    addEventListener('resize', pruefen);
+    pruefen();
+})();
+</script>
+
 <?php require __DIR__ . '/../teile/fuss.php'; ?>

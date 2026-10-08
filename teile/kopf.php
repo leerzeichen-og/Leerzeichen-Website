@@ -148,14 +148,12 @@ header('Cache-Control: no-cache');
 // entsättigt das Differenz-Ergebnis, Logo und Navigation bleiben damit
 // schwarz/weiß statt bunt (Roman, 24.9.2026). $bedienbar steuert, ob Links
 // und Knopf echt sind (die Kopie darf weder Klicks noch Fokus bekommen).
-// Auf Seiten mit fester (nicht mischender) Navigation über hellem Grund
-// (body-Klasse navi-fest) trägt die Kopfzeile das Positiv-Logo.
-function lz_kopf_inhalt(array $nav, string $aktiv, bool $bedienbar, string $logo): void
+function lz_kopf_inhalt(array $nav, string $aktiv, bool $bedienbar): void
 {
     $a = $bedienbar ? 'a href="/"' : 'a';
 ?>
   <<?= $a ?> aria-label="Zur Startseite">
-    <img class="lz-logo" src="<?= e($logo) ?>" alt="<?= $bedienbar ? e(FIRMA_NAME) : '' ?>" width="316" height="41">
+    <img class="lz-logo" src="/assets/logo/leerzeichen-logo-neg.svg" alt="<?= $bedienbar ? e(FIRMA_NAME) : '' ?>" width="316" height="41">
   </a>
   <nav class="lz-nav"<?= $bedienbar ? ' aria-label="Hauptnavigation"' : '' ?>>
     <?php foreach ($nav as [$pfad, $label]): ?>
@@ -172,14 +170,11 @@ function lz_kopf_inhalt(array $nav, string $aktiv, bool $bedienbar, string $logo
 <?php
 }
 ?>
-<?php $kopfLogo = (strpos($bodyKlasse ?? '', 'navi-fest') !== false)
-    ? '/assets/logo/leerzeichen-logo-pos.svg'
-    : '/assets/logo/leerzeichen-logo-neg.svg'; ?>
 <header class="lz-header">
-  <?php lz_kopf_inhalt($nav, $nav_aktiv, true, $kopfLogo) ?>
+  <?php lz_kopf_inhalt($nav, $nav_aktiv, true) ?>
 </header>
 <div class="lz-header lz-header-farblos" aria-hidden="true">
-  <?php lz_kopf_inhalt($nav, $nav_aktiv, false, $kopfLogo) ?>
+  <?php lz_kopf_inhalt($nav, $nav_aktiv, false) ?>
 </div>
 
 <?php // Vollbild-Menü fürs Telefon: schwarz, weiße Links; auf und zu über
