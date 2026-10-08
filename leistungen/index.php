@@ -1,11 +1,11 @@
 <?php
-// Leistungen (Fassung Roman, 8.10.2026): Hero mit Hintergrundfilm „Schiff"
-// und dem Statement „Information braucht Form." — danach die zwei Säulen
-// als Split-Teaser mit Video, der Stärken-Block, der Ablauf als Zeitstrahl
-// und der Abschluss-CTA. Hintergrund je Kachel ein Video (assets/videos/,
-// startet automatisch und bleibt am letzten Frame stehen — darum bewusst
-// KEIN loop-Attribut); liegt ein Video (noch) nicht im Repo, trägt die
-// Grafik bzw. das Ink-Motiv die Fläche. Texte: Roman, 8.10.2026.
+// Leistungen (Fassung Roman, 8.10.2026): durchgehend schwarze Seite.
+// Hero mit dem Schiff-Film (läuft EINMAL, bleibt dann stehen — kein loop)
+// und dem Statement „Information braucht Form."; die drei Hero-Absätze
+// blenden beim Scrollen einzeln ein und aus (Muster der Startseiten-
+// Fragen, Mechanik unten im Skript). Danach die zwei Säulen als
+// Kontur-Boxen ohne Bildmotiv, der Stärken-Block, der Ablauf als
+// Zeitstrahl und der Abschluss-CTA. Texte: Roman, 8.10.2026.
 require_once __DIR__ . '/../teile/firma.php';
 
 $titel        = 'Leistungen — Erlebnisse und Gestaltung | leerzeichen';
@@ -13,15 +13,7 @@ $beschreibung = 'Jede Gestaltungsaufgabe beginnt mit einer Information, die verm
               . 'werden soll. Grafikdesign und Erlebnisgestaltung aus einer Hand.';
 $brotkrumen   = [['Leistungen', '/leistungen/']];
 $voll_breit   = true;
-
-// Video nur anbieten, wenn die Datei wirklich liegt (Roman lädt sie hoch).
-function leistung_video(string $name): ?string
-{
-    return is_file(__DIR__ . '/../assets/videos/' . $name) ? '/assets/videos/' . $name : null;
-}
-
-// Hero-Film: das Schiff. Fehlt die Datei, trägt das Ink-Motiv den Hero.
-$heroVideo = leistung_video('leerzeichen-schiff.mp4');
+$bodyKlasse   = 'seite-dunkel';
 
 $saeulen = [
     [
@@ -40,8 +32,6 @@ $saeulen = [
                      'Microsites und Landingpages', 'Screendesign und LED-Screens'],
         'url'    => '/grafikdesign/',
         'knopf'  => 'Zum Grafikdesign',
-        'video'  => leistung_video('leerzeichen-vernetzte-gestaltung.mp4'),
-        'bild'   => '/assets/bilder/leerzeichen-gestalterisch.webp',
     ],
     [
         'chip'   => 'Erlebnisse & Abenteuer',
@@ -58,8 +48,6 @@ $saeulen = [
                      'Audio- und Printstationen im Raum'],
         'url'    => '/erlebnisgestaltung/',
         'knopf'  => 'Zur Erlebnisgestaltung',
-        'video'  => leistung_video('leerzeichen-abenteuer.mp4'),
-        'bild'   => '/assets/bilder/leerzeichen-adventure.webp',
     ],
 ];
 
@@ -85,17 +73,18 @@ $ablauf = [
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<?php // Hero im Kontakt-Kopf-Muster, darunter liegt der Film (abgedunkelt,
-      // damit der weiße Text trägt). ?>
-<section class="seiten-hero leistung-hero"<?= $heroVideo ? '' : ' style="background-image:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.9) 72%), url(/assets/bilder/ink-splash.webp)"' ?>>
-  <?php if ($heroVideo): ?>
-  <video class="leistung-hero-video" src="<?= e($heroVideo) ?>"
-    autoplay muted loop playsinline aria-hidden="true"></video>
-  <?php endif; ?>
-  <div class="leistung-hero-inhalt">
-    <h1 class="titel-gross">Information braucht Form.</h1>
-    <div class="kopf-gross-zeile">
-      <div class="kopf-gross-rechts">
+<?php // Hero im Kontakt-Kopf-Muster. Die „Leinwand" trägt den Film und den
+      // Text; mit JavaScript bekommt die Sektion eine Scrollstrecke, die
+      // Leinwand bleibt stehen (sticky) und die Absätze wechseln einzeln —
+      // ohne JavaScript stehen alle drei normal untereinander. ?>
+<section class="leistung-hero" id="l-hero">
+  <div class="seiten-hero leistung-hero-leinwand">
+    <video class="leistung-hero-video" src="/assets/videos/leerzeichen-abenteuer.mp4"
+      autoplay muted playsinline aria-hidden="true"></video>
+    <div class="leistung-hero-inhalt">
+      <h1 class="titel-gross">Information<br>braucht Form.</h1>
+      <div class="kopf-gross-zeile">
+        <div class="kopf-gross-rechts">
         <p>Jede Gestaltungsaufgabe beginnt mit einer Information, die vermittelt
           werden soll. Ein Unternehmen braucht ein Erscheinungsbild. Eine
           Organisation eine Website. Eine Stadt ein Buch. Ein Museum eine
@@ -108,19 +97,17 @@ require __DIR__ . '/../teile/kopf.php';
           Screen, ein Raum anders als ein Waldweg. Wir kennen diese Unterschiede
           aus vielen Jahren Praxis. Und wo unsere Spezialisierung endet, beginnt
           unser Netzwerk.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<?php // Die zwei Säulen als Kontur-Boxen: schwarzer Grund, starke weiße
+      // Linie — kein Bildmotiv mehr (Roman, 8.10.2026). ?>
 <section class="lz-sec leistungs-kacheln">
   <?php foreach ($saeulen as $s): ?>
-  <a class="leistung-kachel" href="<?= e($s['url']) ?>"
-     <?= $s['video'] ? '' : 'style="background-image:url(' . e($s['bild']) . ')"' ?>>
-    <?php if ($s['video']): ?>
-    <video class="leistung-video" src="<?= e($s['video']) ?>"
-      autoplay muted playsinline aria-hidden="true"></video>
-    <?php endif; ?>
+  <a class="leistung-kachel" href="<?= e($s['url']) ?>">
     <span class="leistung-inhalt">
       <span class="chip"><?= e($s['chip']) ?></span>
       <h2><?= e($s['titel']) ?></h2>
@@ -137,13 +124,43 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <script>
-// Bei reduzierter Bewegung bleiben die Hintergrund-Videos auf dem ersten Bild.
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.leistung-video, .leistung-hero-video').forEach(function (v) {
-        v.pause();
-        v.removeAttribute('autoplay');
-    });
-}
+(function () {
+    // Bei reduzierter Bewegung bleibt der Hero-Film auf dem ersten Bild,
+    // und die Absätze stehen statisch untereinander (kein Scroll-Wechsel).
+    var ruhig = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (ruhig) {
+        document.querySelectorAll('.leistung-hero-video').forEach(function (v) {
+            v.pause();
+            v.removeAttribute('autoplay');
+        });
+        return;
+    }
+
+    // Hero-Absätze wechseln beim Scrollen (Muster der Startseiten-Fragen):
+    // die Sektion bekommt eine Scrollstrecke, die Leinwand bleibt stehen,
+    // je Scrollfortschritt ist genau ein Absatz sichtbar. Der dritte bleibt
+    // am Ende stehen, damit der Übergang zu den Säulen nicht leer ist.
+    var hero = document.getElementById('l-hero');
+    if (!hero) { return; }
+    var abs = hero.querySelectorAll('.kopf-gross-rechts p');
+    if (abs.length < 2) { return; }
+    var FENSTER = [[0.04, 0.34], [0.40, 0.68], [0.74, 1.10]];
+    var BLENDE = 0.08;   // Breite der Ein-/Ausblendzone im Fortschritt
+    hero.classList.add('rollt');
+    function zeichnen() {
+        var r = hero.getBoundingClientRect();
+        var strecke = r.height - innerHeight;
+        var p = strecke > 0 ? Math.min(1, Math.max(0, -r.top / strecke)) : 1;
+        abs.forEach(function (el, i) {
+            var f = FENSTER[Math.min(i, FENSTER.length - 1)];
+            var o = Math.min((p - f[0]) / BLENDE, (f[1] - p) / BLENDE);
+            el.style.opacity = String(Math.max(0, Math.min(1, o)));
+        });
+    }
+    addEventListener('scroll', zeichnen, { passive: true });
+    addEventListener('resize', zeichnen);
+    zeichnen();
+})();
 </script>
 
 <?php // Stärken-Block: Überschrift links am Rand, Text versetzt rechts —

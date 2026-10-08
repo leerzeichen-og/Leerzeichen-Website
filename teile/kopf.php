@@ -6,7 +6,9 @@
 //           $jsonld_extra = fertiges Schema-Array (z. B. CreativeWork),
 //           $styles = ['/assets/….css'] für zusätzliche Stylesheets,
 //           $voll_breit = true lässt <main> ohne Lesespalten-Begrenzung
-//           (Startseite: die Sektionen bringen ihre Ränder selbst mit).
+//           (Startseite: die Sektionen bringen ihre Ränder selbst mit),
+//           $bodyKlasse = Klasse am <body> (z. B. 'seite-dunkel' für die
+//           durchgehend schwarze Leistungsseite).
 
 require_once __DIR__ . '/firma.php';
 
@@ -138,7 +140,7 @@ header('Cache-Control: no-cache');
 <script type="application/ld+json"><?= json_encode($block, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>
 </head>
-<body>
+<body<?= !empty($bodyKlasse) ? ' class="' . e($bodyKlasse) . '"' : '' ?>>
 <?php
 // Die Kopfzeile wird ZWEIMAL gezeichnet (deckungsgleich): die echte im
 // Mischmodus „difference" (färbt sich gegen den Hintergrund um) und eine

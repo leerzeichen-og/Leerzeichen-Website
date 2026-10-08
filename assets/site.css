@@ -846,43 +846,27 @@ body.menue-offen { overflow: hidden; }
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
     gap: clamp(20px, 2.5vw, 40px);
-    /* Die Seite hat keinen Seitenkopf — oben nur an der Kopfzeile vorbei. */
-    padding-top: calc(var(--kopf-frei) + var(--space-6));
 }
+/* Kontur-Boxen (Roman, 8.10.2026): kein Bildmotiv mehr — schwarzer Grund,
+   starke weiße Linie, der Knopf steht in beiden Boxen unten bündig. */
 .leistung-kachel {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     min-height: clamp(520px, 74vh, 820px);
+    border: 3px solid #fff;
     border-radius: var(--radius-xs);
     overflow: hidden;
-    background-color: #000;
-    background-size: cover;
-    background-position: center;
+    background: #000;
     color: #fff;
     text-decoration: none;
-}
-/* Video als Hintergrund: füllt die Kachel proportional (cover). */
-.leistung-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-/* Lesbarkeits-Schleier über Video bzw. Grafik, unter dem Inhalt. */
-.leistung-kachel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, .74) 72%);
 }
 .leistung-inhalt {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    flex: 1;
     gap: var(--space-4);
     padding: clamp(32px, 4.5vw, 72px) clamp(24px, 4vw, 64px);
 }
@@ -917,14 +901,18 @@ body.menue-offen { overflow: hidden; }
     border-bottom: 1px solid rgba(255, 255, 255, .22);
     break-inside: avoid;
 }
-.leistung-kachel .knopf { margin-top: var(--space-5); }
+/* margin-top: auto drückt den Knopf ans untere Ende — beide Boxen
+   schließen damit bündig ab, egal wie lang das Verzeichnis ist. */
+.leistung-kachel .knopf { margin-top: auto; }
+.leistung-liste { margin-bottom: var(--space-6); }
 @media (max-width: 640px) {
     .leistung-liste { columns: 1; }
 }
 
-/* Leistungs-Hero (8.10.2026): der Schiff-Film liegt unter dem Kopf im
-   Kontakt-Muster und wird abgedunkelt, damit der weiße Text trägt. */
-.leistung-hero { overflow: hidden; }
+/* Leistungs-Hero (8.10.2026): die „Leinwand" trägt den Schiff-Film
+   (läuft einmal, bleibt stehen) unter dem Kopf im Kontakt-Muster und
+   dunkelt ihn deutlich ab, damit der weiße Text trägt. */
+.leistung-hero-leinwand { overflow: hidden; }
 .leistung-hero-video {
     position: absolute;
     inset: 0;
@@ -932,13 +920,37 @@ body.menue-offen { overflow: hidden; }
     height: 100%;
     object-fit: cover;
 }
-.leistung-hero::after {
+.leistung-hero-leinwand::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, .55) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .72) 100%);
 }
 .leistung-hero-inhalt { position: relative; z-index: 1; width: 100%; }
+/* Headline exakt wie auf Kontakt/Agentur (kein Chip davor, also auch
+   kein Hero-Zusatzabstand); der Teaser beginnt bewusst weiter unten
+   und atmet zwischen den Absätzen mehr. */
+.leistung-hero-leinwand .titel-gross { margin-top: 0; }
+.leistung-hero-leinwand .kopf-gross-zeile { margin-top: var(--space-9); }
+.leistung-hero-leinwand .kopf-gross-rechts p { margin-bottom: var(--space-7); }
+
+/* Mit JavaScript bekommt der Hero eine Scrollstrecke: die Leinwand bleibt
+   stehen, die drei Absätze liegen übereinander und wechseln per Opacity
+   (gesteuert im Seitenskript — Muster der Startseiten-Fragen). */
+.leistung-hero.rollt { height: 330vh; height: 330svh; }
+.leistung-hero.rollt .leistung-hero-leinwand {
+    position: sticky;
+    top: 0;
+    min-height: 0;
+    height: 100vh;
+    height: 100svh;
+}
+.leistung-hero.rollt .kopf-gross-rechts { display: grid; }
+.leistung-hero.rollt .kopf-gross-rechts p {
+    grid-area: 1 / 1;
+    margin: 0;
+    opacity: 0;
+}
 
 /* Der Ablauf als Zeitstrahl: acht Stationen an einer durchgehenden Linie,
    je Schritt eine große Light-Nummer, Titel und kurzer Text. */
@@ -997,6 +1009,15 @@ body.menue-offen { overflow: hidden; }
     line-height: var(--leading-body);
     color: var(--text-body);
 }
+
+/* Dunkle Seite (Leistungen, Beschluss Roman 8.10.2026): schwarzer Grund
+   über die ganze Seite. Die fixierte Kopfzeile färbt sich über den
+   Mischmodus von selbst weiß; Newsletter-Postkarte und Fuß behalten ihr
+   helles Papier. Hier nur, was sonst auf Schwarz unsichtbar wäre. */
+body.seite-dunkel { background: #000; color: #fff; }
+.seite-dunkel .ablauf-liste::before,
+.seite-dunkel .ablauf-schritt::before { background: #fff; }
+.seite-dunkel .ablauf .ablauf-schritt p { color: rgba(255, 255, 255, .72); }
 
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
 
