@@ -113,28 +113,25 @@ require __DIR__ . '/../teile/kopf.php';
 
 <section class="lz-sec viel-luft">
   <h2>Was wir gestalten.</h2>
-  <?php // Listen-Layout nach pixelart-Vorbild: Bild · Titel+Text · Pfeil,
-        // der ganze Eintrag verlinkt reihum auf eines der Säulen-Projekte. ?>
+  <?php // Zentrierte Liste; die Projektbilder schweben abwechselnd links
+        // und rechts außerhalb und verlinken (nur sie) zum Portfolio-Eintrag. ?>
   <div class="feld-fluss">
     <?php foreach ($felder as $i => [$feldTitel, $feldText]): ?>
     <?php $feldProjekt = $referenzen ? $referenzen[$i % count($referenzen)] : null; ?>
-    <?php if ($feldProjekt): ?>
-    <a class="feld-eintrag" href="/referenzen/<?= e($feldProjekt['slug'] ?? '') ?>/"
-       aria-label="<?= e($feldTitel) ?> — zum Projekt <?= e((string) ($feldProjekt['titel'] ?? '')) ?>">
-    <?php else: ?>
     <div class="feld-eintrag">
-    <?php endif; ?>
-      <div class="feld-bild">
-        <?= $feldProjekt ? pj_bild($feldProjekt['teaser_quer'] ?? null, '', '(max-width: 900px) 100vw, 26vw') : '' ?>
-      </div>
       <div class="feld-text">
         <h3><?= e($feldTitel) ?></h3>
         <p><?= e($feldText) ?></p>
       </div>
       <?php if ($feldProjekt): ?>
-      <span class="feld-pfeil" aria-hidden="true"><?= lz_pfeil() ?></span>
+      <a class="feld-flieger" href="/referenzen/<?= e($feldProjekt['slug'] ?? '') ?>/"
+         aria-label="Zum Projekt <?= e((string) ($feldProjekt['titel'] ?? '')) ?>">
+        <span class="feld-flieger-innen">
+          <?= pj_bild($feldProjekt['teaser_quer'] ?? null, '', '(max-width: 1100px) 70vw, 20vw') ?>
+        </span>
+      </a>
       <?php endif; ?>
-    <?= $feldProjekt ? '</a>' : '</div>' ?>
+    </div>
     <?php endforeach; ?>
   </div>
 </section>

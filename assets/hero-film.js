@@ -82,6 +82,30 @@
         zeichnen();
     }
 
+    // Schwebende Projektbilder neben der Leistungs-Liste: ein sanftes
+    // Scroll-Parallax (gegenläufig, geglättet) auf dem äußeren <a>; die
+    // CSS-Schwebe liegt auf dem inneren <span>, darum kein Konflikt.
+    // Unter 1100 px stehen die Bilder im Fluss (CSS setzt transform ab).
+    var flieger = document.querySelectorAll('.feld-flieger');
+    if (!ruhig && flieger.length) {
+        var zustand = [];
+        flieger.forEach(function (el, i) {
+            zustand.push({ el: el, y: 0, faktor: i % 2 ? -0.16 : -0.1 });
+        });
+        var flug = function () {
+            if (innerWidth > 1100) {
+                zustand.forEach(function (s) {
+                    var r = s.el.parentElement.getBoundingClientRect();
+                    var ziel = (r.top + r.height / 2 - innerHeight / 2) * s.faktor;
+                    s.y += (ziel - s.y) * 0.08;
+                    s.el.style.transform = 'translateY(calc(-50% + ' + s.y.toFixed(1) + 'px))';
+                });
+            }
+            requestAnimationFrame(flug);
+        };
+        requestAnimationFrame(flug);
+    }
+
     // Erscroll-Choreografie: einmal da, bleibt da; der riesige obere
     // Beobachtungsrand zählt alles OBERHALB des Fensters als erreicht —
     // schnelles Scrollen lässt sonst Elemente dauerhaft unsichtbar zurück.
