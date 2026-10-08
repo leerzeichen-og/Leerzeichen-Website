@@ -922,6 +922,82 @@ body.menue-offen { overflow: hidden; }
     .leistung-liste { columns: 1; }
 }
 
+/* Leistungs-Hero (8.10.2026): der Schiff-Film liegt unter dem Kopf im
+   Kontakt-Muster und wird abgedunkelt, damit der weiße Text trägt. */
+.leistung-hero { overflow: hidden; }
+.leistung-hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.leistung-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, .55) 100%);
+}
+.leistung-hero-inhalt { position: relative; z-index: 1; width: 100%; }
+
+/* Der Ablauf als Zeitstrahl: acht Stationen an einer durchgehenden Linie,
+   je Schritt eine große Light-Nummer, Titel und kurzer Text. */
+.ablauf-liste {
+    list-style: none;
+    margin: var(--space-7) 0 0;
+    padding: 0 0 0 clamp(28px, 3vw, 44px);
+    position: relative;
+}
+.ablauf-liste::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: var(--ink);
+}
+.ablauf-schritt {
+    position: relative;
+    display: grid;
+    grid-template-columns: clamp(44px, 5vw, 64px) 1fr;
+    gap: var(--space-5);
+    padding-bottom: var(--space-7);
+}
+.ablauf-schritt:last-child { padding-bottom: 0; }
+/* Die Station sitzt mittig auf der Linie (Linienmitte = Listenkante + 1 px). */
+.ablauf-schritt::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * clamp(28px, 3vw, 44px) - 5px);
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--ink);
+}
+.ablauf-nr {
+    font-weight: 300;
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    line-height: 1;
+}
+.ablauf-schritt h3 {
+    margin: .1em 0 .35em;
+    font-weight: 600;
+    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    line-height: 1.25;
+}
+/* Die Schritt-Texte bleiben klein — die Teaser-Regel der rechten Spalte
+   (.kopf-gross-rechts p) gilt hier nicht. */
+.ablauf .ablauf-schritt p {
+    margin: 0;
+    max-width: 48ch;
+    font-weight: 400;
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    color: var(--text-body);
+}
+
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
 
 /* Der Kontakt-Kopf nutzt die generischen Bausteine .kopf-gross/.kopf-gross-zeile
