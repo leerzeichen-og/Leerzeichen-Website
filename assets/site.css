@@ -912,6 +912,41 @@ body.menue-offen { overflow: hidden; }
     .leistung-liste { columns: 1; }
 }
 
+/* Scrollhinweis: zarter Pfeil nach unten (ursprünglich die Projektseiten,
+   Roman 24.9.2026; seit 8.10.2026 globaler Baustein — auch im
+   Leistungs-Hero). Rein visuell (aria-hidden); der lange Pfeil zeigt
+   gedreht nach unten und nickt sanft in Scrollrichtung. */
+.pj-runter {
+    display: block;
+    position: relative;
+    width: 68px;
+    height: 76px;
+    margin-top: clamp(28px, 6vh, 64px);
+    /* Der gedrehte Pfeil liegt mittig in seiner Box — die halbe Box abzüglich
+       halber Strichbreite nach links, dann sitzt er exakt an der Textkante. */
+    margin-left: -27px;
+    color: #fff;
+    opacity: .85;
+    pointer-events: none;
+}
+.pj-runter svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    /* Nach der Drehung zeigt die örtliche X-Achse nach unten — das Nicken
+       wandert also in Scrollrichtung. */
+    transform: translate(-50%, -50%) rotate(90deg);
+    animation: pj-nicken 2.4s ease-in-out infinite;
+}
+@keyframes pj-nicken {
+    0%, 100% { transform: translate(-50%, -50%) rotate(90deg) translateX(0); }
+    50%      { transform: translate(-50%, -50%) rotate(90deg) translateX(12px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pj-runter svg { animation: none; }
+}
+
 /* Leistungs-Hero (8.10.2026): die „Leinwand" trägt den Schiff-Film
    (läuft einmal, bleibt stehen) unter dem Kopf im Kontakt-Muster und
    dunkelt ihn deutlich ab, damit der weiße Text trägt. */
@@ -927,9 +962,32 @@ body.menue-offen { overflow: hidden; }
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .72) 100%);
+    /* Oben ein kräftiger Scrim: Er hält den Grund hinter Logo und
+       Navigation dunkel, die auf dieser Seite nicht mischen (unten). */
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, .85) 0, rgba(0, 0, 0, 0) 240px),
+        linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .72) 100%);
 }
+/* Nach dem Abspann dimmt der Film weiter ab — der Text darüber liest
+   sich auf dem stehenden Bild sonst nicht überall gut. */
+.leistung-hero-video { transition: opacity 1.6s ease; }
+.film-fertig .leistung-hero-video { opacity: .5; }
 .leistung-hero-inhalt { position: relative; z-index: 1; width: 100%; }
+/* Der Scrollhinweis-Pfeil, unten an der Logo-Kante (Baustein .pj-runter,
+   der −27-px-Versatz steckt hier im left). */
+.leistung-runter {
+    position: absolute;
+    left: calc(var(--rand) - 27px);
+    bottom: clamp(28px, 6vh, 64px);
+    margin: 0;
+    z-index: 1;
+}
+
+/* Auf der dunklen Seite mischt die Kopfzeile nicht: Über dem Video wurde
+   die Differenz grau und unlesbar — Logo und Navigation bleiben hier
+   konstant weiß, der Hero-Scrim hält den Grund dahinter dunkel. */
+.seite-dunkel .lz-header { mix-blend-mode: normal; }
+.seite-dunkel .lz-header-farblos { display: none; }
 /* Headline exakt wie auf Kontakt/Agentur (kein Chip davor, also auch
    kein Hero-Zusatzabstand); der Teaser beginnt bewusst weiter unten
    und atmet zwischen den Absätzen mehr. */
@@ -1002,14 +1060,36 @@ body.menue-offen { overflow: hidden; }
     font-size: clamp(2.2rem, 3.4vw, 3.2rem);
     line-height: 1;
 }
-/* Scroll-Choreografie (Skript der Leistungsseite): Schritte warten
-   unsichtbar und treten einzeln auf, sobald man sie erscrollt. */
-.ablauf-schritt.wartet {
+/* Scroll-Choreografie (Skript der Leistungsseite): Elemente mit .wartet
+   stehen unsichtbar bereit und treten einzeln auf (.da), sobald man sie
+   in die obere Bildschirmhälfte erscrollt — Zeitstrahl-Schritte und der
+   zweite Stärken-Absatz. */
+.wartet {
     opacity: 0;
     transform: translateY(26px);
     transition: opacity .7s ease, transform .7s ease;
 }
-.ablauf-schritt.wartet.da { opacity: 1; transform: none; }
+.wartet.da { opacity: 1; transform: none; }
+
+/* „Das ist unsere Stärke.": die zwei Absätze nebeneinander im
+   Teaser-Format; der rechte tritt erst beim Weiterscrollen dazu. */
+.staerke-spalten {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-7);
+}
+.staerke-spalten p {
+    margin: 0;
+    max-width: 30ch;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+    line-height: 1.3;
+    text-wrap: pretty;
+}
+@media (max-width: 900px) {
+    .staerke-spalten { grid-template-columns: 1fr; gap: var(--space-6); }
+}
 .ablauf-schritt h3 {
     margin: .1em 0 .35em;
     font-weight: 600;

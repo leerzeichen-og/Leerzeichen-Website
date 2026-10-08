@@ -100,6 +100,7 @@ require __DIR__ . '/../teile/kopf.php';
         </div>
       </div>
     </div>
+    <span class="pj-runter leistung-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
   </div>
 </section>
 
@@ -124,21 +125,20 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 
-<?php // Stärken-Block: Überschrift links am Rand, Text versetzt rechts —
-      // dieselbe Sprache wie die Seitenköpfe. ?>
+<?php // Stärken-Block: die zwei Absätze nebeneinander — der linke blendet
+      // normal ein, der rechte tritt erst beim Weiterscrollen dazu
+      // (Klasse staerke-zwei, Choreografie im Seitenskript). ?>
 <section class="lz-sec">
   <h2>Das ist unsere Stärke.</h2>
-  <div class="kopf-gross-zeile">
-    <div class="kopf-gross-rechts">
-      <p>Die meisten Vorhaben bleiben nicht bei einem Format. Wir entwickeln
-        eine Ausstellung und gestalten danach die Plakate, den Folder und die
-        Website dazu. Oder wir schärfen das Erscheinungsbild eines Betriebs und
-        übersetzen es in einen Messestand oder eine interaktive Station.</p>
-      <p>Das können wir, weil wir beide Seiten kennen. Weil wir wissen, wie
-        Drucksachen produziert werden, wie Websites ihre Ziele erreichen und
-        was eine Station im Freien jahrelang aushält. Wir gestalten auf Papier
-        und im Raum. Wir bauen interaktive Tools analog und digital.</p>
-    </div>
+  <div class="staerke-spalten">
+    <p>Die meisten Vorhaben bleiben nicht bei einem Format. Wir entwickeln
+      eine Ausstellung und gestalten danach die Plakate, den Folder und die
+      Website dazu. Oder wir schärfen das Erscheinungsbild eines Betriebs und
+      übersetzen es in einen Messestand oder eine interaktive Station.</p>
+    <p class="staerke-zwei">Das können wir, weil wir beide Seiten kennen. Weil
+      wir wissen, wie Drucksachen produziert werden, wie Websites ihre Ziele
+      erreichen und was eine Station im Freien jahrelang aushält. Wir gestalten
+      auf Papier und im Raum. Wir bauen interaktive Tools analog und digital.</p>
   </div>
 </section>
 
@@ -185,8 +185,9 @@ require __DIR__ . '/../teile/kopf.php';
     if (!hero) { return; }
     var abs = hero.querySelectorAll('.kopf-gross-rechts p');
     if (abs.length < 2) { return; }
-    // Lange Lesefenster mit echten Pausen dazwischen (Strecke: 430 svh).
-    var FENSTER = [[0.04, 0.30], [0.40, 0.66], [0.76, 1.10]];
+    // Lange Lesefenster mit echten Pausen dazwischen (Strecke: 430 svh);
+    // der zweite Absatz steht bewusst am längsten (Roman, 8.10.2026).
+    var FENSTER = [[0.04, 0.30], [0.38, 0.70], [0.78, 1.10]];
     var BLENDE = 0.07;   // Breite der Ein-/Ausblendzone im Fortschritt
     hero.classList.add('rollt');
 
@@ -198,6 +199,9 @@ require __DIR__ . '/../teile/kopf.php';
     function ersterAbsatzFrei() {
         if (FENSTER[0][0] < 0) { return; }
         FENSTER[0][0] = -1;
+        // Der stehende Schlussframe dimmt zusätzlich ab (CSS film-fertig) —
+        // der Text darüber liest sich sonst nicht überall gut.
+        hero.querySelector('.leistung-hero-leinwand').classList.add('film-fertig');
         abs[0].style.transition = 'opacity 1.2s ease';
         zeichnen();
         setTimeout(function () { abs[0].style.transition = ''; }, 1300);
@@ -220,12 +224,12 @@ require __DIR__ . '/../teile/kopf.php';
     addEventListener('resize', zeichnen);
     zeichnen();
 
-    // Zeitstrahl: Jeder Schritt tritt erst auf, wenn man ihn in die obere
-    // Bildschirmhälfte erscrollt hat — einmal da, bleibt er, und die
-    // Segmente setzen sich zur ganzen Linie zusammen. Ohne
-    // IntersectionObserver bleibt die Liste einfach sichtbar.
+    // Zeitstrahl und zweiter Stärken-Absatz: Jedes Element tritt erst auf,
+    // wenn man es in die obere Bildschirmhälfte erscrollt hat — einmal da,
+    // bleibt es, und die Zeitstrahl-Segmente setzen sich zur ganzen Linie
+    // zusammen. Ohne IntersectionObserver bleibt alles einfach sichtbar.
     if ('IntersectionObserver' in window) {
-        var schritte = document.querySelectorAll('.ablauf-schritt');
+        var schritte = document.querySelectorAll('.ablauf-schritt, .staerke-zwei');
         schritte.forEach(function (el) { el.classList.add('wartet'); });
         var io = new IntersectionObserver(function (eintraege) {
             eintraege.forEach(function (e) {
@@ -243,7 +247,8 @@ require __DIR__ . '/../teile/kopf.php';
 })();
 </script>
 
-<?php require __DIR__ . '/../teile/newsletter.php'; ?>
+<?php // Kein Newsletter auf dieser Seite (Roman, 8.10.2026) — nach dem
+      // Zeitstrahl kommt gleich der CTA. ?>
 <?php require __DIR__ . '/../teile/cta.php'; ?>
 
 <?php require __DIR__ . '/../teile/fuss.php'; ?>

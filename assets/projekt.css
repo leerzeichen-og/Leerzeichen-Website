@@ -114,43 +114,8 @@
 /* Falls ein Projekt (noch) kein Headerbild hat. */
 .pj .pj-titel-ohne-bild { margin: 0 0 1rem; }
 
-/* ---- Scrollhinweis: zarter Pfeil nach unten ------------------------------- */
-/* Unter dem Titel, an dessen linker Kante (Roman, 24.9.2026). Rein visuell
-   (aria-hidden); der lange Leerzeichen-Pfeil zeigt gedreht nach unten und
-   nickt sanft in Scrollrichtung. */
-
-.pj-runter {
-  display: block;
-  position: relative;
-  width: 68px;
-  height: 76px;
-  margin-top: clamp(28px, 6vh, 64px);
-  /* Der gedrehte Pfeil liegt mittig in seiner Box — die halbe Box abzüglich
-     halber Strichbreite nach links, dann sitzt er exakt an der Textkante. */
-  margin-left: -27px;
-  color: #fff;
-  opacity: .85;
-  pointer-events: none;
-}
-.pj-runter svg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 64px;
-  /* Nach der Drehung zeigt die örtliche X-Achse nach unten — das Nicken
-     wandert also in Scrollrichtung. */
-  transform: translate(-50%, -50%) rotate(90deg);
-  animation: pj-nicken 2.4s ease-in-out infinite;
-}
-
-@keyframes pj-nicken {
-  0%, 100% { transform: translate(-50%, -50%) rotate(90deg) translateX(0); }
-  50%      { transform: translate(-50%, -50%) rotate(90deg) translateX(12px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pj-runter svg { animation: none; }
-}
+/* Der Scrollhinweis-Pfeil (.pj-runter) ist seit 8.10.2026 ein globaler
+   Baustein in site.css — die Leistungsseite nutzt ihn ebenfalls. */
 
 /* ---- Textblöcke: schmale Spalte rechts der Mitte, wie im Layout ---------- */
 
