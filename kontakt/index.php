@@ -27,8 +27,8 @@ require __DIR__ . '/../teile/kopf.php';
     <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
       braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
     <div class="kontakt-wege">
-      <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?></a>
-      <a href="mailto:<?= e(FIRMA_MAIL) ?>"><?= e(FIRMA_MAIL) ?></a>
+      <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?> <?= lz_pfeil() ?></a>
+      <a href="mailto:<?= e(FIRMA_MAIL) ?>"><?= e(FIRMA_MAIL) ?> <?= lz_pfeil() ?></a>
     </div>
   </div>
 </section>
