@@ -82,23 +82,32 @@
         zeichnen();
     }
 
-    // Schwebende Projektbilder neben der Leistungs-Liste: ein sanftes
-    // Scroll-Parallax (gegenläufig, geglättet) auf dem äußeren <a>; die
-    // CSS-Schwebe liegt auf dem inneren <span>, darum kein Konflikt.
-    // Unter 1100 px stehen die Bilder im Fluss (CSS setzt transform ab).
+    // Projektbilder neben der Leistungs-Liste: Scroll-Parallax (gegenläufig,
+    // geglättet) auf dem äußeren <a>; Drehung und Erscheinen liegen auf dem
+    // inneren <span>, darum kein Konflikt. Die Zeile, deren Mitte der
+    // Bildschirmmitte am nächsten ist, gilt als aktiv — ihr Bild erscheint
+    // (CSS .aktiv; am Zeiger-Gerät zeigt auch :hover). Unter 1100 px stehen
+    // die Bilder im Fluss (CSS setzt transform ab).
     var flieger = document.querySelectorAll('.feld-flieger');
     if (!ruhig && flieger.length) {
         var zustand = [];
         flieger.forEach(function (el, i) {
-            zustand.push({ el: el, y: 0, faktor: i % 2 ? -0.16 : -0.1 });
+            zustand.push({ el: el, zeile: el.parentElement, y: 0, faktor: i % 2 ? -0.14 : -0.09 });
         });
         var flug = function () {
             if (innerWidth > 1100) {
+                var aktiv = null;
+                var abstand = Infinity;
                 zustand.forEach(function (s) {
-                    var r = s.el.parentElement.getBoundingClientRect();
-                    var ziel = (r.top + r.height / 2 - innerHeight / 2) * s.faktor;
-                    s.y += (ziel - s.y) * 0.08;
+                    var r = s.zeile.getBoundingClientRect();
+                    var ab = r.top + r.height / 2 - innerHeight / 2;
+                    s.y += (ab * s.faktor - s.y) * 0.08;
                     s.el.style.transform = 'translateY(calc(-50% + ' + s.y.toFixed(1) + 'px))';
+                    if (Math.abs(ab) < abstand) { abstand = Math.abs(ab); aktiv = s.zeile; }
+                });
+                zustand.forEach(function (s) {
+                    s.zeile.classList.toggle('aktiv',
+                        s.zeile === aktiv && abstand < innerHeight * .45);
                 });
             }
             requestAnimationFrame(flug);

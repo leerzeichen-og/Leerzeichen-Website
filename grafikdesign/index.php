@@ -112,7 +112,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2>Was wir gestalten.</h2>
+  <h2 class="titel-gross">Was wir gestalten.</h2>
   <?php // Zentrierte Liste; die Projektbilder schweben abwechselnd links
         // und rechts außerhalb und verlinken (nur sie) zum Portfolio-Eintrag. ?>
   <div class="feld-fluss">

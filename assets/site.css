@@ -1017,21 +1017,36 @@ body.menue-offen { overflow: hidden; }
 .seite-dunkel .lz-header-farblos { display: none; }
 
 /* --- Bausteine der Säulen-Seiten (dunkel, 8.10.2026) ----------------------- */
-/* Sektionen mit viel Luft nach oben (Abstand zum Modul davor). */
-.viel-luft { padding-top: clamp(150px, 20vh, 280px); }
+/* Sektionen mit viel Luft nach oben UND unten — die Säulen-Seiten
+   sollen deutlich atmen (Beschluss Roman, 8.10.2026). */
+.viel-luft {
+    padding-top: clamp(190px, 25vh, 360px);
+    padding-bottom: clamp(120px, 16vh, 240px);
+}
 
-/* Leistungsfelder (Roman, 8.10.2026): zentrierte Liste auf rund 60 %
-   Breite, Fließtext in der Teaser-Größe der Projektseiten; die
-   Projektbilder schweben abwechselnd links und rechts AUSSERHALB der
-   Liste (sanftes Fliegen: CSS-Schwebe + Scroll-Parallax in hero-film.js),
-   nur sie sind klickbar und führen zum Portfolio-Eintrag. */
-.feld-fluss { max-width: 60%; margin: var(--space-7) auto 0; }
+/* Leistungsfelder (Roman, 8.10.2026): zentrierte, schmale Liste (48 %),
+   Fließtext in der Teaser-Größe der Projektseiten; die Trennlinien ziehen
+   über die volle Fensterbreite. Beim Scrollen über eine Zeile (bzw. beim
+   Zeigen) erscheint groß und leicht schräg das passende Referenz-Projekt —
+   nur dieses Bild ist klickbar und führt zur Detailseite. Aktiv-Logik und
+   Scroll-Parallax: hero-film.js. */
+.feld-fluss { max-width: 48%; margin: var(--space-7) auto 0; }
 .feld-eintrag {
     position: relative;
-    padding: clamp(56px, 8vh, 110px) 0;
-    border-top: 2px solid currentColor;
+    padding: clamp(64px, 9vh, 130px) 0;
 }
-.feld-fluss .feld-eintrag:last-child { border-bottom: 2px solid currentColor; }
+/* Die Linie bricht aus der schmalen Liste aus: volle Fensterbreite. */
+.feld-eintrag::before,
+.feld-fluss .feld-eintrag:last-child::after {
+    content: "";
+    position: absolute;
+    left: calc(50% - 50vw);
+    width: 100vw;
+    height: 2px;
+    background: currentColor;
+}
+.feld-eintrag::before { top: 0; }
+.feld-fluss .feld-eintrag:last-child::after { bottom: 0; }
 .feld-text h3 {
     margin: 0 0 .5em;
     font-weight: 600;
@@ -1046,48 +1061,56 @@ body.menue-offen { overflow: hidden; }
     font-size: clamp(1.5rem, 2.4vw, 2.5rem);
     line-height: 1.3;
 }
-/* Der Flieger: hängt auf Höhe seines Eintrags im Außenraum neben der
-   Liste (33,3 % der Eintragsbreite = der halbe Rest der Sektion). Das
-   äußere <a> bewegt das Scroll-Parallax (hero-film.js), das innere
-   <span> schwebt per CSS — zwei Ebenen, kein Transform-Konflikt. */
+/* Der Flieger: groß und leicht schräg, abwechselnd rechts und links —
+   seine Außenkante endet am Seitenrand (--rand), darum kein Querscrollen.
+   Unsichtbar, bis die Zeile aktiv ist (Scroll-Mitte, hero-film.js) oder
+   gezeigt wird. Das äußere <a> bewegt das Scroll-Parallax, das innere
+   <span> trägt Drehung und Erscheinen — kein Transform-Konflikt. */
 .feld-flieger {
     position: absolute;
     top: 50%;
-    width: calc(33.333% - clamp(16px, 2vw, 36px));
+    width: clamp(300px, 34vw, 540px);
     transform: translateY(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .5s ease;
 }
-.feld-eintrag:nth-child(odd) .feld-flieger { left: calc(100% + clamp(10px, 1.2vw, 20px)); }
-.feld-eintrag:nth-child(even) .feld-flieger { right: calc(100% + clamp(10px, 1.2vw, 20px)); }
+.feld-eintrag:nth-child(odd) .feld-flieger { right: calc(50% - 50vw + var(--rand)); }
+.feld-eintrag:nth-child(even) .feld-flieger { left: calc(50% - 50vw + var(--rand)); }
+.feld-eintrag.aktiv .feld-flieger,
+.feld-eintrag:hover .feld-flieger {
+    opacity: 1;
+    pointer-events: auto;
+}
 .feld-flieger-innen {
     display: block;
-    animation: feld-schweben 7s ease-in-out infinite alternate;
+    transform: rotate(4deg) scale(.94);
+    transition: transform .6s var(--ease-out, ease-out);
 }
-.feld-eintrag:nth-child(even) .feld-flieger-innen { animation-duration: 8.6s; animation-delay: -3s; }
-@keyframes feld-schweben {
-    0%   { transform: translateY(-12px) rotate(-2deg); }
-    100% { transform: translateY(12px) rotate(2.4deg); }
-}
+.feld-eintrag:nth-child(even) .feld-flieger-innen { transform: rotate(-4deg) scale(.94); }
+.feld-eintrag.aktiv .feld-flieger-innen,
+.feld-eintrag:hover .feld-flieger-innen { transform: rotate(4deg) scale(1); }
+.feld-eintrag.aktiv:nth-child(even) .feld-flieger-innen,
+.feld-eintrag:hover:nth-child(even) .feld-flieger-innen { transform: rotate(-4deg) scale(1); }
 .feld-flieger img {
     display: block;
     width: 100%;
     height: auto;
     border-radius: var(--radius-xs);
-    transition: transform .4s var(--ease-out, ease-out);
-}
-.feld-flieger:hover img,
-.feld-flieger:focus-visible img { transform: scale(1.05); }
-@media (prefers-reduced-motion: reduce) {
-    .feld-flieger-innen { animation: none; }
 }
 @media (max-width: 1100px) {
-    /* Ohne Außenraum stehen die Bilder im Fluss über dem Text. */
+    /* Ohne Raum fürs Erscheinen stehen die Bilder im Fluss über dem Text,
+       immer sichtbar und klickbar. */
     .feld-fluss { max-width: none; }
     .feld-eintrag:nth-child(n) .feld-flieger {
         position: static;
         width: min(70%, 340px);
         margin-bottom: var(--space-5);
+        opacity: 1;
+        pointer-events: auto;
         transform: none !important;   /* hebt auch das JS-Parallax auf */
     }
+    .feld-eintrag:nth-child(n) .feld-flieger-innen { transform: none; }
 }
 
 /* Merkmale: Kategorie-Zellen — kräftige Oberlinie, Titel links, Text
