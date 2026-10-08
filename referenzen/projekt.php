@@ -28,6 +28,9 @@ $brotkrumen   = [
     [(string) ($projekt['titel'] ?? ''), '/referenzen/' . $projekt['slug'] . '/'],
 ];
 $styles       = ['/assets/projekt.css'];
+// Konstant weiße Navigation mit dunklem Verlauf dahinter — die mischende
+// Kopfzeile wurde über den Projektfotos grau und unlesbar (8.10.2026).
+$bodyKlasse   = 'navi-dunkel';
 // CreativeWork fürs Projekt. Den Kunden nennt die description mit —
 // schema.org hat kein eigenes Feld für Auftraggeber.
 $jsonld_extra = array_filter([
