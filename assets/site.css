@@ -1353,8 +1353,19 @@ body.menue-offen { overflow: hidden; }
    helles Papier. Hier nur, was sonst auf Schwarz unsichtbar wäre. */
 body.seite-dunkel { background: #000; color: #fff; }
 /* Der Abschluss-CTA bekommt auf den dunklen Seiten viel Luft nach oben
-   und unten (Beschluss Roman, 8.10.2026). */
-.seite-dunkel .kontakt-cta { margin: clamp(120px, 16vh, 220px) 0; }
+   und unten und geht im Seiten-Schwarz auf — der gradient-ink der hellen
+   Seiten stach hier als Grauton heraus (Befund Roman, 8.10.2026). */
+.seite-dunkel .kontakt-cta {
+    margin: clamp(120px, 16vh, 220px) 0;
+    background: #000;
+}
+/* Der Newsletter steht auf den dunklen Seiten als heller Block auf
+   Papier — samt dunkler Schrift, die sonst vom weißen body-Text der
+   Seite geerbt würde. */
+.seite-dunkel .nl-bereich {
+    background: var(--paper);
+    color: var(--text-strong);
+}
 .seite-dunkel .ablauf-schritt::before,
 .seite-dunkel .ablauf-schritt::after { background: #fff; }
 .seite-dunkel .ablauf .ablauf-schritt p { color: rgba(255, 255, 255, .72); }
