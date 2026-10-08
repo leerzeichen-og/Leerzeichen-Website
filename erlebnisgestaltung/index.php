@@ -104,7 +104,7 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
-<section class="lz-sec">
+<section class="lz-sec viel-luft">
   <h2>Was wir gestalten.</h2>
   <?php // Listen-Layout nach pixelart-Vorbild: Bild · Titel+Text · Pfeil,
         // der ganze Eintrag verlinkt reihum auf eines der Säulen-Projekte. ?>
@@ -145,7 +145,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <?php if ($referenzen): ?>
-<section class="lz-sec">
+<section class="lz-sec viel-luft">
   <h2>Ausgewählte Projekte.</h2>
   <div class="saeulen-projekte">
     <?php foreach ($referenzen as $p): ?>
@@ -168,7 +168,7 @@ require __DIR__ . '/../teile/kopf.php';
 
 <?php // „Wer mitbaut.": zwei Absätze nebeneinander im Teaser-Format —
       // das Stärke-Muster der Leistungsseite. ?>
-<section class="lz-sec staerke">
+<section class="lz-sec staerke viel-luft">
   <h2>Wer mitbaut.</h2>
   <div class="staerke-spalten">
     <p>Für die Produktion arbeiten wir mit Tischlereien, Holzbauern,
@@ -181,7 +181,7 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
-<section class="lz-sec">
+<section class="lz-sec viel-luft">
   <h2>Häufige Fragen.</h2>
   <div class="faq">
     <?php foreach ($fragen as [$frage, $antwort]): ?>
