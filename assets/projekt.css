@@ -75,10 +75,11 @@
 .pj-header-inhalt {
   position: absolute;
   z-index: 2;
-  /* Titel-Position des editorialen Grundrasters (Tokens aus site.css).
-     Das Bild ist randlos — die Einrückung rechnet deshalb ab Fensterkante. */
-  top: var(--titel-oben);
-  left: calc(50% - 50vw + var(--titel-links));
+  /* Kopf-Position wie auf Kontakt/Agentur (Muster 8.10.2026): am Logo-Rand,
+     knapp unter der Kopfzeile. Das Bild ist randlos — die Einrückung
+     rechnet deshalb ab Fensterkante. */
+  top: calc(var(--kopf-frei) + var(--space-5));
+  left: calc(50% - 50vw + var(--rand));
   right: calc(50% - 50vw + var(--rand));
   color: #fff;
 }
@@ -98,11 +99,13 @@
 
 .pj .pj-titel {
   margin: 0;
-  /* Light und in der Größe der Säulen-Seiten — wie jede Überschrift. */
+  /* Claim-Größe im Light-Schnitt (.titel-gross in site.css) — die
+     Projektseiten tragen denselben Kopf wie Kontakt und Agentur. */
   font-weight: 300;
-  font-size: clamp(2.2rem, 4.6vw, 4.4rem);
-  line-height: 1.06;
-  max-width: 22ch;
+  font-size: clamp(2.7rem, 9vw, 9rem);
+  line-height: .96;
+  letter-spacing: -0.015em;
+  max-width: 16ch;
   text-wrap: balance;
   color: #fff;
   text-shadow: 0 1px 24px rgba(0, 0, 0, .35);
@@ -154,16 +157,18 @@
 .pj-text {
   max-width: var(--pj-textspalte);
   margin: var(--pj-luft) auto var(--pj-luft) var(--pj-text-links);
-  /* Auf den Projektseiten deutlich größer als der Website-Standard —
-     die Texte sind hier die Hauptdarsteller (Roman, 24.9.2026). */
-  font-size: clamp(1.45rem, 1.9vw, 1.8rem);
-  line-height: 1.5;
+  /* Teaser-Format (Roman, 8.10.2026): Light in der Teaser-Größe —
+     die Texte sind hier die Hauptdarsteller. */
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+  line-height: 1.3;
 }
 
 .pj .pj-text p { margin: 0 0 1em; }
 .pj .pj-text p:last-child { margin-bottom: 0; }
 
-.pj-lead { font-size: clamp(1.55rem, 2.1vw, 2rem); }
+/* Der Lead trägt seit 8.10.2026 dasselbe Format wie die übrigen Absätze
+   (alle Projekttexte in Teaser-Größe) — keine eigene Regel mehr nötig. */
 
 @media (max-width: 900px) {
   .pj-text {

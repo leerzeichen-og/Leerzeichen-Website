@@ -20,13 +20,13 @@ require __DIR__ . '/../teile/kopf.php';
 ?>
 
 <?php // Kopf nach Romans DevTools-Fassung (8.10.2026): Headline in
-      // Claim-Größe linksbündig am Logo-Rand; der Teaser darunter in der
-      // rechten Spalte, deren Kante exakt mit dem Büro-Foto fluchtet
+      // Claim-Größe (Light) linksbündig am Logo-Rand; der Teaser darunter in
+      // der rechten Spalte, deren Kante exakt mit dem Büro-Foto fluchtet
       // (gleiches Spaltenraster wie .kontakt-lage). ?>
-<section class="kontakt-kopf">
-  <h1 class="lz-claim">Am besten,<br>wir treffen uns.</h1>
-  <div class="kontakt-kopf-zeile">
-    <div class="kontakt-kopf-rechts">
+<section class="kopf-gross">
+  <h1 class="titel-gross">Am besten,<br>wir treffen uns.</h1>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
       <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
         braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
       <div class="kontakt-wege">

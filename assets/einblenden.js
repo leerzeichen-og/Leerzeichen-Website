@@ -21,9 +21,9 @@
     // Was eingeblendet wird. Bewusst eine Liste konkreter Bausteine —
     // pauschal „alle Absätze" erwischte auch Fußzeile und Formulare.
     var AUSWAHL = [
-        '.titel-seite', '.pj-intro-satz', '.pj-gruppe-titel',
+        '.titel-seite', '.titel-gross', '.pj-intro-satz', '.pj-gruppe-titel',
         '.seiten-kopf .chip', '.seiten-hero .chip',
-        '.text-spalte p', '.lz-lead', '.lz-h2',
+        '.text-spalte p', '.kopf-gross-rechts p', '.lz-lead', '.lz-h2',
         '.prinzip', '.lz-saeule',
         // Die Newsletter-Karte fliegt als GANZES ein (Postkarte) —
         // ihre Einzelteile bekommen deshalb keine eigene Blende.

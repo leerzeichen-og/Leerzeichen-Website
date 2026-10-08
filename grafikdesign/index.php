@@ -41,15 +41,18 @@ require __DIR__ . '/../teile/kopf.php';
 
 <section class="seiten-hero" style="background-image:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.9) 72%), url(/assets/bilder/ink-splash.webp)">
   <span class="chip">Gestaltung für Unternehmen</span>
-  <h1 class="titel-seite">Wir machen sichtbar, was Ihr Unternehmen ausmacht —
+  <h1 class="titel-gross">Wir machen sichtbar, was Ihr Unternehmen ausmacht —
     und geben Ihrer Geschichte eine Form.</h1>
-  <p class="lz-lead" style="margin-top:var(--space-6);max-width:52ch">Viele Betriebe
-    können mehr, als man ihnen ansieht. Wir entwickeln das Bild, das dazu passt:
-    ein Erscheinungsbild (Corporate Design), das auf dem Briefpapier genauso
-    funktioniert wie auf dem Screen, der Messe, und in Publikationen, die jemand
-    freiwillig in die Hand nimmt.</p>
-  <p class="lz-lead" style="margin-top:var(--space-4);max-width:52ch">Unsere Kunden
-    sind meist regional, aber ihre Geschichten wirken (Europa)weit.</p>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <p>Viele Betriebe können mehr, als man ihnen ansieht. Wir entwickeln das
+        Bild, das dazu passt: ein Erscheinungsbild (Corporate Design), das auf
+        dem Briefpapier genauso funktioniert wie auf dem Screen, der Messe, und
+        in Publikationen, die jemand freiwillig in die Hand nimmt.</p>
+      <p>Unsere Kunden sind meist regional, aber ihre Geschichten wirken
+        (Europa)weit.</p>
+    </div>
+  </div>
 </section>
 
 <section class="lz-sec" style="padding-top:var(--space-7);padding-bottom:var(--space-7)">

@@ -211,13 +211,53 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     border-radius: 2px;
 }
 
-/* Der Claim: die größte Stimme der Seite (Startseite, Kontakt-Headline). */
+/* Der Claim: die größte Stimme der Seite (Startseite). */
 .lz-claim {
     margin: 0;
     font-weight: var(--weight-display);
     font-size: clamp(2.7rem, 9vw, 9rem);
     line-height: .94;
     letter-spacing: -0.015em;
+}
+
+/* Große Seiten-Headline (Kontakt-Muster, 8.10.2026): Claim-Größe im
+   Light-Schnitt — auf Kontakt, Agentur, den Säulen-Heroes und den
+   Projektseiten. */
+.titel-gross {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(2.7rem, 9vw, 9rem);
+    line-height: .96;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+}
+
+/* Kopf-Raster dazu: Headline linksbündig am Logo-Rand, der Teaser darunter
+   in der rechten Spalte (gleiche Teilung wie die Lage-/Foto-Raster). */
+.kopf-gross {
+    padding: calc(var(--kopf-frei) + var(--space-5)) var(--rand) var(--space-9);
+}
+.kopf-gross-zeile {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: var(--space-8);
+    width: 100%;
+    margin-top: var(--space-7);
+}
+.kopf-gross-rechts { grid-column: 2; }
+.kopf-gross-rechts p {
+    margin: 0 0 var(--space-5);
+    max-width: 30ch;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+    line-height: 1.3;
+    color: inherit;
+    text-wrap: pretty;
+}
+.kopf-gross-rechts p:last-child { margin-bottom: 0; }
+@media (max-width: 900px) {
+    .kopf-gross-zeile { grid-template-columns: 1fr; gap: var(--space-6); }
+    .kopf-gross-rechts { grid-column: 1; }
 }
 
 /* Seitentitel der Unterseiten: Light und groß — die Stimme der Startseite */
@@ -294,9 +334,11 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     transform: none;
 }
 
-/* Dunkler Seiten-Hero (Landingpages): Ink-Motiv, Chip, Light-Titel.
+/* Dunkler Seiten-Hero (Landingpages): Ink-Motiv, Chip und seit 8.10.2026
+   das Kontakt-Kopf-Muster — Titel in Claim-Größe (Light) am Logo-Rand,
+   die Leads versetzt in der rechten Spalte (.kopf-gross-zeile).
    Beginnt an der Bildschirmkante (die Kopfzeile ist fixiert und liegt
-   negativ darüber) und füllt fast die ganze Höhe; der Inhalt sitzt unten. */
+   negativ darüber) und füllt fast die ganze Höhe. */
 .seiten-hero {
     position: relative;
     background-color: #000;
@@ -304,8 +346,7 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     background-position: center top;
     background-repeat: no-repeat;
     color: #fff;
-    /* Titel-Position wie überall: --titel-oben von oben, --titel-links von links. */
-    padding: var(--titel-oben) var(--rand) var(--space-9) var(--titel-links);
+    padding: calc(var(--kopf-frei) + var(--space-5)) var(--rand) var(--space-9);
     min-height: clamp(520px, 88vh, 1100px);
     min-height: clamp(520px, 88svh, 1100px);   /* svh: stabil trotz Handy-Browserleiste */
     display: flex;
@@ -313,14 +354,14 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     align-items: flex-start;
     justify-content: flex-start;
 }
-.seiten-hero .titel-seite { color: #fff; margin-top: var(--space-5); }
+.seiten-hero .titel-gross { color: #fff; margin-top: var(--space-5); }
 
 /* Kreis-Video im Säulen-Hero (Test auf der Erlebnisse-Seite): der helle
-   Block mit dem plastischen Kreis schwebt rechts neben dem Titel. */
+   Block mit dem plastischen Kreis — seit dem Kopf-Umbau unten links, in
+   der Spalte, die die Leads freigeben. */
 .hero-kreis {
     position: absolute;
-    right: var(--rand);
-    /* Unten rechts, auf Höhe der Leads — oben gehört die Zeile dem Titel. */
+    left: var(--rand);
     bottom: var(--space-9);
     width: min(340px, 23vw);
     aspect-ratio: 1;
@@ -337,7 +378,6 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
         width: min(300px, 62vw);
     }
 }
-.seiten-hero .lz-lead { color: rgba(255, 255, 255, .8); }
 
 /* Prinzipien-Raster: offene Blöcke mit Oberlinie (Fassung „frei") */
 .prinzipien {
@@ -861,29 +901,9 @@ body.menue-offen { overflow: hidden; }
 
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
 
-/* Kontakt-Kopf (DevTools-Fassung Roman, 8.10.2026): Headline in
-   Claim-Größe am Logo-Rand, der Teaser darunter in der rechten Spalte des
-   Lage-Rasters — seine Kante fluchtet exakt mit dem Büro-Foto. */
-.kontakt-kopf {
-    padding: calc(var(--kopf-frei) + var(--space-5)) var(--rand) var(--space-9);
-}
-/* Dieselben Spalten wie .kontakt-lage — darum fluchten Teaser und Foto. */
-.kontakt-kopf-zeile {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-    gap: var(--space-8);
-    margin-top: var(--space-7);
-}
-.kontakt-kopf-rechts { grid-column: 2; }
-.kontakt-kopf-rechts p {
-    margin: 0;
-    max-width: 30ch;
-    font-weight: 300;
-    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
-    line-height: 1.3;
-    color: var(--ink);
-    text-wrap: pretty;
-}
+/* Der Kontakt-Kopf nutzt die generischen Bausteine .kopf-gross/.kopf-gross-zeile
+   (oben bei .titel-gross) — dieselben Spalten wie .kontakt-lage, darum
+   fluchten Teaser und Büro-Foto. Hier nur noch die Kontaktzeilen: */
 .kontakt-wege {
     display: flex;
     flex-direction: column;
@@ -902,10 +922,6 @@ body.menue-offen { overflow: hidden; }
 }
 .kontakt-wege a svg { width: 1em; flex: none; }
 .kontakt-wege a:hover { text-decoration: underline; }
-@media (max-width: 900px) {
-    .kontakt-kopf-zeile { grid-template-columns: 1fr; gap: var(--space-6); }
-    .kontakt-kopf-rechts { grid-column: 1; }
-}
 
 /* Lage-Sektion: Text und Wegskizze links, Büro-Foto rechts. */
 .kontakt-lage {

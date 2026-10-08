@@ -29,15 +29,19 @@ require __DIR__ . '/../teile/kopf.php';
 
 <section class="seiten-hero" style="background-image:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.9) 72%), url(/assets/bilder/ink-splash.webp)">
   <span class="chip">Erlebnisse</span>
-  <h1 class="titel-seite">Wir schaffen Erlebnisse — und bringen Neues in die Welt.</h1>
-  <p class="lz-lead" style="margin-top:var(--space-6);max-width:52ch">Erlebnisse haben
-    viele Formen: Ausstellungen, Escape-Rooms und Treasure Trails, Rundwege mit
-    interaktiven Stationen, Outdoor-Abenteuer, Spielplätze mit ihrer eigenen
-    Geschichte, Kinderebenen, die eine Ausstellung für Familien öffnen. Am Ende
-    steht immer dieselbe Frage: Was bringt Besucher zum Staunen?</p>
-  <p class="lz-lead" style="margin-top:var(--space-4);max-width:52ch">Wir arbeiten für
-    Museen, Gemeinden, Ausflugsziele und Tourismusregionen. Oft an Kinder und ihre
-    Familien gerichtet. Analog und begreifbar. Digital dort, wo es Sinn stiftet.</p>
+  <h1 class="titel-gross">Wir schaffen Erlebnisse — und bringen Neues in die Welt.</h1>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <p>Erlebnisse haben viele Formen: Ausstellungen, Escape-Rooms und Treasure
+        Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer, Spielplätze
+        mit ihrer eigenen Geschichte, Kinderebenen, die eine Ausstellung für
+        Familien öffnen. Am Ende steht immer dieselbe Frage: Was bringt Besucher
+        zum Staunen?</p>
+      <p>Wir arbeiten für Museen, Gemeinden, Ausflugsziele und Tourismusregionen.
+        Oft an Kinder und ihre Familien gerichtet. Analog und begreifbar. Digital
+        dort, wo es Sinn stiftet.</p>
+    </div>
+  </div>
   <?php // Kreis-Video (Test, Roman 25.9.2026): rein dekorativ, stumm im
         // Loop; bei reduzierter Bewegung hält es das Skript am Seitenende an. ?>
   <video class="hero-kreis" src="/assets/videos/circle.mp4"

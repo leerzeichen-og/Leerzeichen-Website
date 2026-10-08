@@ -51,16 +51,20 @@ $ctaKnopf = 'Kommen Sie vorbei';
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="seiten-kopf">
-  <h1 class="titel-seite">Wir gestalten.</h1>
-</section>
-<section class="text-spalte">
-  <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
-    wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
-    entstehen muss.</p>
-  <p>Unsere Arbeit lebt von Neugier. Unsere Gestaltung von
-    Präzision. Unser Antrieb ist die Wirkung.</p>
-  <p>Seit <?= e(FIRMA_GEGRUENDET) ?> setzen wir gemeinsam Zeichen.</p>
+<?php // Kopf im Kontakt-Muster (8.10.2026): Headline in Claim-Größe (Light)
+      // am Logo-Rand, der Teaser versetzt in der rechten Spalte. ?>
+<section class="kopf-gross">
+  <h1 class="titel-gross">Wir gestalten.</h1>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <p>Genau zuhören. Den Blickwinkel drehen. Freundlich hinterfragen, worum es
+        wirklich geht. Und die Vorstellungskraft besitzen für das, was erst noch
+        entstehen muss.</p>
+      <p>Unsere Arbeit lebt von Neugier. Unsere Gestaltung von
+        Präzision. Unser Antrieb ist die Wirkung.</p>
+      <p>Seit <?= e(FIRMA_GEGRUENDET) ?> setzen wir gemeinsam Zeichen.</p>
+    </div>
+  </div>
 </section>
 
 <section class="lz-sec">
