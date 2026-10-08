@@ -127,7 +127,17 @@ a { color: inherit; }
 .text-link svg { width: 1em; flex: none; }
 .text-link:hover { text-decoration: underline; }
 
-h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tight); }
+h1, h3 { font-weight: var(--weight-display); line-height: var(--leading-tight); }
+
+/* h2-Standard (Beschluss Roman, 8.10.2026): das Format von „So finden
+   Sie uns." auf der Kontakt-Seite — bold in Teaser-Größe. Bewusste
+   Sonderformate (.lz-h2, Bühne, Rechtstexte …) überschreiben gezielt. */
+h2 {
+    margin: 0 0 var(--space-5);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+    line-height: 1.2;
+}
 
 /* --- Wiederkehrende Bausteine (Benennung aus dem Design) ------------------ */
 
@@ -943,14 +953,8 @@ body.menue-offen { overflow: hidden; }
     gap: var(--space-8);
     align-items: start;
 }
-/* „So finden Sie uns.": bold in Teaser-Größe, Adresse darunter im
-   Teaser-Schnitt, der Hinweis klein (Fassung Roman, 8.10.2026). */
-.kontakt-untertitel {
-    margin: 0 0 var(--space-5);
-    font-weight: 700;
-    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
-    line-height: 1.2;
-}
+/* „So finden Sie uns." ist seit 8.10.2026 der h2-Standard (oben bei den
+   Grundelementen) — hier nur noch Adresse und Hinweis. */
 .kontakt-adresse {
     margin: 0 0 var(--space-5);
     font-weight: 300;

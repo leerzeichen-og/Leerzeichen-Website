@@ -39,7 +39,7 @@ require __DIR__ . '/../teile/kopf.php';
 
 <section class="lz-sec kontakt-lage">
   <div class="kontakt-lage-text">
-    <h2 class="kontakt-untertitel">So finden Sie uns.</h2>
+    <h2>So finden Sie uns.</h2>
     <p class="kontakt-adresse"><?= e(FIRMA_NAME) ?><br>
       <?= e(FIRMA_STRASSE) ?><br>
       <?= e(FIRMA_PLZ) ?> <?= e(FIRMA_ORT) ?></p>

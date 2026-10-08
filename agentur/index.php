@@ -68,7 +68,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec">
-  <h2 class="lz-h3">Wir sind Leerzeichen.</h2>
+  <h2>Wir sind Leerzeichen.</h2>
   <div class="portraits">
     <?php foreach ($team as [$slug, $name, $rolle, $postName, $telefon]): $bild = agentur_portrait($slug, $portraitVariante); ?>
     <figure class="portrait">

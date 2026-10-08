@@ -304,6 +304,7 @@
 
 .pj-weitere h2 {
   margin: 0 0 1.6rem;
+  font-weight: var(--weight-display, 500);
   font-size: 1rem;
   letter-spacing: .03em;
 }
@@ -490,14 +491,9 @@
 /* Rund 200 px Luft zwischen den Kategorien (am Telefon weniger). */
 .pj-gruppe + .pj-gruppe { margin-top: clamp(110px, 14vw, 200px); }
 
-/* Gleiches Maß wie „So finden Sie uns." (Kontakt) bzw. „Wir sind
-   Leerzeichen." (Agentur) — die lz-h3-Werte aus site.css. */
-.pj-gruppe-titel {
-  margin: 0;
-  font-weight: var(--weight-display, 500);
-  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
-  line-height: 1.12;
-}
+/* Typografie kommt vom h2-Standard (site.css, Muster „So finden Sie
+   uns.") — in der Rasterzelle braucht es nur den Abstand nicht. */
+.pj-gruppe-titel { margin: 0; }
 
 @media (max-width: 900px) {
   .pj-gruppe { grid-template-columns: 1fr; }

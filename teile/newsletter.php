@@ -11,7 +11,7 @@
       width="1356" height="1164" loading="lazy">
     <div class="nl-spalten">
       <div>
-        <h2 class="lz-h3" style="font-weight:700">Empty Space</h2>
+        <h2>Empty Space</h2>
         <p class="nl-untertitel">Der leerzeichen Newsletter. Wir schreiben über
           Dinge, die uns bei der Arbeit beschäftigen. Vier Mal im Jahr.</p>
         <ul class="lz-nllist">
