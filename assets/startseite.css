@@ -19,13 +19,8 @@
     overflow: hidden;
 }
 
-.lz-claim {
-    margin: 0;
-    font-weight: var(--weight-display);
-    font-size: clamp(2.7rem, 9vw, 9rem);
-    line-height: .94;
-    letter-spacing: -0.015em;
-}
+/* .lz-claim liegt seit 8.10.2026 in site.css (Bausteine) — die Kontakt-
+   Headline nutzt ihn jetzt auch. */
 
 .buehne-claimblock {
     position: absolute;

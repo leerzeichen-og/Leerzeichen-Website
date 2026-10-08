@@ -211,6 +211,15 @@ h1, h2, h3 { font-weight: var(--weight-display); line-height: var(--leading-tigh
     border-radius: 2px;
 }
 
+/* Der Claim: die größte Stimme der Seite (Startseite, Kontakt-Headline). */
+.lz-claim {
+    margin: 0;
+    font-weight: var(--weight-display);
+    font-size: clamp(2.7rem, 9vw, 9rem);
+    line-height: .94;
+    letter-spacing: -0.015em;
+}
+
 /* Seitentitel der Unterseiten: Light und groß — die Stimme der Startseite */
 .titel-seite {
     margin: 0;
@@ -852,17 +861,20 @@ body.menue-offen { overflow: hidden; }
 
 /* --- Kontakt-Seite (Fassung „Anfahrt & Büro", 24.9.2026) --------------------- */
 
-/* Zweispaltiger Kontakt-Kopf (Screenshot Roman, 8.10.2026): Titel links,
-   knapp daneben der Teaser in der großen Light-Größe — er beginnt versetzt
-   etwa auf Höhe der zweiten Titelzeile und läuft darunter hinaus. */
+/* Kontakt-Kopf (DevTools-Fassung Roman, 8.10.2026): Headline in
+   Claim-Größe am Logo-Rand, der Teaser darunter in der rechten Spalte des
+   Lage-Rasters — seine Kante fluchtet exakt mit dem Büro-Foto. */
 .kontakt-kopf {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    gap: clamp(40px, 6vw, 104px);
-    align-items: start;
-    padding: var(--titel-oben) var(--rand) var(--space-9) var(--titel-links);
+    padding: calc(var(--kopf-frei) + var(--space-5)) var(--rand) var(--space-9);
 }
-.kontakt-kopf-rechts { padding-top: clamp(2.5rem, 7vw, 7rem); }
+/* Dieselben Spalten wie .kontakt-lage — darum fluchten Teaser und Foto. */
+.kontakt-kopf-zeile {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: var(--space-8);
+    margin-top: var(--space-7);
+}
+.kontakt-kopf-rechts { grid-column: 2; }
 .kontakt-kopf-rechts p {
     margin: 0;
     max-width: 30ch;
@@ -891,8 +903,8 @@ body.menue-offen { overflow: hidden; }
 .kontakt-wege a svg { width: 1em; flex: none; }
 .kontakt-wege a:hover { text-decoration: underline; }
 @media (max-width: 900px) {
-    .kontakt-kopf { grid-template-columns: 1fr; gap: var(--space-6); }
-    .kontakt-kopf-rechts { padding-top: 0; }
+    .kontakt-kopf-zeile { grid-template-columns: 1fr; gap: var(--space-6); }
+    .kontakt-kopf-rechts { grid-column: 1; }
 }
 
 /* Lage-Sektion: Text und Wegskizze links, Büro-Foto rechts. */
@@ -902,12 +914,26 @@ body.menue-offen { overflow: hidden; }
     gap: var(--space-8);
     align-items: start;
 }
-.kontakt-lage-text h2 { margin: 0 0 var(--space-5); }
-.kontakt-lage-text p {
+/* „So finden Sie uns.": bold in Teaser-Größe, Adresse darunter im
+   Teaser-Schnitt, der Hinweis klein (Fassung Roman, 8.10.2026). */
+.kontakt-untertitel {
+    margin: 0 0 var(--space-5);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+    line-height: 1.2;
+}
+.kontakt-adresse {
+    margin: 0 0 var(--space-5);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+    line-height: 1.3;
+    color: var(--ink);
+}
+.kontakt-hinweis {
     margin: 0 0 var(--space-5);
     max-width: 44ch;
-    font-size: var(--text-fliess);
-    line-height: 1.55;
+    font-size: var(--text-lg);
+    line-height: 1.5;
     color: var(--text-body);
 }
 .kontakt-foto { margin: 0; position: relative; }

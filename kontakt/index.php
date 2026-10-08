@@ -19,27 +19,32 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<?php // Zweispaltiger Kopf (Screenshot Roman, 8.10.2026): links der Titel
-      // mit festem Umbruch, rechts daneben Lead und die Kontaktzeilen. ?>
+<?php // Kopf nach Romans DevTools-Fassung (8.10.2026): Headline in
+      // Claim-Größe linksbündig am Logo-Rand; der Teaser darunter in der
+      // rechten Spalte, deren Kante exakt mit dem Büro-Foto fluchtet
+      // (gleiches Spaltenraster wie .kontakt-lage). ?>
 <section class="kontakt-kopf">
-  <h1 class="titel-seite">Am besten,<br>wir treffen uns.</h1>
-  <div class="kontakt-kopf-rechts">
-    <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
-      braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
-    <div class="kontakt-wege">
-      <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?> <?= lz_pfeil() ?></a>
-      <a href="mailto:<?= e(FIRMA_MAIL) ?>"><?= e(FIRMA_MAIL) ?> <?= lz_pfeil() ?></a>
+  <h1 class="lz-claim">Am besten,<br>wir treffen uns.</h1>
+  <div class="kontakt-kopf-zeile">
+    <div class="kontakt-kopf-rechts">
+      <p>Dann finden wir gemeinsam heraus, was Ihr Projekt
+        braucht — bei Ihnen, oder bei uns im Rathaus in Neumarkt.</p>
+      <div class="kontakt-wege">
+        <a href="tel:<?= e(str_replace(' ', '', FIRMA_TELEFON)) ?>"><?= e(FIRMA_TELEFON) ?> <?= lz_pfeil() ?></a>
+        <a href="mailto:<?= e(FIRMA_MAIL) ?>"><?= e(FIRMA_MAIL) ?> <?= lz_pfeil() ?></a>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="lz-sec kontakt-lage">
   <div class="kontakt-lage-text">
-    <h2 class="lz-h3">So finden Sie uns.</h2>
-    <p><?= e(FIRMA_NAME) ?><br>
-      <?= e(FIRMA_STRASSE) ?>, <?= e(FIRMA_PLZ) ?> <?= e(FIRMA_ORT) ?><br>
-      Erdgeschoss, erste Tür rechts.</p>
-    <p>Unser Büro liegt im historischen Rathaus, direkt am Marktplatz.</p>
+    <h2 class="kontakt-untertitel">So finden Sie uns.</h2>
+    <p class="kontakt-adresse"><?= e(FIRMA_NAME) ?><br>
+      <?= e(FIRMA_STRASSE) ?><br>
+      <?= e(FIRMA_PLZ) ?> <?= e(FIRMA_ORT) ?></p>
+    <p class="kontakt-hinweis">Unser Büro liegt im Rathaus, direkt am Marktplatz.
+      Erdgeschoss. Erste Tür rechts.</p>
     <p><a class="knopf" href="<?= e($routenplaner) ?>" rel="noopener noreferrer" target="_blank">Routenplaner <?= lz_pfeil() ?></a></p>
   </div>
 
