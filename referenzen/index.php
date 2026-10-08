@@ -18,6 +18,22 @@ $voll_breit   = true;
 
 $projekte = pj_index();
 
+// Übergeordnete Filter (Roman, 8.10.2026): die zwei Säulen als echte
+// Auswahl über ?filter=… — serverseitig, ohne JavaScript. Die Kategorien
+// und Gruppen bauen sich dann nur aus den Projekten der Säule.
+$filterWahl = [
+    'erlebnis'   => ['Erlebnis',   'erlebnisse'],
+    'gestaltung' => ['Gestaltung', 'gestaltung'],
+];
+$filter = (string) ($_GET['filter'] ?? '');
+if (!isset($filterWahl[$filter])) {
+    $filter = '';
+}
+if ($filter !== '') {
+    $projekte = array_values(array_filter($projekte,
+        fn($p) => ($p['saeule'] ?? '') === $filterWahl[$filter][1]));
+}
+
 // Gruppen: Kategorie → Beiträge (ein Beitrag steht in jeder seiner Kategorien).
 $gruppen = [];
 foreach ($projekte as $p) {
@@ -41,18 +57,28 @@ require __DIR__ . '/../teile/kopf.php';
   <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
     am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
     an Ausstellungen und Erlebniswegen.</h1>
-  <?php if ($gruppen): ?>
-  <nav class="pj-kategorien" aria-label="Kategorien">
-    <?php foreach ($gruppen as $name => $liste): ?>
-    <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
-    <?php endforeach; ?>
-  </nav>
-  <?php endif; ?>
+  <div class="pj-filterblock">
+    <nav class="pj-filter" aria-label="Bereiche">
+      <a class="pj-filter-pille" href="/referenzen/"<?= $filter === '' ? ' aria-current="true"' : '' ?>>Alle</a>
+      <?php foreach ($filterWahl as $schluessel => [$label, $saeule]): ?>
+      <a class="pj-filter-pille" href="/referenzen/?filter=<?= e($schluessel) ?>"<?= $filter === $schluessel ? ' aria-current="true"' : '' ?>><?= e($label) ?></a>
+      <?php endforeach; ?>
+    </nav>
+    <?php if ($gruppen): ?>
+    <nav class="pj-kategorien" aria-label="Kategorien">
+      <?php foreach ($gruppen as $name => $liste): ?>
+      <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
+      <?php endforeach; ?>
+    </nav>
+    <?php endif; ?>
+  </div>
 </section>
 
 <?php if (!$gruppen): ?>
 <section class="lz-sec">
-  <p class="platzhalter">Hier erscheinen die Projekte, sobald Space sie veröffentlicht hat.</p>
+  <p class="platzhalter"><?= $filter !== ''
+      ? 'In diesem Bereich sind noch keine Projekte veröffentlicht — „Alle“ zeigt den ganzen Bestand.'
+      : 'Hier erscheinen die Projekte, sobald Space sie veröffentlicht hat.' ?></p>
 </section>
 <?php else: ?>
 <section class="lz-sec" style="padding-top:0">

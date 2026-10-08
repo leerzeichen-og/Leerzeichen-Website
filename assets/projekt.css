@@ -370,14 +370,46 @@
   margin-top: 1.4rem;
 }
 
-.pj-pille {
-  padding: .35rem .9rem;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: .88rem;
+/* Übergeordnete Bereichs-Filter (Roman, 8.10.2026): die zwei Säulen als
+   große Schalter über den Kategorien — serverseitig über ?filter=…. */
+.pj-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: var(--space-6);
 }
 
+.pj-filter-pille {
+  padding: .55rem 1.35rem;
+  border: 2px solid var(--tinte);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  line-height: 1.2;
+  color: var(--tinte);
+  transition: background .18s ease, color .18s ease;
+}
+
+.pj-filter-pille:hover,
+.pj-filter-pille[aria-current="true"] {
+  background: var(--tinte);
+  color: var(--papier);
+}
+
+/* Kategorien-Pillen: seit 8.10.2026 prominenter — größere Schrift,
+   Ink-Kontur statt Hairline, gefüllt beim Zeigen. */
+.pj-pille {
+  padding: .45rem 1.1rem;
+  border: 1px solid var(--tinte);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: clamp(.95rem, 1.15vw, 1.05rem);
+  line-height: 1.3;
+  transition: background .18s ease, color .18s ease;
+}
+
+.pj-pille:hover,
 .pj-pille[aria-current="true"] {
   background: var(--tinte);
   border-color: var(--tinte);
@@ -440,7 +472,7 @@
 .pj-kategorien {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 .pj-kategorien .pj-pille { justify-self: start; }
 
