@@ -53,24 +53,29 @@ function pj_anker(string $name): string
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="pj-intro">
-  <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
-    am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
-    an Ausstellungen und Erlebniswegen.</h1>
-  <div class="pj-filterblock">
-    <nav class="pj-filter" aria-label="Bereiche">
-      <a class="pj-filter-pille" href="/referenzen/"<?= $filter === '' ? ' aria-current="true"' : '' ?>>Alle</a>
-      <?php foreach ($filterWahl as $schluessel => [$label, $saeule]): ?>
-      <a class="pj-filter-pille" href="/referenzen/?filter=<?= e($schluessel) ?>"<?= $filter === $schluessel ? ' aria-current="true"' : '' ?>><?= e($label) ?></a>
-      <?php endforeach; ?>
-    </nav>
-    <?php if ($gruppen): ?>
-    <nav class="pj-kategorien" aria-label="Kategorien">
-      <?php foreach ($gruppen as $name => $liste): ?>
-      <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
-      <?php endforeach; ?>
-    </nav>
-    <?php endif; ?>
+<?php // Kopf im Kontakt-Muster (8.10.2026): die Bereichs-Filter stehen links
+      // oben am Headline-Platz, der Einleitungssatz (h1) versetzt in der
+      // rechten Spalte, die Kategorien als Fließzeile darunter. ?>
+<section class="kopf-gross pj-intro">
+  <nav class="pj-filter" aria-label="Bereiche">
+    <a class="pj-filter-pille" href="/referenzen/"<?= $filter === '' ? ' aria-current="true"' : '' ?>>Alle</a>
+    <?php foreach ($filterWahl as $schluessel => [$label, $saeule]): ?>
+    <a class="pj-filter-pille" href="/referenzen/?filter=<?= e($schluessel) ?>"<?= $filter === $schluessel ? ' aria-current="true"' : '' ?>><?= e($label) ?></a>
+    <?php endforeach; ?>
+  </nav>
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
+        am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
+        an Ausstellungen und Erlebniswegen.</h1>
+      <?php if ($gruppen): ?>
+      <nav class="pj-kategorien" aria-label="Kategorien">
+        <?php foreach ($gruppen as $name => $liste): ?>
+        <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
+        <?php endforeach; ?>
+      </nav>
+      <?php endif; ?>
+    </div>
   </div>
 </section>
 
