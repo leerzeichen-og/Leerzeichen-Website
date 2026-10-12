@@ -293,7 +293,10 @@ foreach ($projekte as $nr => $p) {
 
     $bilder = [
         'header'      => td_bildobjekt($ziel, $slug, 'header', 2560, 1440 / 2560, $farben,
-            'Testmotiv: Header von ' . $p['titel']),
+            'Testmotiv: Header von ' . $p['titel'], [0.5, 0.5],
+            // Header-Credit nur bei Modul-Projekten — Funkenflug bleibt die
+            // reine Altformat-Probe.
+            !empty($p['module']) ? 'Foto: Atelier Lichtfang (erfunden)' : ''),
         'teaser_quer' => td_bildobjekt($ziel, $slug, 'teaser', 2288, 1520 / 2288, $farben,
             'Testmotiv: Teaser von ' . $p['titel']),
         'teaser_hoch' => td_bildobjekt($ziel, $slug, 'teaser-hoch', 1120, 1520 / 1120, $farben,
@@ -307,8 +310,10 @@ foreach ($projekte as $nr => $p) {
         $bilder[$name] = td_bildobjekt($ziel, $slug, str_replace('_', '-', $name), 2560, $ratio,
             $farben, 'Testmotiv ' . $name . ' von ' . $p['titel'],
             $fokusReihe[$i % count($fokusReihe)],
-            // Jedes zweite Foto mit Muster-Credit, der Rest bewusst leer.
-            $i % 2 === 0 ? 'Foto: Atelier Lichtfang (erfunden)' : '');
+            // Die Wasserwelt (Musterseite) trägt auf JEDEM Medium einen
+            // Credit; bei den übrigen bleibt jedes zweite bewusst leer.
+            ($slug === 'test-wasserwelt-erlebnisweg' || $i % 2 === 0)
+                ? 'Foto: Atelier Lichtfang (erfunden)' : '');
         $i++;
     }
 
