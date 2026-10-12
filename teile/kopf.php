@@ -145,6 +145,29 @@ header('Cache-Control: no-cache');
 <?php foreach ($jsonld as $block): ?>
 <script type="application/ld+json"><?= json_encode($block, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>
+<?php // Matomo: selbst gehostet auf analytics.leerzeichen.at, cookielos
+      // (disableCookies) — genau so beschreibt es die Datenschutzerklärung.
+      // Auf lokalen Testkopien bleibt das Skript draußen: Beim Entwickeln
+      // soll die Seite keine externen Anfragen schicken, und die Messung
+      // bliebe sonst voller Testaufrufe. ?>
+<?php if (!in_array($_SERVER['SERVER_NAME'] ?? '', ['localhost', '127.0.0.1', '[::1]'], true)): ?>
+<!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["disableCookies"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://analytics.leerzeichen.at/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '17']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+<?php endif; ?>
 </head>
 <body<?= !empty($bodyKlasse) ? ' class="' . e($bodyKlasse) . '"' : '' ?>>
 <?php
