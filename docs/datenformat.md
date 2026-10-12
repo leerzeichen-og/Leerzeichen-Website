@@ -118,6 +118,7 @@ reduzierter Bewegung an.
 {
   "alt": "Blick in den Ausstellungsraum …",
   "beschreibung": "",
+  "credit": "Foto: Atelier Lichtfang",
   "breite": 2560, "hoehe": 1440,
   "fokus": [0.5, 0.4],
   "quellen": [
@@ -132,6 +133,10 @@ reduzierter Bewegung an.
   `srcset` (das hat früher WordPress erledigt). Empfohlene Stufen: 640, 1280,
   1920 und die Zielgröße des Slots. `breite`/`hoehe` beziehen sich auf die
   größte Fassung und verhindern Layout-Springen beim Laden.
+- `credit` (seit 12.10.2026): **Bildcredit**, leerer String wenn keiner
+  eingetragen ist. Die Website zeigt ihn um −90° gedreht in der rechten
+  unteren Ecke des Mediums (von unten nach oben zu lesen, Differenz-Modus
+  gegen das Motiv); leer = nichts. Gilt für Bilder UND Videos.
 - `fokus` (seit 7.10.2026): Fokuspunkt `[x, y]` als Anteile 0–1. Beschnitten
   wird seit dem Modul-Format auf der **Website** (object-fit); der Fokus
   sagt ihr, welcher Bildteil stehen bleibt (object-position). Nur die
@@ -143,6 +148,7 @@ reduzierter Bewegung an.
 ```json
 {
   "alt": "…", "beschreibung": "",
+  "credit": "",
   "video": true, "mime": "video/mp4",
   "quellen": [ { "datei": "/bilder/projekte/{slug}/video-12-abc123.mp4", "breite": null } ]
 }

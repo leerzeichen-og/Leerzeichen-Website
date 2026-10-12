@@ -54,7 +54,8 @@ function td_bild(string $pfad, int $w, int $h, array $farben, string $label): vo
  * $ratio = Höhe/Breite des Motivs (Contentfotos dürfen jedes Format haben).
  */
 function td_bildobjekt(string $ziel, string $slug, string $name, int $zielBreite, float $ratio,
-                       array $farben, string $alt, array $fokus = [0.5, 0.5]): array
+                       array $farben, string $alt, array $fokus = [0.5, 0.5],
+                       string $credit = ''): array
 {
     $breiten = array_values(array_filter([640, 1280, 1920], fn($x) => $x < $zielBreite));
     $breiten[] = $zielBreite;
@@ -69,6 +70,8 @@ function td_bildobjekt(string $ziel, string $slug, string $name, int $zielBreite
     return [
         'alt'          => $alt,
         'beschreibung' => '',
+        // Bildcredit (seit 12.10.2026) — leer, wenn keiner eingetragen ist.
+        'credit'       => $credit,
         'breite'       => $zielBreite,
         'hoehe'        => (int) round($zielBreite * $ratio),
         // Fokuspunkt wie ihn Space seit dem Modul-Format liefert — die
@@ -90,6 +93,7 @@ function td_videoobjekt(string $ziel, string $slug, string $alt): array
     return [
         'alt'          => $alt,
         'beschreibung' => '',
+        'credit'       => 'Video: Studio Treibgut (erfunden)',
         'video'        => true,
         'mime'         => 'video/mp4',
         'quellen'      => [['datei' => '/' . $datei, 'breite' => null]],
@@ -302,7 +306,10 @@ foreach ($projekte as $nr => $p) {
     foreach ($p['fotos'] as $name => $ratio) {
         $bilder[$name] = td_bildobjekt($ziel, $slug, str_replace('_', '-', $name), 2560, $ratio,
             $farben, 'Testmotiv ' . $name . ' von ' . $p['titel'],
-            $fokusReihe[$i++ % count($fokusReihe)]);
+            $fokusReihe[$i % count($fokusReihe)],
+            // Jedes zweite Foto mit Muster-Credit, der Rest bewusst leer.
+            $i % 2 === 0 ? 'Foto: Atelier Lichtfang (erfunden)' : '');
+        $i++;
     }
 
     $beitrag = [

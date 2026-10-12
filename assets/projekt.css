@@ -152,6 +152,51 @@
   margin: var(--pj-luft) calc(50% - 50vw);
 }
 
+/* ---- Bildcredit (seit 12.10.2026) ----------------------------------------- */
+/* Trägt ein Medium einen Credit, übernimmt eine <figure class="pj-mc …">
+   dessen Layout-Klasse (die Regeln sind klassenbasiert und wirken auf der
+   figure genauso); das Medium füllt sie, der Credit steht um −90° gedreht
+   in der rechten unteren Ecke — von unten nach oben zu lesen. */
+.pj-mc { margin: 0; position: relative; }
+.pj-mc > img,
+.pj-mc > video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Füllende Kontexte: das Medium deckt die figure, beschnitten um den
+   Fokuspunkt (object-position steht am Medium selbst). */
+.pj-header-bild.pj-mc > img,
+.pj-header-bild.pj-mc > video,
+.pj-doppel-medium.pj-mc > img,
+.pj-doppel-medium.pj-mc > video {
+  height: 100%;
+  object-fit: cover;
+}
+.pj-scroller-medium.pj-mc > img,
+.pj-scroller-medium.pj-mc > video {
+  width: auto;
+  height: 100%;
+}
+.pj-bildcredit {
+  position: absolute;
+  right: 10px;
+  bottom: 14px;
+  /* Senkrecht gesetzt und um 180° gedreht = von unten nach oben zu lesen;
+     anders als ein rotiertes Inline-Element bleibt die Box dabei im Bild. */
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .05em;
+  /* Differenz gegen das Motiv: auf hellen wie dunklen Bildern lesbar. */
+  color: #fff;
+  mix-blend-mode: difference;
+  opacity: .85;
+  pointer-events: none;
+}
+
 /* ---- Inhalts-Module (Modul-Format seit 7.10.2026) -------------------------- */
 
 /* Optionale Zwischenüberschrift eines Moduls — sitzt im Textblock und

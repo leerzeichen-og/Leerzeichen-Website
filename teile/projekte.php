@@ -115,13 +115,24 @@ function pj_video(?array $bild, string $klasse): string
         . '></video>';
 }
 
-/** Bild oder Video — Space markiert Videos mit "video": true. */
+/**
+ * Bild oder Video — Space markiert Videos mit "video": true. Trägt das
+ * Medium einen Bildcredit (Feld credit, seit 12.10.2026), übernimmt eine
+ * <figure> die Layout-Klasse und der Credit steht gedreht in der rechten
+ * unteren Ecke; ohne Credit bleibt alles wie gehabt (nacktes Medium).
+ */
 function pj_medium(?array $m, string $klasse, string $sizes, bool $zuerst = false): string
 {
     if (!$m) {
         return '';
     }
-    return !empty($m['video']) ? pj_video($m, $klasse) : pj_bild($m, $klasse, $sizes, $zuerst);
+    $credit = trim((string) ($m['credit'] ?? ''));
+    if ($credit === '') {
+        return !empty($m['video']) ? pj_video($m, $klasse) : pj_bild($m, $klasse, $sizes, $zuerst);
+    }
+    $innen = !empty($m['video']) ? pj_video($m, '') : pj_bild($m, '', $sizes, $zuerst);
+    return '<figure class="pj-mc ' . e($klasse) . '">' . $innen
+        . '<small class="pj-bildcredit">' . e($credit) . '</small></figure>';
 }
 
 /**
