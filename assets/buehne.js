@@ -1,8 +1,12 @@
 // Scroll-Bühne der Startseite — schlichtes JavaScript, kein Framework.
 // Portiert aus dem Claude-Design-Entwurf (scroll-buehne.jsx, 16.9.2026):
-// Projekt-Objekte fliegen über den ersten Bildschirm, drei Fragen erscheinen
+// Projekt-Objekte fliegen über den ersten Bildschirm, zwei Fragen erscheinen
 // wortweise am Scroll-Fortschritt, danach blendet die dunkle Fläche mit dem
-// Astronauten und der Antwort ein. Klick auf ein Objekt öffnet eine Karte.
+// Astronauten und der Antwort ein. Über einem Objekt erscheint ein schwarzes
+// Rechteck-Badge (Logo-Form) unter dem Zeiger — Projekttitel + „Ansehen";
+// ein Klick lässt es den Schirm füllen und führt zur Projektseite. Am
+// Telefon zeigt der erste Tipp das Badge am Objekt, der zweite springt ab
+// (Muster blossom.at, Beschluss Roman 12.10.2026).
 //
 // Fortschrittlich verbessert: Ohne dieses Skript (oder bei reduzierter
 // Bewegung) bleibt die statische Fassung (#buehne-statisch) stehen; die
@@ -90,9 +94,20 @@
         };
     });
 
-    var auswahl = null;      // Index des geöffneten Objekts (pausiert den Flug)
-    var karte   = null;      // DOM-Knoten der offenen Karte
-    var pBeimOeffnen = 0;    // Scroll-Stand beim Öffnen (Weiterscrollen schließt)
+    // --- Zeiger-Badge (Rechteck in Logo-Form) über den Objekten ---------------
+    var feinzeiger = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var badge = document.createElement('div');
+    badge.className = 'buehne-zeigerbadge';
+    badge.innerHTML = '<strong></strong><span>[ Ansehen ]</span>';
+    blick.appendChild(badge);
+    var badgeTitel = badge.querySelector('strong');
+
+    var armiert = null;      // Telefon: Index des angetippten Objekts (pausiert den Flug)
+    var zoomZiel = null;     // Adresse nach der Absprung-Animation
+    var bx = 0, by = 0;      // Badge-Lage (geglättet)
+    var bzx = 0, bzy = 0;    // … und ihr Ziel (Maus bzw. Objektmitte)
+    var badgeDa = false;
+    var pBeimArmieren = 0;   // Scroll-Stand beim Antippen (Weiterscrollen schließt)
 
     // --- Scroll-Fortschritt 0–1 über die ganze Sektion ------------------------
     var p = 0, leseTicket = 0;
@@ -100,10 +115,10 @@
         leseTicket = 0;
         var gesamt = Math.max(1, buehne.offsetHeight - window.innerHeight);
         p = klemm(-buehne.getBoundingClientRect().top / gesamt);
-        // Scrollt jemand mit offener Karte weiter, zöge das Objekt unter dem
-        // Zeiger weg — dann lieber sauber schließen.
-        if (karte && Math.abs(p - pBeimOeffnen) > 0.008) {
-            schliessen();
+        // Scrollt jemand mit gezeigtem Badge weiter (Telefon), zöge das
+        // Objekt darunter weg — dann lieber sauber schließen.
+        if (armiert !== null && Math.abs(p - pBeimArmieren) > 0.008) {
+            entwaffnen();
         }
         malenFortschritt();
     }
@@ -179,7 +194,7 @@
     function fliegen(jetzt) {
         var dt = Math.min(64, jetzt - zuletzt) / 1000;
         zuletzt = jetzt;
-        if (auswahl === null) {
+        if (armiert === null) {
             zustand.forEach(function (s) {
                 s.x += s.vx * dt * 1.6;
                 if (s.x > 100) s.x = -s.w;
@@ -201,94 +216,82 @@
             var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
         });
+        // Das Badge fährt seinem Ziel weich hinterher (Maus bzw. Objekt).
+        if (zoomZiel === null) {
+            bx += (bzx - bx) * Math.min(1, dt * 12);
+            by += (bzy - by) * Math.min(1, dt * 12);
+            badge.style.transform = 'translate(' + bx.toFixed(1) + 'px,' + by.toFixed(1) + 'px) translate(-50%, -50%)';
+        }
         requestAnimationFrame(fliegen);
     }
 
-    // --- Karte: wächst aus dem angeklickten Objekt heraus -----------------------
-    function schliessen() {
-        auswahl = null;
-        buehne.classList.remove('hat-karte');
-        if (karte) { karte.remove(); karte = null; }
+    // --- Badge zeigen, Absprung zur Projektseite -------------------------------
+    function entwaffnen() {
+        armiert = null;
+        badgeDa = false;
+        badge.classList.remove('da');
         huelle.classList.remove('hat-auswahl');
         objekte.forEach(function (el) { el.classList.remove('ist-auswahl'); });
     }
 
-    function oeffnen(i) {
-        schliessen();
-        var el = objekte[i];
-        var r  = el.getBoundingClientRect();
-        var vw = window.innerWidth, vh = window.innerHeight;
-        var W  = Math.min(400, vw * 0.86), rand = 16, luft = 22;
-        var zwischen = function (v, min, max) { return Math.min(max, Math.max(min, v)); };
+    function badgeZeigen(i) {
+        badgeTitel.textContent = objekte[i].dataset.titel;
+        badgeDa = true;
+        badge.classList.add('da');
+    }
 
-        karte = document.createElement('div');
-        karte.className = 'buehne-karte';
-        karte.style.width = W + 'px';
-        karte.innerHTML =
-            '<span class="chip"></span>' +
-            '<h3 class="lz-h3"></h3>' +
-            '<p class="lz-lead"></p>' +
-            '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
-            '<a class="knopf"></a>' +
-            '<button type="button" class="buehne-schliessen">schließen</button></div>';
-        karte.querySelector('.chip').textContent = el.dataset.kat;
-        karte.querySelector('h3').textContent = el.dataset.titel;
-        karte.querySelector('p').textContent = el.dataset.punchline;
-        var link = karte.querySelector('a');
-        link.textContent = 'Projekt ansehen';
-        link.href = el.dataset.url;
-        karte.querySelector('.buehne-schliessen').addEventListener('click', schliessen);
-
-        // Erst unsichtbar anhängen und die ECHTE Höhe messen — vorher wurde
-        // sie geschätzt, und die Karte stand oft schief zum Objekt.
-        karte.style.visibility = 'hidden';
-        blick.appendChild(karte);
-        var H = karte.offsetHeight;
-
-        // Wunschplätze der Reihe nach: ÜBER dem Objekt (mittig), sonst
-        // daneben, sonst darunter (Telefon). 84 px halten die Kopfzeile frei.
-        var ox = r.left + r.width / 2, oy = r.top + r.height / 2;
-        var left, top, lage;
-        if (r.top - H - luft >= 84) {
-            lage = 'oben';
-            top  = r.top - H - luft;
-            left = zwischen(ox - W / 2, rand, vw - W - rand);
-        } else if (r.right + luft + W <= vw - rand || r.left - luft - W >= rand) {
-            var rechts = r.right + luft + W <= vw - rand;
-            lage = rechts ? 'rechts' : 'links';
-            left = rechts ? r.right + luft : r.left - W - luft;
-            top  = zwischen(oy - H / 2, rand, vh - H - rand);
-        } else {
-            lage = 'unten';
-            top  = zwischen(r.bottom + luft, rand, vh - H - rand);
-            left = zwischen(ox - W / 2, rand, vw - W - rand);
-        }
-        karte.classList.add('lage-' + lage);
-        karte.style.left = left + 'px';
-        karte.style.top  = top + 'px';
-        // Zeiger und Wachstums-Ursprung sitzen auf der Objektmitte — die
-        // Karte kommt sichtbar AUS dem Objekt.
-        karte.style.setProperty('--zeiger-x', zwischen(ox - left, 20, W - 20) + 'px');
-        karte.style.setProperty('--zeiger-y', zwischen(oy - top, 20, H - 20) + 'px');
-        karte.style.transformOrigin = (ox - left) + 'px ' + (oy - top) + 'px';
-        karte.style.visibility = '';
-        requestAnimationFrame(function () { karte && karte.classList.add('karte-da'); });
-
-        auswahl = i;
-        pBeimOeffnen = p;
-        buehne.classList.add('hat-karte');
-        huelle.classList.add('hat-auswahl');
-        el.classList.add('ist-auswahl');
+    // Klick: Das Rechteck füllt den Schirm (cover, mit Reserve), dann geht
+    // es zur Projektseite — die beginnt ohnehin dunkel, der Übergang sitzt.
+    function absprung(i) {
+        if (zoomZiel !== null) { return; }
+        zoomZiel = objekte[i].dataset.url;
+        badgeZeigen(i);
+        var r = badge.getBoundingClientRect();
+        var faktor = 2 * Math.max(
+            window.innerWidth / Math.max(1, r.width),
+            window.innerHeight / Math.max(1, r.height)
+        );
+        badge.classList.add('zoom');
+        badge.style.transition = 'transform .55s cubic-bezier(.5, 0, .2, 1)';
+        badge.style.transform = 'translate(' + (window.innerWidth / 2) + 'px,'
+            + (window.innerHeight / 2) + 'px) translate(-50%, -50%) scale(' + faktor + ')';
+        setTimeout(function () { window.location.href = zoomZiel; }, 580);
     }
 
     objekte.forEach(function (el, i) {
-        el.querySelector('button').addEventListener('click', function () {
-            if (auswahl === i) { schliessen(); } else { oeffnen(i); }
-        });
+        if (feinzeiger) {
+            // Zeigegerät: Badge folgt der Maus über dem Objekt, Klick springt ab.
+            el.addEventListener('mouseenter', function () { badgeZeigen(i); });
+            el.addEventListener('mouseleave', function () {
+                if (zoomZiel === null) { badgeDa = false; badge.classList.remove('da'); }
+            });
+            el.querySelector('button').addEventListener('click', function () { absprung(i); });
+        } else {
+            // Telefon: erster Tipp zeigt das Badge am Objekt, der zweite springt ab.
+            el.querySelector('button').addEventListener('click', function () {
+                if (armiert === i) { absprung(i); return; }
+                entwaffnen();
+                armiert = i;
+                pBeimArmieren = p;
+                var r = el.getBoundingClientRect();
+                bzx = bx = r.left + r.width / 2;
+                bzy = by = Math.max(70, r.top - 34);
+                badgeZeigen(i);
+                huelle.classList.add('hat-auswahl');
+                el.classList.add('ist-auswahl');
+            });
+        }
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') schliessen(); });
+    if (feinzeiger) {
+        blick.addEventListener('mousemove', function (e) {
+            bzx = e.clientX;
+            bzy = e.clientY;
+            if (!badgeDa) { bx = bzx; by = bzy; }   // beim Erscheinen nicht anreisen
+        });
+    }
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') entwaffnen(); });
     blick.addEventListener('click', function (e) {
-        if (karte && !karte.contains(e.target) && !e.target.closest('.buehne-obj')) schliessen();
+        if (armiert !== null && !e.target.closest('.buehne-obj')) entwaffnen();
     });
 
     lesen();

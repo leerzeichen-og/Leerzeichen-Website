@@ -35,11 +35,6 @@
     padding: calc(130px + var(--space-8)) 55px var(--space-9);
 }
 
-/* Solange eine Projekt-Karte offen ist, tritt der Claim zurück — er ist
-   Dekoration und läge sonst über dem Kartentext (Stapelkontext des sticky-
-   Ausschnitts; die Karte kann ihn nicht überdecken). */
-.buehne.hat-karte .buehne-claimblock { opacity: 0; }
-.buehne-claimblock { transition: opacity 300ms var(--ease-out); }
 
 /* Schwebende Projekt-Objekte */
 .buehne-objekte {
@@ -276,56 +271,52 @@
     margin-top: var(--space-6);
 }
 
-/* Karte, die aus dem angeklickten Objekt herauswächst */
-.buehne-karte {
-    position: absolute;
-    max-height: calc(100vh - 2 * var(--space-6));
-    background: var(--paper);
-    border: 2px solid var(--ink);
-    border-radius: var(--radius-xs);
-    padding: var(--space-6);
-    z-index: 5;
-    /* Wächst sichtbar AUS dem Objekt (transform-origin setzt buehne.js auf
-       die Objektmitte); die Kurve schießt leicht über — lebendig, nicht steif. */
-    opacity: 0;
-    transform: scale(.3);
-    transition: transform .45s cubic-bezier(.22, 1.3, .32, 1), opacity .22s linear;
-}
-.buehne-karte.karte-da { opacity: 1; transform: none; }
-
-/* Zeiger zum Objekt: schwarzer Diamant an der zugewandten Kante, auf Höhe
-   bzw. Breite der Objektmitte (--zeiger-x/-y setzt buehne.js). */
-.buehne-karte::after {
-    content: "";
-    position: absolute;
-    width: 13px;
-    height: 13px;
+/* Zeiger-Badge (Beschluss Roman, 12.10.2026, Muster blossom.at): ein
+   schwarzes Rechteck in der Logo-Form folgt der Maus über den Objekten —
+   Projekttitel + „Ansehen". Beim Klick füllt es den Schirm (Skript skaliert
+   es) und die Projektseite lädt. Am Telefon erscheint es beim ersten Tipp
+   über dem Objekt. */
+.buehne-zeigerbadge {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 16px 24px;
     background: var(--ink);
+    color: #fff;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    will-change: transform;
 }
-.buehne-karte.lage-oben::after   { left: var(--zeiger-x); bottom: -8px; transform: translateX(-50%) rotate(45deg); }
-.buehne-karte.lage-unten::after  { left: var(--zeiger-x); top: -8px;    transform: translateX(-50%) rotate(45deg); }
-.buehne-karte.lage-rechts::after { top: var(--zeiger-y);  left: -8px;   transform: translateY(-50%) rotate(45deg); }
-.buehne-karte.lage-links::after  { top: var(--zeiger-y);  right: -8px;  transform: translateY(-50%) rotate(45deg); }
-
-@media (prefers-reduced-motion: reduce) {
-    .buehne-karte { transition: none; opacity: 1; transform: none; }
+.buehne-zeigerbadge.da { opacity: 1; }
+.buehne-zeigerbadge strong {
+    font-weight: 600;
+    font-size: .95rem;
+    line-height: 1.2;
+    max-width: 22ch;
 }
-
-.buehne-karte h3 { margin: 14px 0 0; }
-.buehne-karte .lz-lead { margin: 14px 0 22px; max-width: min(26ch, 100%); }
-
-.buehne-schliessen {
-    font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-wide);
+.buehne-zeigerbadge span {
+    font-size: .66rem;
+    font-weight: 500;
+    letter-spacing: .16em;
     text-transform: uppercase;
-    color: var(--text-muted);
-    background: none;
-    border: 0;
-    cursor: pointer;
-    padding: 6px 2px;
+    opacity: .75;
 }
-.buehne-schliessen:hover { color: var(--ink); }
+/* Während der Absprung-Animation skaliert das Rechteck — der Text bleibt
+   zurück, sonst würde er riesig mitwachsen. */
+.buehne-zeigerbadge.zoom strong,
+.buehne-zeigerbadge.zoom span { opacity: 0; transition: opacity .18s ease; }
+/* Am Zeigegerät ersetzt das Badge den Systemzeiger über den Objekten. */
+@media (hover: hover) and (pointer: fine) {
+    .buehne-obj button { cursor: none; }
+}
+
 
 /* Statischer Ersatz (ohne JavaScript oder bei reduzierter Bewegung):
    gleiche Inhalte als ruhige Seite. */
@@ -449,5 +440,4 @@
    statischen Fassung, aber auch Astronaut/Karten stehen dann still. */
 @media (prefers-reduced-motion: reduce) {
     .buehne-obj img, .buehne-astro img { animation: none; }
-    .buehne-karte { animation: none; }
 }

@@ -49,19 +49,20 @@ $fragen = [
 // ins Bild (Roman, 24.9.2026). y0 verteilt die zehn gleichmäßig über die
 // Spanne, die leicht unterschiedlichen Tiefen lassen sie gegeneinander
 // wandern, damit die Verteilung lebendig bleibt.
+// Neun Bahnen (vorher zehn — mit zwei statt drei Fragen wirkte die Bühne
+// zu dicht, Roman 12.10.2026), gleichmäßig über die 200-vh-Umlaufbahn.
 $bahnen = [
     ['w' => 31, 'h' => 22, 'x' => 6,  'y0' => 8,   'tiefe' => 900, 'vx' => 0.28],
-    ['w' => 24, 'h' => 19, 'x' => 62, 'y0' => 26,  'tiefe' => 870, 'vx' => -0.22],
-    ['w' => 20, 'h' => 26, 'x' => 34, 'y0' => 46,  'tiefe' => 930, 'vx' => 0.20],
-    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 66,  'tiefe' => 850, 'vx' => -0.26],
-    ['w' => 22, 'h' => 24, 'x' => 12, 'y0' => 88,  'tiefe' => 960, 'vx' => 0.18],
-    ['w' => 28, 'h' => 19, 'x' => 52, 'y0' => 108, 'tiefe' => 890, 'vx' => -0.20],
-    ['w' => 18, 'h' => 18, 'x' => 74, 'y0' => 128, 'tiefe' => 990, 'vx' => 0.24],
-    ['w' => 25, 'h' => 16, 'x' => 28, 'y0' => 150, 'tiefe' => 920, 'vx' => -0.18],
-    ['w' => 21, 'h' => 15, 'x' => 88, 'y0' => 168, 'tiefe' => 860, 'vx' => 0.22],
-    ['w' => 26, 'h' => 17, 'x' => 44, 'y0' => 186, 'tiefe' => 940, 'vx' => -0.24],
+    ['w' => 24, 'h' => 19, 'x' => 62, 'y0' => 30,  'tiefe' => 870, 'vx' => -0.22],
+    ['w' => 20, 'h' => 26, 'x' => 34, 'y0' => 52,  'tiefe' => 930, 'vx' => 0.20],
+    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 74,  'tiefe' => 850, 'vx' => -0.26],
+    ['w' => 22, 'h' => 24, 'x' => 12, 'y0' => 96,  'tiefe' => 960, 'vx' => 0.18],
+    ['w' => 28, 'h' => 19, 'x' => 52, 'y0' => 118, 'tiefe' => 890, 'vx' => -0.20],
+    ['w' => 25, 'h' => 16, 'x' => 76, 'y0' => 140, 'tiefe' => 920, 'vx' => 0.24],
+    ['w' => 21, 'h' => 15, 'x' => 28, 'y0' => 162, 'tiefe' => 860, 'vx' => -0.18],
+    ['w' => 26, 'h' => 17, 'x' => 88, 'y0' => 184, 'tiefe' => 940, 'vx' => 0.22],
 ];
-// Immer zehn Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
+// Immer neun Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
 $objektProjekte = array_values(array_filter(pj_index(),
     fn($p) => !empty($p['objekt']['quellen'])));
 $flieger = [];
