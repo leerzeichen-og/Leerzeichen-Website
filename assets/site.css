@@ -1453,17 +1453,35 @@ body.seite-dunkel { background: #000; color: #fff; }
     .lz-anfrage { display: none; }
 }
 
-/* Das Formular: zweispaltiges Raster in der Lesespalte, Nachricht über
-   die volle Breite; der Honigtopf ist für Menschen unsichtbar. */
-.anfrage { max-width: 60rem; }
+/* Das Formular sitzt in der Teaser-Spalte des Kopf-Rasters (gleiche Teilung
+   wie .kopf-gross-zeile): Die linke Kante flieht mit dem Teaser darüber.
+   Nachricht über die volle Breite; der Honigtopf ist für Menschen unsichtbar. */
+.anfrage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 0 var(--space-8);
+}
+.anfrage > * { grid-column: 2; min-width: 0; }
 .anfrage-raster {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-    gap: var(--space-5) var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-6);
 }
 .anfrage-breit { grid-column: 1 / -1; }
-.anfrage-form .lz-input { width: 100%; }
-.anfrage-form textarea.lz-input { resize: vertical; }
+/* Großzügiger als die Newsletter-Bausteine: größere Schrift, mehr Luft. */
+.anfrage-form .lz-field { gap: 10px; }
+.anfrage-form .lz-label { font-size: var(--text-xs); }
+.anfrage-form .lz-input {
+    width: 100%;
+    font-size: 1.125rem;
+    padding: 1.05rem 1.15rem;
+}
+.anfrage-form textarea.lz-input { resize: vertical; min-height: 11rem; }
+.anfrage-form .knopf { padding: 1.05rem 1.9rem; font-size: var(--text-sm); }
+@media (max-width: 900px) {
+    .anfrage { grid-template-columns: 1fr; }
+    .anfrage > * { grid-column: 1; }
+}
 .anfrage-falle {
     position: absolute;
     left: -9999px;
