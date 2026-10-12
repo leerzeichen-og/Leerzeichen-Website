@@ -98,7 +98,9 @@
     var feinzeiger = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     var badge = document.createElement('div');
     badge.className = 'buehne-zeigerbadge';
-    badge.innerHTML = '<strong></strong><span>[ Ansehen ]</span>';
+    badge.innerHTML = '<strong></strong>'
+        + '<svg viewBox="0 0 63.611 14.4" aria-hidden="true">'
+        + '<path fill="currentColor" d="M54.906,12.9l4.622-4.622H0V6.125H59.528L54.906,1.5,56.412,0l7.2,7.2-7.2,7.2Z"/></svg>';
     blick.appendChild(badge);
     var badgeTitel = badge.querySelector('strong');
 
@@ -216,10 +218,14 @@
             var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
         });
-        // Das Badge fährt seinem Ziel weich hinterher (Maus bzw. Objekt).
+        // Das Badge fährt seinem Ziel weich hinterher (Maus bzw. Objekt) —
+        // geklemmt, damit der Kreis nie aus dem Bild ragt.
         if (zoomZiel === null) {
-            bx += (bzx - bx) * Math.min(1, dt * 12);
-            by += (bzy - by) * Math.min(1, dt * 12);
+            var halb = badge.offsetWidth / 2 + 8;
+            var zx = Math.min(window.innerWidth - halb, Math.max(halb, bzx));
+            var zy = Math.min(window.innerHeight - halb, Math.max(halb, bzy));
+            bx += (zx - bx) * Math.min(1, dt * 12);
+            by += (zy - by) * Math.min(1, dt * 12);
             badge.style.transform = 'translate(' + bx.toFixed(1) + 'px,' + by.toFixed(1) + 'px) translate(-50%, -50%)';
         }
         requestAnimationFrame(fliegen);
@@ -230,6 +236,7 @@
         armiert = null;
         badgeDa = false;
         badge.classList.remove('da');
+        badge.style.pointerEvents = '';
         huelle.classList.remove('hat-auswahl');
         objekte.forEach(function (el) { el.classList.remove('ist-auswahl'); });
     }
@@ -277,10 +284,15 @@
                 bzx = bx = r.left + r.width / 2;
                 bzy = by = Math.max(70, r.top - 34);
                 badgeZeigen(i);
+                // Auch der Kreis selbst darf den zweiten Tipp entgegennehmen.
+                badge.style.pointerEvents = 'auto';
                 huelle.classList.add('hat-auswahl');
                 el.classList.add('ist-auswahl');
             });
         }
+    });
+    badge.addEventListener('click', function () {
+        if (armiert !== null) { absprung(armiert); }
     });
     if (feinzeiger) {
         blick.addEventListener('mousemove', function (e) {
@@ -292,6 +304,18 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') entwaffnen(); });
     blick.addEventListener('click', function (e) {
         if (armiert !== null && !e.target.closest('.buehne-obj')) entwaffnen();
+    });
+
+    // Kommt jemand per Zurück-Knopf wieder, stellt der Browser die Seite
+    // aus dem Cache so her, wie sie beim Absprung aussah — mit dem
+    // bildschirmfüllenden Badge. Deshalb hier alles zurücksetzen.
+    window.addEventListener('pageshow', function () {
+        zoomZiel = null;
+        badge.classList.remove('zoom', 'da');
+        badge.style.transition = '';
+        badge.style.transform = 'translate(' + bx.toFixed(1) + 'px,' + by.toFixed(1) + 'px) translate(-50%, -50%)';
+        badgeDa = false;
+        entwaffnen();
     });
 
     lesen();
