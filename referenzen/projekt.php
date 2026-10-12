@@ -115,7 +115,7 @@ require __DIR__ . '/../teile/kopf.php';
   <section class="pj-abschluss">
     <div class="pj-cta">
       <?= $cta ?>
-      <a class="pj-knopf" href="/kontakt/">Kontaktieren Sie uns <span aria-hidden="true">&rarr;</span></a>
+      <a class="knopf" href="/kontakt/">Kontaktieren Sie uns <?= lz_pfeil() ?></a>
     </div>
     <?php if ($credits): ?>
     <dl class="pj-credits">

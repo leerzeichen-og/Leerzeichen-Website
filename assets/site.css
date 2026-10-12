@@ -635,10 +635,12 @@ html.navi-wechsel .lz-header { mix-blend-mode: normal; }
 html.navi-wechsel .lz-header-farblos { display: none; }
 html.navi-wechsel .lz-nav a,
 html.navi-wechsel .lz-burger { transition: color .25s ease; }
-html.navi-wechsel .lz-logo { transition: filter .25s ease; }
+/* Nur das Logo der KOPFZEILE — der nackte .lz-logo-Selektor invertierte
+   auch das schwarze Logo im Fuß (Befund Roman, 12.10.2026). */
+html.navi-wechsel .lz-header .lz-logo { transition: filter .25s ease; }
 html.navi-wechsel.navi-ink .lz-nav a,
 html.navi-wechsel.navi-ink .lz-burger { color: var(--ink); }
-html.navi-wechsel.navi-ink .lz-logo { filter: invert(1); }
+html.navi-wechsel.navi-ink .lz-header .lz-logo { filter: invert(1); }
 
 /* Farblos-Schicht: deckungsgleiche Kopie der Kopfzeile im Mischmodus „color".
    Ihre weißen (also farblosen) Zeichen entsättigen das Differenz-Ergebnis

@@ -252,13 +252,16 @@ html.pj-rollt .pj-scroller { overflow: hidden; }
 
 /* ---- Call to Action mit Credits ------------------------------------------ */
 
+/* Großzügig und plakativ (Roman, 12.10.2026): viel Luft um den Block,
+   der CTA als große Zeile mit dem Standard-Knopf der Website, die
+   Credits lesbar mit Zeilenluft daneben. */
 .pj-abschluss {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, 22rem);
-  gap: clamp(32px, 5vw, 96px);
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 30rem);
+  gap: clamp(48px, 7vw, 140px);
   align-items: start;
   margin: var(--pj-luft) var(--pj-rand);
-  padding-top: var(--pj-luft);
+  padding: clamp(100px, 14vh, 200px) 0 clamp(50px, 7vh, 110px);
   border-top: 1px solid var(--pj-linie);
 }
 
@@ -271,69 +274,50 @@ html.pj-rollt .pj-scroller { overflow: hidden; }
 
 .pj-cta-text {
   font-weight: 600;
-  font-size: clamp(1.15rem, 2vw, 1.7rem);
-  line-height: 1.3;
-  max-width: 24ch;
+  font-size: clamp(1.9rem, 3.4vw, 3.2rem);
+  line-height: 1.15;
+  max-width: 18ch;
+  text-wrap: balance;
 }
 
 .pj-cta-text p { margin: 0 0 .6em; }
 
-.pj .pj-knopf {
-  display: inline-flex;
-  align-items: center;
-  gap: .6rem;
-  margin-top: 1.6rem;
-  padding: .7rem 1.2rem;
-  border: 1px solid var(--pj-akzent);
-  color: var(--pj-akzent);
-  text-decoration: none;
-  font-size: .9rem;
-  transition: background .15s ease, color .15s ease;
-}
-
-.pj .pj-knopf:hover,
-.pj .pj-knopf:focus-visible {
-  background: var(--pj-akzent);
-  color: #fff;
-}
+.pj-cta .knopf { margin-top: var(--space-6); }
 
 .pj-credits {
   margin: 0;
-  font-size: .8rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
   color: var(--pj-gedaempft);
 }
 
-.pj-credit { display: flex; gap: .5rem; }
+.pj-credit { display: flex; gap: .6rem; padding: .4em 0; }
 .pj-credit dt { margin: 0; }
 .pj-credit dt::after { content: ":"; }
 .pj .pj-credit dd { margin: 0; color: var(--pj-ink); }
 
 @media (max-width: 900px) {
-  .pj-abschluss { grid-template-columns: 1fr; }
+  .pj-abschluss { grid-template-columns: 1fr; padding-top: clamp(70px, 10vh, 120px); }
 }
 
 /* ---- Projektkarten (Übersicht, „Weitere Projekte", Scroller) ------------- */
 
+/* Großzügig (Roman, 12.10.2026): Titel im h2-Standard, größere Karten,
+   viel Luft nach oben und unten. */
 .pj-weitere {
   margin: var(--pj-luft) var(--pj-rand);
-  padding-top: var(--pj-luft);
+  padding: clamp(100px, 14vh, 200px) 0 clamp(50px, 7vh, 110px);
   border-top: 1px solid var(--pj-linie);
 }
 
-.pj-weitere h2 {
-  margin: 0 0 1.6rem;
-  font-weight: var(--weight-display, 500);
-  font-size: 1rem;
-  letter-spacing: .03em;
-}
+.pj-weitere h2 { margin-bottom: var(--space-7); }
 
 .pj-weitere-liste,
 .pj-liste {
   display: grid;
   /* min(100%, …) — sonst schiebt die Mindestbreite am Telefon die Seite auf */
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-  gap: clamp(16px, 2vw, 32px);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: clamp(24px, 3.5vw, 56px);
 }
 
 .pj-liste { margin-top: 2rem; }
