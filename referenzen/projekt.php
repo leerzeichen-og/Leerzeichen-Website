@@ -74,6 +74,15 @@ if ($module && (($module[0]['art'] ?? '') === 'header')) {
 }
 $headerBild = $headerModul['bilder'][0] ?? ($projekt['bilder']['header'] ?? null);
 
+// Share-Bild (og:image): der Quer-Teaser in der mittleren Größe — 1280 px
+// reicht den Vorschaukarten, die größte Stufe wäre unnötig schwer.
+foreach (($projekt['bilder']['teaser_quer']['quellen'] ?? []) as $q) {
+    if (!empty($q['datei']) && (int) ($q['breite'] ?? 0) >= 1280) {
+        $ogBild = (string) $q['datei'];
+        break;
+    }
+}
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 <div class="pj">

@@ -17,6 +17,14 @@ Header set X-Robots-Tag "noindex, nofollow, noarchive" env=LZ_STAGING
 
 RewriteEngine On
 
+# Eine kanonische Adresse: leerzeichen.at (ohne www) leitet dauerhaft auf
+# https://www.leerzeichen.at um — beide bleiben erreichbar, aber Links und
+# Suchmaschinen laufen auf EINER Form zusammen. Greift nur auf der nackten
+# Hauptdomain; Staging (neu.) bleibt unberührt. Liegt schon jetzt bereit,
+# damit beim Livegang nichts zu ändern ist.
+RewriteCond %{HTTP_HOST} ^leerzeichen\.at$ [NC]
+RewriteRule ^(.*)$ https://www.leerzeichen.at/$1 [R=301,L]
+
 # sitemap.xml wird von sitemap.php erzeugt (liest Seitenliste + Projekte).
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
@@ -30,6 +38,7 @@ RewriteRule ^referenzen/([a-z0-9-]+)/?$ referenzen/projekt.php?slug=$1 [L,QSA]
 # Die Templates lesen die Dateien serverseitig, dafür braucht es keinen HTTP-Zugriff.
 RewriteRule ^daten/ - [F,L]
 
-# --- 301-Umleitungen alter WordPress-Adressen ---------------------------
-# Kommen vor dem Livegang aus der Bestandsliste (docs/wp-url-bestand.md).
-# Muster:  Redirect 301 /alte-seite/ https://www.leerzeichen.at/neue-seite/
+# Alte WordPress-Adressen: KEINE Umleitungen nötig — leerzeichen.at war
+# jahrelang nur eine Coming-Soon-Seite, es gibt keine verlinkten Alt-URLs
+# (Roman, 12.10.2026). Sollte doch eine auftauchen, Muster:
+#   Redirect 301 /alte-seite/ https://www.leerzeichen.at/neue-seite/

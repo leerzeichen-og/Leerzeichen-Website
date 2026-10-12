@@ -13,6 +13,7 @@ $seiten = [
     '/referenzen/',
     '/agentur/',
     '/kontakt/',
+    '/kontakt/anfrage/',
     '/kontakt/impressum/',
     '/kontakt/datenschutzerklaerung/',
     '/kontakt/agb/',

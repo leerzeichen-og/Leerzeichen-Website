@@ -139,6 +139,21 @@ header('Cache-Control: no-cache');
 <title><?= e($titel) ?></title>
 <meta name="description" content="<?= e($beschreibung) ?>">
 <link rel="canonical" href="<?= e($kanonisch) ?>">
+<?php // Vorschau beim Teilen (LinkedIn, WhatsApp, Signal …) und für
+      // KI-Suchen. Seiten mit eigenem Motiv setzen vor dem Einbinden
+      // $ogBild (absoluter Pfad oder volle Adresse, z. B. der
+      // Projekt-Teaser); sonst gilt das Standard-Share-Bild (1200×630,
+      // erzeugt aus dem Büro-Besprechungsfoto). ?>
+<?php $ogBild = $ogBild ?? '/assets/bilder/og-leerzeichen.jpg';
+      if (!str_starts_with($ogBild, 'http')) { $ogBild = FIRMA_URL . $ogBild; } ?>
+<meta property="og:site_name" content="<?= e(FIRMA_KURZ) ?>">
+<meta property="og:type" content="website">
+<meta property="og:title" content="<?= e($titel) ?>">
+<meta property="og:description" content="<?= e($beschreibung) ?>">
+<meta property="og:url" content="<?= e($kanonisch) ?>">
+<meta property="og:image" content="<?= e($ogBild) ?>">
+<meta property="og:locale" content="de_AT">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/assets/fonts/ArticulatCF-Medium.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="<?= e(lz_asset('/assets/fonts.css')) ?>">
 <link rel="stylesheet" href="<?= e(lz_asset('/assets/site.css')) ?>">
