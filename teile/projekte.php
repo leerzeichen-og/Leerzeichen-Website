@@ -75,15 +75,107 @@ function pj_bild(?array $bild, string $klasse, string $sizes, bool $zuerst = fal
         fn($q) => e($q['datei']) . ' ' . (int) $q['breite'] . 'w',
         $quellen
     ));
+    // Zugeschnitten wird seit dem Modul-Format auf der Website (object-fit) —
+    // der Fokuspunkt aus Space sagt, welcher Bildteil dabei stehen bleibt.
+    $stil = '';
+    if (isset($bild['fokus'][0], $bild['fokus'][1])) {
+        $stil = ' style="object-position:' . round((float) $bild['fokus'][0] * 100, 1)
+              . '% ' . round((float) $bild['fokus'][1] * 100, 1) . '%"';
+    }
     return '<img class="' . e($klasse) . '"'
         . ' src="' . e($groesste['datei']) . '"'
         . ' srcset="' . $srcset . '"'
         . ' sizes="' . e($sizes) . '"'
         . (!empty($bild['breite']) ? ' width="' . (int) $bild['breite'] . '" height="' . (int) $bild['hoehe'] . '"' : '')
         . ' alt="' . e((string) ($bild['alt'] ?? '')) . '"'
+        . $stil
         . ' decoding="async"'
         . ($zuerst ? ' loading="eager" fetchpriority="high"' : ' loading="lazy"')
         . '>';
+}
+
+/**
+ * Ein Video aus dem Modul-Format: die Originaldatei, stumm im Loop (rein
+ * illustrativ wie die Fotos daneben); bei reduzierter Bewegung hält es das
+ * Seitenskript an. Space liefert keine Breitenstufen — Videos kann der
+ * Server nicht rechnen.
+ */
+function pj_video(?array $bild, string $klasse): string
+{
+    $q = $bild['quellen'][0] ?? null;
+    if (!$q) {
+        return '';
+    }
+    $alt = trim((string) ($bild['alt'] ?? ''));
+    return '<video class="' . e($klasse) . '"'
+        . ' autoplay muted loop playsinline preload="metadata"'
+        . ($alt !== '' ? ' aria-label="' . e($alt) . '"' : ' aria-hidden="true"')
+        . '><source src="' . e($q['datei']) . '"'
+        . (!empty($bild['mime']) ? ' type="' . e((string) $bild['mime']) . '"' : '')
+        . '></video>';
+}
+
+/** Bild oder Video — Space markiert Videos mit "video": true. */
+function pj_medium(?array $m, string $klasse, string $sizes, bool $zuerst = false): string
+{
+    if (!$m) {
+        return '';
+    }
+    return !empty($m['video']) ? pj_video($m, $klasse) : pj_bild($m, $klasse, $sizes, $zuerst);
+}
+
+/**
+ * Ein Inhalts-Modul des Beitrags-JSON rendern (Modul-Format seit 7.10.2026,
+ * docs/datenformat.md). Eine unbekannte Art fällt auf das foto_text-Muster
+ * zurück — so bricht ein neues Space-Modul die Seite nie, es wird nur
+ * schlichter gezeigt.
+ */
+function pj_modul(array $m): string
+{
+    $art    = (string) ($m['art'] ?? '');
+    $bilder = array_values((array) ($m['bilder'] ?? []));
+    $texte  = array_values(array_filter(
+        (array) ($m['texte'] ?? []),
+        fn($t) => trim((string) $t) !== ''
+    ));
+    $kopf   = trim((string) ($m['ueberschrift'] ?? ''));
+
+    switch ($art) {
+        case 'doppelbild':
+            $out = '<div class="pj-doppel">';
+            foreach (array_slice($bilder, 0, 2) as $b) {
+                $out .= pj_medium($b, 'pj-doppel-medium', '(max-width: 640px) 100vw, 50vw');
+            }
+            return $out . '</div>';
+
+        case 'scroller':
+            $out = '<div class="pj-scroller"><div class="pj-scroller-spur">';
+            foreach ($bilder as $b) {
+                $out .= pj_medium($b, 'pj-scroller-medium', '70vw');
+            }
+            return $out . '</div></div>';
+
+        case 'foto_details':
+            $out = pj_medium($bilder[0] ?? null, 'pj-foto', '100vw');
+            if ($kopf !== '') {
+                $out .= '<div class="pj-text"><h2 class="pj-zwischentitel">' . e($kopf) . '</h2></div>';
+            }
+            $spalten = '';
+            foreach (array_slice($texte, 0, 2) as $t) {
+                $spalten .= '<div class="pj-text">' . pj_absaetze((string) $t) . '</div>';
+            }
+            return $out . ($spalten !== '' ? '<div class="pj-details">' . $spalten . '</div>' : '');
+
+        default:   // header (mitten im Lauf), foto_text, foto_zusammenfassung, Unbekanntes
+            $out = pj_medium($bilder[0] ?? null, 'pj-foto', '100vw');
+            if ($kopf !== '' || $texte) {
+                $out .= '<div class="pj-text">'
+                    . ($kopf !== '' ? '<h2 class="pj-zwischentitel">' . e($kopf) . '</h2>' : '')
+                    . implode('', array_map(fn($t) => pj_absaetze((string) $t), $texte))
+                    . '</div>';
+            }
+            return $out;
+    }
 }
 
 /**

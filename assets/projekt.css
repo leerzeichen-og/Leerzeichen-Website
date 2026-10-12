@@ -152,6 +152,60 @@
   margin: var(--pj-luft) calc(50% - 50vw);
 }
 
+/* ---- Inhalts-Module (Modul-Format seit 7.10.2026) -------------------------- */
+
+/* Optionale Zwischenüberschrift eines Moduls — sitzt im Textblock und
+   erbt dessen Spaltenlage; Typografie kommt vom h2-Standard (site.css). */
+.pj-text .pj-zwischentitel { margin: 0 0 var(--space-5); }
+
+/* Doppelbild: zwei Medien randlos nebeneinander, gleich hoch — beschnitten
+   wird per object-fit um den Fokuspunkt aus Space (object-position). */
+.pj-doppel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 1.4vw, 28px);
+  width: 100vw;
+  max-width: 100vw;
+  margin: var(--pj-luft) calc(50% - 50vw);
+}
+.pj-doppel-medium {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+@media (max-width: 640px) {
+  .pj-doppel { grid-template-columns: 1fr; }
+}
+
+/* Scroller: drei bis fünf Medien in einer Reihe. Die Spur wandert quer
+   mit dem Seiten-Scroll (Skript der Projektseite, Klasse pj-rollt) —
+   ohne JavaScript oder bei reduzierter Bewegung bleibt sie von Hand
+   wischbar (overflow-x: auto, Rollbalken versteckt). */
+.pj-scroller {
+  width: 100vw;
+  max-width: 100vw;
+  margin: var(--pj-luft) calc(50% - 50vw);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.pj-scroller::-webkit-scrollbar { display: none; }
+html.pj-rollt .pj-scroller { overflow: hidden; }
+.pj-scroller-spur {
+  display: flex;
+  gap: clamp(12px, 1.6vw, 32px);
+  width: max-content;
+  padding: 0 var(--rand);
+  will-change: transform;
+}
+.pj-scroller-medium {
+  display: block;
+  height: clamp(300px, 62vh, 680px);
+  width: auto;
+}
+
 /* Die Fotos treten beim Scrollen sanft auf (einblenden.js) — etwas tiefer
    und langsamer als Text, das wirkt schwerer. :not(.blende-da), damit die
    Lande-Regel nicht an der Spezifität scheitert (siehe .nl-karte). */

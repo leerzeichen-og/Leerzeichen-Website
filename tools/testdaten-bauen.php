@@ -54,7 +54,7 @@ function td_bild(string $pfad, int $w, int $h, array $farben, string $label): vo
  * $ratio = Höhe/Breite des Motivs (Contentfotos dürfen jedes Format haben).
  */
 function td_bildobjekt(string $ziel, string $slug, string $name, int $zielBreite, float $ratio,
-                       array $farben, string $alt): array
+                       array $farben, string $alt, array $fokus = [0.5, 0.5]): array
 {
     $breiten = array_values(array_filter([640, 1280, 1920], fn($x) => $x < $zielBreite));
     $breiten[] = $zielBreite;
@@ -71,7 +71,28 @@ function td_bildobjekt(string $ziel, string $slug, string $name, int $zielBreite
         'beschreibung' => '',
         'breite'       => $zielBreite,
         'hoehe'        => (int) round($zielBreite * $ratio),
+        // Fokuspunkt wie ihn Space seit dem Modul-Format liefert — die
+        // Website beschneidet damit (object-position).
+        'fokus'        => $fokus,
         'quellen'      => $quellen,
+    ];
+}
+
+/**
+ * Ein Video-Objekt laut Modul-Format: keine Breitenstufen, die Originaldatei.
+ * Als Testdatei dient eine Kopie von assets/videos/circle.mp4.
+ */
+function td_videoobjekt(string $ziel, string $slug, string $alt): array
+{
+    $datei = "bilder/projekte/$slug/video-test.mp4";
+    @mkdir(dirname("$ziel/$datei"), 0775, true);
+    copy(__DIR__ . '/../assets/videos/circle.mp4', "$ziel/$datei");
+    return [
+        'alt'          => $alt,
+        'beschreibung' => '',
+        'video'        => true,
+        'mime'         => 'video/mp4',
+        'quellen'      => [['datei' => '/' . $datei, 'breite' => null]],
     ];
 }
 
@@ -158,7 +179,19 @@ $projekte = [
             ['bereich' => 'Wasserbau',               'person' => 'IB Quellgrund (erfunden)'],
             ['bereich' => 'Fotografie',              'person' => 'Atelier Lichtfang (erfunden)'],
         ],
-        'fotos' => ['foto_01' => 0.667, 'foto_02' => 0.75, 'foto_04' => 1.5, 'foto_05' => 0.667],
+        'fotos' => ['foto_01' => 0.667, 'foto_02' => 0.75, 'foto_04' => 1.5, 'foto_05' => 0.667,
+                    'scroll_01' => 0.7, 'scroll_02' => 1.3, 'scroll_03' => 0.75, 'foto_06' => 0.6],
+        // Schaufenster ALLER sechs Modularten (inkl. Video) — Muster fürs
+        // Begutachten von Gestaltung und Funktion (Roman, 12.10.2026).
+        'module' => [
+            ['art' => 'header',               'texte' => ['kurzbeschreibung'], 'bilder' => ['header']],
+            ['art' => 'foto_text',            'ueberschrift' => 'Die Aufgabe', 'texte' => ['aufgabenstellung'], 'bilder' => ['foto_01']],
+            ['art' => 'scroller',             'bilder' => ['scroll_01', 'foto_02', 'scroll_02', 'scroll_03']],
+            ['art' => 'foto_text',            'ueberschrift' => 'Die Lösung', 'texte' => ['loesung'], 'bilder' => ['foto_04']],
+            ['art' => 'doppelbild',           'bilder' => ['foto_05', 'foto_01']],
+            ['art' => 'foto_details',         'ueberschrift' => 'Im Detail', 'texte' => ['detail_01', 'detail_02'], 'bilder' => ['foto_06']],
+            ['art' => 'foto_zusammenfassung', 'texte' => ['zusammenfassung'], 'bilder' => ['video']],
+        ],
     ],
     [
         'slug' => 'test-zeitsprung-burgruine', 'palette' => 'burg',
@@ -180,6 +213,12 @@ $projekte = [
             ['bereich' => 'Metallbau',                'person' => 'Schlosserei Grubhofer (erfunden)'],
         ],
         'fotos' => ['foto_01' => 0.75, 'foto_02' => 0.667, 'foto_05' => 0.75],   // kein Foto 4
+        'module' => [
+            ['art' => 'header',               'texte' => ['kurzbeschreibung'], 'bilder' => ['header']],
+            ['art' => 'foto_text',            'texte' => ['aufgabenstellung'], 'bilder' => ['foto_01']],
+            ['art' => 'foto_details',         'texte' => ['loesung', 'detail_01'], 'bilder' => ['foto_02']],
+            ['art' => 'foto_zusammenfassung', 'texte' => ['zusammenfassung'], 'bilder' => ['foto_05']],
+        ],
     ],
     [
         'slug' => 'test-molkerei-sonnseit', 'palette' => 'molke',
@@ -204,6 +243,14 @@ $projekte = [
             ['bereich' => 'Reinzeichnung',    'person' => 'Susanne Pichelmann'],
         ],
         'fotos' => ['foto_01' => 0.667, 'foto_02' => 1.333, 'foto_04' => 0.667, 'foto_05' => 0.75],
+        'module' => [
+            ['art' => 'header',               'texte' => ['kurzbeschreibung'], 'bilder' => ['header']],
+            ['art' => 'foto_text',            'ueberschrift' => 'Die Aufgabe', 'texte' => ['aufgabenstellung'], 'bilder' => ['foto_01']],
+            ['art' => 'doppelbild',           'bilder' => ['foto_02', 'foto_04']],
+            ['art' => 'foto_text',            'ueberschrift' => 'Die Lösung', 'texte' => ['loesung'], 'bilder' => ['foto_05']],
+            ['art' => 'foto_details',         'texte' => ['detail_01', 'detail_02'], 'bilder' => ['foto_04']],
+            ['art' => 'foto_zusammenfassung', 'texte' => ['zusammenfassung'], 'bilder' => ['foto_01']],
+        ],
     ],
     [
         'slug' => 'test-werksbericht-funkenflug', 'palette' => 'werk',
@@ -250,18 +297,46 @@ foreach ($projekte as $nr => $p) {
         'objekt'      => td_objekt($ziel, $slug, $nr, $farben,
             'Freigestelltes Testobjekt von ' . $p['titel']),
     ];
+    $fokusReihe = [[0.5, 0.5], [0.35, 0.3], [0.65, 0.45], [0.5, 0.25]];
+    $i = 0;
     foreach ($p['fotos'] as $name => $ratio) {
         $bilder[$name] = td_bildobjekt($ziel, $slug, str_replace('_', '-', $name), 2560, $ratio,
-            $farben, 'Testmotiv ' . $name . ' von ' . $p['titel']);
+            $farben, 'Testmotiv ' . $name . ' von ' . $p['titel'],
+            $fokusReihe[$i++ % count($fokusReihe)]);
     }
 
     $beitrag = [
         'slug' => $slug, 'titel' => $p['titel'], 'kunde' => $p['kunde'],
         'jahr' => $p['jahr'], 'saeule' => $p['saeule'],
         'schlagworte' => $p['schlagworte'], 'punchline' => $p['punchline'],
-        'texte' => $p['texte'], 'credits' => $p['credits'],
-        'bilder' => $bilder, 'stand' => date('c'),
+        'credits' => $p['credits'], 'stand' => date('c'),
     ];
+    if (!empty($p['module'])) {
+        // Modul-Format wie es Space seit 7.10.2026 schreibt: texte je Modul
+        // (hier als Verweise auf die Textsammlung oben), cta als Klartext,
+        // in bilder nur die festen Slots (Teaser + Objekt).
+        $beitrag['module'] = array_map(function ($m) use ($bilder, $ziel, $slug, $p) {
+            $zeile = ['art' => $m['art']];
+            if (!empty($m['ueberschrift'])) {
+                $zeile['ueberschrift'] = $m['ueberschrift'];
+            }
+            if (!empty($m['texte'])) {
+                $zeile['texte'] = array_map(fn($k) => $p['texte'][$k], $m['texte']);
+            }
+            $zeile['bilder'] = array_map(fn($k) => $k === 'video'
+                ? td_videoobjekt($ziel, $slug, 'Testvideo von ' . $p['titel'])
+                : $bilder[$k], $m['bilder']);
+            return $zeile;
+        }, $p['module']);
+        $beitrag['cta']    = $p['texte']['call_to_action'] ?? '';
+        $beitrag['bilder'] = array_intersect_key($bilder,
+            array_flip(['teaser_quer', 'teaser_hoch', 'objekt']));
+    } else {
+        // Altes Format (vor 7.10.2026) — Funkenflug bleibt bewusst so, als
+        // Probe für den Fallback der Projektseite.
+        $beitrag['texte']  = $p['texte'];
+        $beitrag['bilder'] = $bilder;
+    }
     if (!empty($p['zitat'])) {
         $beitrag['zitat']     = $p['zitat'];
         $beitrag['zitat_von'] = $p['zitat_von'] ?? '';

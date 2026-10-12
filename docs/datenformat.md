@@ -49,7 +49,8 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
 
 ## daten/projekte/{slug}.json
 
-Der vollständige Beitrag:
+Der vollständige Beitrag — **Modul-Format seit 7.10.2026** (Space:
+`portfolio_module`, exportiert in `ws_push()`):
 
 ```json
 {
@@ -58,25 +59,58 @@ Der vollständige Beitrag:
   "schlagworte": ["Ausstellung", "Leitsystem"],
   "punchline": "…",
   "zitat": "…", "zitat_von": "…",
-  "texte": {
-    "kurzbeschreibung": "…", "aufgabenstellung": "…", "loesung": "…",
-    "detail_01": "…", "detail_02": "…", "zusammenfassung": "…",
-    "call_to_action": "…"
-  },
+  "module": [
+    { "art": "header",
+      "texte": ["Kurzbeschreibung …"],
+      "bilder": [ { …Bild-Objekt… } ] },
+    { "art": "foto_text",
+      "ueberschrift": "optional",
+      "texte": ["…"],
+      "bilder": [ { …Bild- oder Video-Objekt… } ] }
+  ],
+  "cta": "Sie haben einen Ort, der mehr erzählen könnte?",
   "credits": [ { "bereich": "Konzept", "person": "Roman Dachsberger" } ],
   "bilder": {
-    "header":  { …Bild-Objekt… },
-    "foto_01": { }, "foto_02": { }, "foto_04": { }, "foto_05": { },
-    "teaser_quer": { }, "teaser_hoch": { }
+    "teaser_quer": { …Bild-Objekt… },
+    "teaser_hoch": { },
+    "objekt": { }
   },
-  "stand": "2026-09-16T12:00:00+02:00"
+  "stand": "2026-10-12T12:00:00+02:00"
 }
 ```
 
+- `module` steht in **Seitenreihenfolge**. Je Modul: `art` (Pflicht),
+  `ueberschrift` (optional, nur wenn gesetzt), `texte` (nur wenn vorhanden,
+  1–2 Klartexte je nach Art), `bilder` (immer, ggf. leer).
+- Die Website rendert das **erste `header`-Modul als Seitenkopf** (Bild
+  randlos, Titel darüber; sein Text ist der Lead). Alle weiteren Module
+  laufen in Reihenfolge.
+- `cta` (Klartext) und `credits` stehen **außerhalb** — die Website zeigt
+  beide IMMER ganz unten, sie sind kein Modul.
+- `bilder` enthält nur noch die festen Slots `teaser_quer`, `teaser_hoch`
+  und `objekt` (Karten, Collage, Startseiten-Bühne).
 - **Texte sind Klartext**, Absätze durch Leerzeile getrennt. Die Website
-  macht daraus `<p>`-Absätze und escapet alles — es gibt kein HTML in den Daten.
-- Fehlende Texte/Bilder: Schlüssel weglassen oder leer — die Website lässt
-  den Block dann aus (wie bisher der Shortcode).
+  macht daraus `<p>`-Absätze und escapet alles — kein HTML in den Daten.
+- Eine der Website **unbekannte `art`** bricht nichts: Sie wird wie
+  `foto_text` gerendert (erstes Bild + Texte).
+- **Übergang:** Beiträge im alten Format (`texte{}` + feste Bildnamen
+  `header`/`foto_01`…`foto_05`, `call_to_action` in `texte`) rendert die
+  Website weiterhin, bis Space alle Einträge neu gepusht hat.
+
+### Modularten
+
+| `art` | Bilder | Texte | `ueberschrift` | Website |
+| --- | --- | --- | --- | --- |
+| `header` | 1 | 1 | nein | Seitenkopf: Bild randlos 100svh, Titel darauf; Text = Lead |
+| `foto_text` | 1 | 1 | ja | Bild randlos, darunter Text in der Lesespalte |
+| `foto_details` | 1 | 2 | ja | Bild, darunter zwei Texte zweispaltig |
+| `foto_zusammenfassung` | 1 | 1 | ja | wie `foto_text` (typisch der letzte Baustein) |
+| `scroller` | 3–5 | 0 | nein | Reihe nebeneinander, wandert quer mit dem Seiten-Scroll (ohne JS wischbar) |
+| `doppelbild` | 2 | 0 | nein | zwei Medien randlos nebeneinander, gleich hoch (cover um den Fokus) |
+
+Videos sind überall zulässig, wo ein Modul-Bild stehen kann (nicht in den
+festen Slots); die Website spielt sie stumm im Loop und hält sie bei
+reduzierter Bewegung an.
 
 ## Bild-Objekt
 
@@ -85,6 +119,7 @@ Der vollständige Beitrag:
   "alt": "Blick in den Ausstellungsraum …",
   "beschreibung": "",
   "breite": 2560, "hoehe": 1440,
+  "fokus": [0.5, 0.4],
   "quellen": [
     { "datei": "/bilder/projekte/{slug}/header-640.webp",  "breite": 640 },
     { "datei": "/bilder/projekte/{slug}/header-1280.webp", "breite": 1280 },
@@ -97,7 +132,24 @@ Der vollständige Beitrag:
   `srcset` (das hat früher WordPress erledigt). Empfohlene Stufen: 640, 1280,
   1920 und die Zielgröße des Slots. `breite`/`hoehe` beziehen sich auf die
   größte Fassung und verhindern Layout-Springen beim Laden.
+- `fokus` (seit 7.10.2026): Fokuspunkt `[x, y]` als Anteile 0–1. Beschnitten
+  wird seit dem Modul-Format auf der **Website** (object-fit); der Fokus
+  sagt ihr, welcher Bildteil stehen bleibt (object-position). Nur die
+  Teaser liefert Space weiterhin fertig zugeschnitten.
 - Pfade beginnen mit `/bilder/…` (absolut zur Website-Wurzel).
+
+## Video-Objekt
+
+```json
+{
+  "alt": "…", "beschreibung": "",
+  "video": true, "mime": "video/mp4",
+  "quellen": [ { "datei": "/bilder/projekte/{slug}/video-12-abc123.mp4", "breite": null } ]
+}
+```
+
+- Die **Originaldatei**, keine Breitenstufen (der Server rechnet kein Video);
+  `breite`, `hoehe` und `fokus` entfallen. Genau eine Quelle, `breite: null`.
 
 ## Verantwortlichkeiten
 

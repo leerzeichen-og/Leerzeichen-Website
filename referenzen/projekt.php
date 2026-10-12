@@ -1,9 +1,12 @@
 <?php
 // Projektseite: /referenzen/{slug}/ — die .htaccess lenkt hierher (?slug=…).
-// Aufbau wie die frühere WordPress-Shortcode-Fassung: Header mit Bild und
-// Titel · Kurzbeschreibung · Foto 1 · Aufgabenstellung · Foto 2 · Lösung ·
-// Foto 4 · Details zweispaltig · Foto 5 · Zusammenfassung · CTA mit Credits ·
-// weitere Projekte derselben Säule. Daten kommen aus Space (docs/datenformat.md).
+// Daten kommen aus Space (docs/datenformat.md). Seit dem Modul-Format
+// (7.10.2026) besteht die Seite aus frei angeordneten Inhalts-Modulen:
+// das erste header-Modul trägt Headerbild und Lead, danach läuft der Rest
+// in Reihenfolge (pj_modul in teile/projekte.php); Credits und Call to
+// Action stehen IMMER ganz unten, dann weitere Projekte derselben Säule.
+// Beiträge im alten Format (texte{} + feste Bildnamen) rendert der
+// Fallback unten unverändert, bis Space alle Einträge neu gepusht hat.
 
 require_once __DIR__ . '/../teile/firma.php';
 require_once __DIR__ . '/../teile/projekte.php';
@@ -40,13 +43,22 @@ $jsonld_extra = array_filter([
     'creator'     => ['@type' => 'Organization', 'name' => FIRMA_NAME],
 ]);
 
+// Modul-Format: das erste header-Modul trägt den Seitenkopf, der Rest
+// läuft in Reihenfolge. Ohne module-Array greift unten der Alt-Fallback.
+$module      = is_array($projekt['module'] ?? null) ? array_values($projekt['module']) : [];
+$headerModul = null;
+if ($module && (($module[0]['art'] ?? '') === 'header')) {
+    $headerModul = array_shift($module);
+}
+$headerBild = $headerModul['bilder'][0] ?? ($projekt['bilder']['header'] ?? null);
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 <div class="pj">
 
-  <?php if (!empty($projekt['bilder']['header']['quellen'])): ?>
+  <?php if (!empty($headerBild['quellen'])): ?>
   <header class="pj-header">
-    <?= pj_bild($projekt['bilder']['header'], 'pj-header-bild', '100vw', true) ?>
+    <?= pj_medium($headerBild, 'pj-header-bild', '100vw', true) ?>
     <div class="pj-header-inhalt">
       <?php if ($saeule): ?>
       <a class="pj-badge" href="<?= e($saeule[1]) ?>"><?= e($saeule[0]) ?></a>
@@ -59,6 +71,18 @@ require __DIR__ . '/../teile/kopf.php';
   <h1 class="pj-titel-ohne-bild"><?= e((string) ($projekt['titel'] ?? '')) ?></h1>
   <?php endif; ?>
 
+  <?php if ($headerModul || $module): ?>
+
+  <?php // Der Text des header-Moduls ist der Lead der Seite. ?>
+  <?php foreach (($headerModul['texte'] ?? []) as $t): if (trim((string) $t) === '') continue; ?>
+  <div class="pj-text pj-lead"><?= pj_absaetze((string) $t) ?></div>
+  <?php endforeach; ?>
+
+  <?php foreach ($module as $m) { echo pj_modul($m); } ?>
+
+  <?php else: ?>
+
+  <?php // ---- Alt-Fallback (Format vor dem 7.10.2026) ---- ?>
   <?= pj_text($projekt, 'kurzbeschreibung', 'pj-lead') ?>
 
   <?= pj_bild($projekt['bilder']['foto_01'] ?? null, 'pj-foto', '100vw') ?>
@@ -79,8 +103,13 @@ require __DIR__ . '/../teile/kopf.php';
   <?= pj_bild($projekt['bilder']['foto_05'] ?? null, 'pj-foto', '100vw') ?>
   <?= pj_text($projekt, 'zusammenfassung') ?>
 
+  <?php endif; ?>
+
   <?php
-  $cta     = pj_text($projekt, 'call_to_action', 'pj-cta-text');
+  // Credits und Call to Action: immer ganz unten, kein Modul. Im neuen
+  // Format ist cta ein Klartext-Feld, im alten ein texte-Eintrag.
+  $ctaRoh = trim((string) ($projekt['cta'] ?? ($projekt['texte']['call_to_action'] ?? '')));
+  $cta    = $ctaRoh !== '' ? '<div class="pj-text pj-cta-text">' . pj_absaetze($ctaRoh) . '</div>' : '';
   $credits = $projekt['credits'] ?? [];
   if ($cta !== '' || $credits): ?>
   <section class="pj-abschluss">
@@ -125,7 +154,7 @@ require __DIR__ . '/../teile/kopf.php';
 // Ohne JavaScript bleibt die Differenz-Kopfzeile wie bisher.
 (function () {
     var kopf = document.querySelector('.lz-header');
-    var dunkle = document.querySelectorAll('.pj-header, .pj .pj-foto, .pj-zitat');
+    var dunkle = document.querySelectorAll('.pj-header, .pj .pj-foto, .pj-zitat, .pj-doppel, .pj-scroller');
     if (!kopf || !dunkle.length) { return; }
     document.documentElement.classList.add('navi-wechsel');
     function pruefen() {
@@ -140,6 +169,38 @@ require __DIR__ . '/../teile/kopf.php';
     addEventListener('scroll', pruefen, { passive: true });
     addEventListener('resize', pruefen);
     pruefen();
+})();
+
+// Scroller-Module: die Bildreihe wandert quer mit dem Seiten-Scroll —
+// kein Scroll-Hijacking, die Seite läuft normal weiter. Ohne JavaScript
+// (oder bei reduzierter Bewegung) bleibt die Reihe von Hand wischbar
+// (overflow-x: auto); Modul-Videos stehen dann auf dem ersten Bild.
+(function () {
+    var ruhig = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (ruhig) {
+        document.querySelectorAll('.pj video').forEach(function (v) {
+            v.pause();
+            v.removeAttribute('autoplay');
+        });
+        return;
+    }
+    var scroller = document.querySelectorAll('.pj-scroller');
+    if (!scroller.length) { return; }
+    document.documentElement.classList.add('pj-rollt');
+    function lauf() {
+        scroller.forEach(function (sc) {
+            var spur = sc.firstElementChild;
+            var r = sc.getBoundingClientRect();
+            // 0 = Modul tritt unten ein, 1 = es verlässt den Schirm oben.
+            var p = Math.min(1, Math.max(0, 1 - r.bottom / (innerHeight + r.height)));
+            var weg = spur.scrollWidth - sc.clientWidth;
+            if (weg > 0) {
+                spur.style.transform = 'translateX(' + (-weg * p).toFixed(1) + 'px)';
+            }
+        });
+        requestAnimationFrame(lauf);
+    }
+    requestAnimationFrame(lauf);
 })();
 </script>
 

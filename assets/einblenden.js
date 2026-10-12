@@ -39,7 +39,7 @@
         // .pj-text selbst trägt den Spaltenversatz — deshalb werden dort
         // die Absätze eingeblendet, nicht der Block; Fotos treten mit auf.
         '.pj-header-inhalt', '.pj-text p', '.pj-zitat', '.pj-karte',
-        '.pj .pj-foto',
+        '.pj .pj-foto', '.pj-doppel', '.pj-scroller',
         '.buero-kachel', '.buero-text', '.portrait',
     ].join(',');
 
