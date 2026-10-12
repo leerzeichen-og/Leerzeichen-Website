@@ -349,6 +349,22 @@ html.pj-rollt .pj-scroller { overflow: hidden; }
 
 /* Großzügig (Roman, 12.10.2026): Titel im h2-Standard, größere Karten,
    viel Luft nach oben und unten. */
+/* Häufige Fragen zum Projekt (12.10.2026): der FAQ-Baustein der
+   Säulen-Seiten (.faq in site.css), hier in der zentrierten Spalte
+   unterhalb von CTA und Credits. */
+.pj-faq {
+  margin: var(--pj-luft) var(--pj-rand);
+  padding: clamp(100px, 14vh, 200px) 0 clamp(50px, 7vh, 110px);
+  border-top: 1px solid var(--pj-linie);
+}
+.pj-faq h2 {
+  max-width: 48%;
+  margin: 0 auto var(--space-7);
+}
+@media (max-width: 1100px) {
+  .pj-faq h2 { max-width: none; }
+}
+
 .pj-weitere {
   margin: var(--pj-luft) var(--pj-rand);
   padding: clamp(100px, 14vh, 200px) 0 clamp(50px, 7vh, 110px);

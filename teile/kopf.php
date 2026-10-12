@@ -99,7 +99,11 @@ if (!empty($brotkrumen)) {
     $jsonld[] = ['@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => $stufen];
 }
 if (!empty($jsonld_extra)) {
-    $jsonld[] = $jsonld_extra;
+    // Ein einzelner Block ODER eine numerische Liste von Blöcken — die
+    // Projektseite liefert seit 12.10.2026 CreativeWork + FAQPage zusammen.
+    foreach (array_is_list($jsonld_extra) ? $jsonld_extra : [$jsonld_extra] as $block) {
+        $jsonld[] = $block;
+    }
 }
 
 // Aktive Seite für die Navigation (erster Pfadteil der Adresse).

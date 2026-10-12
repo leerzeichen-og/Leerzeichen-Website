@@ -196,6 +196,17 @@ $projekte = [
             ['art' => 'foto_details',         'ueberschrift' => 'Im Detail', 'texte' => ['detail_01', 'detail_02'], 'bilder' => ['foto_06']],
             ['art' => 'foto_zusammenfassung', 'texte' => ['zusammenfassung'], 'bilder' => ['video']],
         ],
+        // Muster-FAQ (12.10.2026): kommt später aus der Wissensbasis.
+        'faq' => [
+            ['frage' => 'Wie lange hat das Projekt von der Beauftragung bis zur Eröffnung gedauert?',
+             'antwort' => 'Vierzehn Monate — vom ersten Gespräch im Frühjahr bis zur Eröffnung im Sommer darauf. Die Stationen wurden über den Winter in der Werkstatt gebaut und im Mai montiert.'],
+            ['frage' => 'Funktioniert der Weg wirklich ohne Personal?',
+             'antwort' => 'Ja. Alle Stationen sind mechanisch, die Wasserkammer kommt ohne Strom aus, und das Leitsystem braucht keine Aufsicht. Die Gemeinde kontrolliert die Strecke einmal pro Woche.'],
+            ['frage' => 'Ist der Erlebnisweg barrierefrei?',
+             'antwort' => 'Der Hauptweg ist durchgehend mit Kinderwagen und Rollstuhl befahrbar. Zwei Beobachtungsplätze am Steilufer sind als Alternative auch von der Hauptroute aus einsehbar.'],
+            ['frage' => 'Was passiert bei Hochwasser?',
+             'antwort' => 'Die Stationen stehen über der 30-jährlichen Hochwasserlinie; die Wasserkammer ist als Teil des Bachbetts ausgelegt und darf überflutet werden. Nach dem ersten Hochwasser war nur der Kies zu tauschen.'],
+        ],
     ],
     [
         'slug' => 'test-zeitsprung-burgruine', 'palette' => 'burg',
@@ -222,6 +233,13 @@ $projekte = [
             ['art' => 'foto_text',            'texte' => ['aufgabenstellung'], 'bilder' => ['foto_01']],
             ['art' => 'foto_details',         'texte' => ['loesung', 'detail_01'], 'bilder' => ['foto_02']],
             ['art' => 'foto_zusammenfassung', 'texte' => ['zusammenfassung'], 'bilder' => ['foto_05']],
+        ],
+        // Kürzere Muster-FAQ — zeigt den Block mit nur zwei Einträgen.
+        'faq' => [
+            ['frage' => 'Braucht das Rätsel eine App oder Internet?',
+             'antwort' => 'Nein. Rätselkarte, Bronzetafeln und der mechanische Schlüssel der Schatzkammer — mehr nicht. Das war Bedingung der Gemeinde und gefällt den Gästen am besten.'],
+            ['frage' => 'Wie lange dauert der Rundgang?',
+             'antwort' => 'Familien brauchen etwa eineinhalb Stunden. Wer nur die Baugeschichte lesen will, ist in einer halben Stunde durch.'],
         ],
     ],
     [
@@ -352,6 +370,9 @@ foreach ($projekte as $nr => $p) {
     if (!empty($p['zitat'])) {
         $beitrag['zitat']     = $p['zitat'];
         $beitrag['zitat_von'] = $p['zitat_von'] ?? '';
+    }
+    if (!empty($p['faq'])) {
+        $beitrag['faq'] = $p['faq'];
     }
     file_put_contents($ziel . '/daten/projekte/' . $slug . '.json', td_json($beitrag));
 

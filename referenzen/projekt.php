@@ -33,7 +33,7 @@ $brotkrumen   = [
 $styles       = ['/assets/projekt.css'];
 // CreativeWork fürs Projekt. Den Kunden nennt die description mit —
 // schema.org hat kein eigenes Feld für Auftraggeber.
-$jsonld_extra = array_filter([
+$jsonld_extra = [array_filter([
     '@context'    => 'https://schema.org',
     '@type'       => 'CreativeWork',
     'name'        => $projekt['titel'] ?? '',
@@ -41,7 +41,29 @@ $jsonld_extra = array_filter([
     'about'       => implode(', ', $projekt['schlagworte'] ?? []),
     'dateCreated' => (string) ($projekt['jahr'] ?? ''),
     'creator'     => ['@type' => 'Organization', 'name' => FIRMA_NAME],
-]);
+])];
+
+// Häufige Fragen zum Projekt (12.10.2026): faq-Array im Beitrags-JSON
+// (docs/datenformat.md), gepflegt in Space. Ohne Einträge entfällt der
+// Block; mit Einträgen gibt es zusätzlich FAQPage-JSON-LD — laut
+// Website-Briefing der wichtigste Einzelposten der Auffindbarkeit.
+$faq = array_values(array_filter(
+    is_array($projekt['faq'] ?? null) ? $projekt['faq'] : [],
+    fn($f) => is_array($f)
+        && trim((string) ($f['frage'] ?? '')) !== ''
+        && trim((string) ($f['antwort'] ?? '')) !== ''
+));
+if ($faq) {
+    $jsonld_extra[] = [
+        '@context'   => 'https://schema.org',
+        '@type'      => 'FAQPage',
+        'mainEntity' => array_map(fn($f) => [
+            '@type'          => 'Question',
+            'name'           => (string) $f['frage'],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => (string) $f['antwort']],
+        ], $faq),
+    ];
+}
 
 // Modul-Format: das erste header-Modul trägt den Seitenkopf, der Rest
 // läuft in Reihenfolge. Ohne module-Array greift unten der Alt-Fallback.
@@ -127,6 +149,22 @@ require __DIR__ . '/../teile/kopf.php';
       <?php endforeach; ?>
     </dl>
     <?php endif; ?>
+  </section>
+  <?php endif; ?>
+
+  <?php // Häufige Fragen zum Projekt — unterhalb von CTA und Credits
+        // (Roman, 12.10.2026); gleicher Baustein wie auf den Säulen-Seiten. ?>
+  <?php if ($faq): ?>
+  <section class="pj-faq">
+    <h2>Häufige Fragen</h2>
+    <div class="faq">
+      <?php foreach ($faq as $f): ?>
+      <details>
+        <summary><?= e((string) $f['frage']) ?></summary>
+        <p><?= e((string) $f['antwort']) ?></p>
+      </details>
+      <?php endforeach; ?>
+    </div>
   </section>
   <?php endif; ?>
 

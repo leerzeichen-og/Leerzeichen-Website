@@ -70,6 +70,7 @@ Der vollständige Beitrag — **Modul-Format seit 7.10.2026** (Space:
   ],
   "cta": "Sie haben einen Ort, der mehr erzählen könnte?",
   "credits": [ { "bereich": "Konzept", "person": "Roman Dachsberger" } ],
+  "faq": [ { "frage": "…?", "antwort": "…" } ],
   "bilder": {
     "teaser_quer": { …Bild-Objekt… },
     "teaser_hoch": { },
@@ -87,6 +88,11 @@ Der vollständige Beitrag — **Modul-Format seit 7.10.2026** (Space:
   laufen in Reihenfolge.
 - `cta` (Klartext) und `credits` stehen **außerhalb** — die Website zeigt
   beide IMMER ganz unten, sie sind kein Modul.
+- `faq` (seit 12.10.2026, optional): Liste aus `{frage, antwort}` in
+  Klartext. Die Website rendert sie als Aufklapp-Liste unterhalb von CTA
+  und Credits und erzeugt daraus FAQPage-JSON-LD. Ohne (oder mit leerem)
+  `faq` entfällt der Block. Quelle in Space: die Wissensbasis-Antworten
+  des Beitrags (Stufe 2, Redaktion/Freigabe).
 - `bilder` enthält nur noch die festen Slots `teaser_quer`, `teaser_hoch`
   und `objekt` (Karten, Collage, Startseiten-Bühne).
 - **Texte sind Klartext**, Absätze durch Leerzeile getrennt. Die Website
