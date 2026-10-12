@@ -2,12 +2,14 @@
 // Säulen-Seiten) — vorher Inline-Skript der Leistungsseite, ausgelagert am
 // 8.10.2026, als die Säulen denselben Hero bekamen.
 //
-// 1) Hero-Film: läuft einmal, dimmt danach ab (CSS film-fertig); solange er
-//    läuft, ist die Seite nicht scrollbar. Die Absätze des Heros wechseln
-//    beim Scrollen einzeln (Sektion bekommt eine Scrollstrecke, die Leinwand
-//    bleibt sticky stehen); der erste erscheint von selbst nach dem Abspann,
-//    gemeinsam mit dem Scrollhinweis-Pfeil. Zwei oder drei Absätze werden
-//    unterstützt (kürzere bzw. längere Strecke).
+// 1) Hero-Film: läuft einmal, dimmt danach ab (CSS film-fertig). Die Absätze
+//    des Heros wechseln beim Scrollen einzeln (Sektion bekommt eine
+//    Scrollstrecke, die Leinwand bleibt sticky stehen); der erste erscheint
+//    von selbst nach dem Abspann, gemeinsam mit dem Scrollhinweis-Pfeil.
+//    Gescrollt werden darf IMMER — die frühere Sperre während des Films
+//    fühlte sich wie eine kaputte Seite an (Beschluss Roman, 12.10.2026);
+//    wer sofort scrollt, bekommt die Absätze über ihre Scroll-Fenster.
+//    Zwei oder drei Absätze werden unterstützt (kürzere bzw. längere Strecke).
 // 2) Erscroll-Choreografie: Elemente treten erst auf (.wartet → .da), wenn
 //    man sie in die obere Bildschirmhälfte erscrollt — Zeitstrahl-Schritte,
 //    zweiter Stärken-Absatz, Ansatz-Merkmale.
@@ -34,20 +36,6 @@
         hero.classList.add('rollt');
         if (abs.length === 2) { hero.classList.add('rollt-kurz'); }
 
-        // Solange der Film läuft, ist die Seite nicht scrollbar — drei
-        // Sicherheitsnetze geben wieder frei: ended, blockiertes Autoplay
-        // (1,5 s ohne Wiedergabe) und eine harte Obergrenze von 9 s. Wer
-        // mitten auf der Seite einsteigt, wird gar nicht erst gesperrt.
-        var gesperrt = false;
-        if (video && !video.ended && scrollY < 50) {
-            gesperrt = true;
-            document.documentElement.style.overflow = 'hidden';
-        }
-        var freigeben = function () {
-            if (!gesperrt) { return; }
-            gesperrt = false;
-            document.documentElement.style.overflow = '';
-        };
         var zeichnen = function () {
             var r = hero.getBoundingClientRect();
             var strecke = r.height - innerHeight;
@@ -59,7 +47,6 @@
             });
         };
         var ersterAbsatzFrei = function () {
-            freigeben();
             if (FENSTER[0][0] < 0) { return; }
             FENSTER[0][0] = -1;
             // Der stehende Schlussframe dimmt zusätzlich ab (CSS film-fertig),
