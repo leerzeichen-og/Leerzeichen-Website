@@ -122,6 +122,12 @@ $nav = [
 header('Cache-Control: no-cache');
 ?>
 <!doctype html>
+<?php // Quellcode-Kunst: ASCII-Grüße für alle, die neugierig den Quelltext
+      // öffnen (Motive: Gemini, Idee Roman, 12.10.2026). Jede Seite darf
+      // vor dem Einbinden $quellkunst setzen — ein Heredoc mit einem
+      // kompletten HTML-Kommentar. Die Ausgabe passiert hier (nicht in
+      // der Seite selbst), weil vor header() nichts ausgegeben werden darf. ?>
+<?= isset($quellkunst) ? $quellkunst . "\n" : '' ?>
 <html lang="de-AT">
 <head>
 <meta charset="utf-8">

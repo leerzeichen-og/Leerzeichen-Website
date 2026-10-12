@@ -83,6 +83,20 @@ $ctaTitel = 'Was dürfen wir für Sie gestalten?';
 $ctaText  = 'Erzählen Sie uns von Ihrem Projekt.';
 $ctaKnopf = 'Reden wir darüber';
 
+// Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
+$quellkunst = <<<'KUNST'
+<!--
+       .-.          [ DER VEKTOR-DOMPTEUR ]
+      /   \
+     |  o  |---o    (Bezier-Punkt anfassen...)
+      \   /
+       '-'          Dateiname:
+        |           layout_v1_final_wirklich_jetzt_v2_DRUCK.pdf
+       / \
+      /   \         "Wir machen sichtbar, was in Ihnen steckt."
+-->
+KUNST;
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 

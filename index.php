@@ -121,6 +121,22 @@ $inkSplash  = startseite_bild('ink-splash');
 $uebergang  = startseite_bild('leerzeichen-design-abenteuer-erfolg-breiter_start_bg');
 $teamFoto   = startseite_bild('team');
 
+// Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
+$quellkunst = <<<'KUNST'
+<!--
+   _                                _     _
+  | | ___  ___ _ __ _______(_) ___| |__   ___ _ __
+  | |/ _ \/ _ \ '__|_  / _ \ |/ __| '_ \ / _ \ '_ \
+  | |  __/  __/ |   / /  __/ | (__| | | |  __/ | | |
+  |_|\___|\___|_|  /___\___|_|\___|_| |_|\___|_| |_|
+
+              [                  ]
+                     ^^^
+       Achtung: Hier steht ein Leerzeichen.
+            Gemeinsam Zeichen setzen.
+-->
+KUNST;
+
 require __DIR__ . '/teile/kopf.php';
 ?>
 

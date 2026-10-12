@@ -74,6 +74,27 @@ $ctaTitel = 'Planen Sie eine Ausstellung oder ein Ausflugsziel?';
 $ctaText  = 'Erzählen Sie uns von Ihrem Ort und Ihrer Geschichte.';
 $ctaKnopf = 'Reden wir darüber';
 
+// Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
+$quellkunst = <<<'KUNST'
+<!--
+                ___
+              /' _ `\     [ BAUAUFSICHT PFAU ]
+             |  / \  |    "Ich prüfe nur die Spaltmaße..."
+             |  \_/  |
+        .---'\_____/'---.
+       /                 \
+      |   (o)   (o)   (o) |
+      |  (o)   (o)   (o)  |
+       \                 /
+        '--._________.-'
+              /     \
+             /       \
+
+  Spielplätze, Ausstellungen, Pfau-Begutachtungen.
+  Wir inszenieren Erlebnisse, die im Gedächtnis bleiben.
+-->
+KUNST;
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 

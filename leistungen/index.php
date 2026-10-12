@@ -70,6 +70,24 @@ $ablauf = [
      'Eröffnung, Livegang oder Auslieferung. Danach bleiben wir erreichbar.'],
 ];
 
+// Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
+$quellkunst = <<<'KUNST'
+<!--
+   GESTALTUNG                 ERLEBNISSE
+   (Bildschirm)               (Baustelle & Raum)
+
+    .--------.                   ___
+    | 100101 |                  /   \  [BAUHELM AUF]
+    |  LOGO  |                 |=====|
+    '---..---'                  \___/
+        ||                     ___|___
+      __||__                  /   |   \  < "Passt die Stele
+     (______)                /|   |   |\    durch die Tür?"
+
+  Egal ob 100 dpi oder 100 Quadratmeter: Wir geben Inhalten Form.
+-->
+KUNST;
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 

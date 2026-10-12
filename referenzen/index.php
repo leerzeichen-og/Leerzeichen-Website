@@ -50,6 +50,29 @@ function pj_anker(string $name): string
     return trim(preg_replace('/[^a-z0-9]+/', '-', $s) ?? '', '-');
 }
 
+// Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
+$quellkunst = <<<'KUNST'
+<!--
+       .----------------------------------.
+       |  [x] prompt_generator.sh    _ [] |
+       |----------------------------------|
+       |  > "Mach mal kurz preisgekröntes |
+       |     Design & Raumkonzept..."     |
+       |                                  |
+       |  KI: [ RAUCH STEIGT AUF ]        |
+       |  ERROR 404: Handwerk not found.  |
+       '----------------------------------'
+            \       \_______/        /
+             \______________________/
+                     |      |
+                   __|______|_
+                  (___________)
+
+  "Das macht ja heute eh alles die KI."
+  (Spoiler: Denken, Kuratieren & Schrauben müssen wir trotzdem selbst.)
+-->
+KUNST;
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 

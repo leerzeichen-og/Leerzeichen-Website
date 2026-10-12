@@ -48,6 +48,24 @@ $prinzipien = [
 $ctaTitel = 'Unser Büro ist einen Besuch wert.';
 $ctaKnopf = 'Kommen Sie vorbei';
 
+// Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
+$quellkunst = <<<'KUNST'
+<!--
+          (  )   (   )  )
+           ) (   )  (  (
+          ( )  (    ) )
+          _____________
+         |             |===|
+         | LEERZEICHEN |   |  < Treibstoff für Neugier
+         |  SEIT 2008  |===|    und Genauigkeit.
+         \_____________/
+       ~~~~~~~~~~~~~~~~~~~
+
+   Perspektiven wechseln. Freundlich hinterfragen.
+   Und Quellcodes nach Easter Eggs durchsuchen.
+-->
+KUNST;
+
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
