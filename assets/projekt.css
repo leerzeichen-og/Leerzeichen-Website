@@ -543,8 +543,42 @@ html.pj-rollt .pj-scroller { overflow: hidden; }
    uns.") — in der Rasterzelle braucht es nur den Abstand nicht. */
 .pj-gruppe-titel { margin: 0; }
 
+/* Der Kategorien-Knopf gehört dem Telefon — am Schreibtisch stehen die
+   Pillen immer offen. :not([hidden]) wegen der display-gegen-hidden-Falle:
+   Der Knopf bleibt hidden, bis das Seitenskript ihn verdrahtet hat. */
+.pj-kategorien-knopf { display: none; }
+
 @media (max-width: 900px) {
   .pj-gruppe { grid-template-columns: 1fr; }
+
+  /* Erster Schirm (Roman, 12.10.2026): Bereichs-Filter, gleich darunter
+     der Einleitungssatz, dann der Kategorien-Knopf — so ist unterhalb
+     schon der erste Beitrag zu erkennen. Umsortiert wird per Flex-Order,
+     das Markup bleibt in der Schreibtisch-Reihenfolge. */
+  .pj-intro { display: flex; flex-direction: column; align-items: flex-start; }
+  .pj-intro .pj-filter { order: 1; margin-bottom: 0; }
+  .pj-intro .kopf-gross-zeile { order: 2; margin-top: var(--space-6); }
+  .pj-kategorien-knopf:not([hidden]) {
+    order: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: .6em;
+    margin-top: var(--space-6);
+    padding: .45rem 1.1rem;
+    border: 2px solid var(--tinte);
+    border-radius: 999px;
+    background: none;
+    color: var(--tinte);
+    font: inherit;
+    font-size: .95rem;
+    line-height: 1.3;
+    cursor: pointer;
+  }
+  .pj-kategorien-knopf::after { content: "+"; font-weight: 600; }
+  .pj-kategorien-knopf[aria-expanded="true"]::after { content: "–"; }
+  .pj-intro .pj-kategorien { order: 4; margin-top: var(--space-5); }
+  /* Zusammengeklappt erst, wenn das Skript den Knopf gezeigt hat. */
+  .pj-kategorien.pj-klappbar:not(.offen) { display: none; }
 }
 
 .pj-fr-titel {

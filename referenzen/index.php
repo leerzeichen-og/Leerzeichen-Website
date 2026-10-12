@@ -64,7 +64,13 @@ require __DIR__ . '/../teile/kopf.php';
     <?php endforeach; ?>
   </nav>
   <?php if ($gruppen): ?>
-  <nav class="pj-kategorien" aria-label="Kategorien">
+  <?php // Am Telefon füllten die Kategorie-Pillen den ganzen ersten Schirm —
+        // dort klappt dieser Knopf sie auf und zu (Roman, 12.10.2026). Er
+        // bleibt hidden, bis das Skript unten ihn verdrahtet (ohne
+        // JavaScript stehen die Pillen wie am Schreibtisch offen da). ?>
+  <button type="button" class="pj-kategorien-knopf" aria-expanded="false"
+    aria-controls="pj-kategorien" hidden>Kategorien</button>
+  <nav class="pj-kategorien" id="pj-kategorien" aria-label="Kategorien">
     <?php foreach ($gruppen as $name => $liste): ?>
     <a class="pj-pille" href="#<?= e(pj_anker($name)) ?>"><?= e($name) ?></a>
     <?php endforeach; ?>
@@ -102,6 +108,22 @@ require __DIR__ . '/../teile/kopf.php';
   <?php endforeach; ?>
 </section>
 <?php endif; ?>
+
+<script>
+// Kategorien-Knopf verdrahten: erst jetzt werden die Pillen am Telefon
+// zusammengeklappt (Klasse pj-klappbar) — ohne Skript bleiben sie offen.
+(function () {
+    var knopf = document.querySelector('.pj-kategorien-knopf');
+    var nav   = document.getElementById('pj-kategorien');
+    if (!knopf || !nav) { return; }
+    knopf.hidden = false;
+    nav.classList.add('pj-klappbar');
+    knopf.addEventListener('click', function () {
+        var offen = nav.classList.toggle('offen');
+        knopf.setAttribute('aria-expanded', offen ? 'true' : 'false');
+    });
+})();
+</script>
 
 <?php require __DIR__ . '/../teile/newsletter.php'; ?>
 <?php require __DIR__ . '/../teile/cta.php'; ?>

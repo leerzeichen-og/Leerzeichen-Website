@@ -434,8 +434,23 @@
     .lz-blockgrid, .lz-teamgrid, .lz-saeulen { grid-template-columns: 1fr; gap: var(--space-7); }
     .buehne-frage { max-width: none; left: var(--rand); right: var(--rand); }
     .buehne-claimblock { padding: calc(90px + var(--space-7)) var(--rand) var(--space-8); }
+    /* Rund 20 % höher als am Schreibtisch: Der Claim konkurrierte unten
+       mit dem schwebenden Anfrage-Icon (Roman, 12.10.2026). */
+    .buehne-claimblock { min-height: min(calc(68vh + 150px), calc(80vh - 32px)); }
     .buehne-antwort { left: var(--rand); right: var(--rand); }
     .buehne-statisch { padding-top: calc(90px + var(--space-6)); }
+    /* Team-Akt: Foto und Text rücken zusammen und damit tiefer (das Foto
+       hing sonst oben an der Kopfzeile). Der weiße Nebel hinter dem Text
+       läuft mit closest-side GARANTIERT innerhalb seiner Box auf 0 aus —
+       die geklemmte Oberkante stand am Telefon als harte Linie im
+       dunklen Splash (Roman, 12.10.2026). */
+    .buehne-team { gap: var(--space-7); }
+    .buehne-team-text::before {
+        inset: -120px -90px;
+        background: radial-gradient(closest-side,
+            rgba(255, 255, 255, .97) 52%,
+            rgba(255, 255, 255, 0) 100%);
+    }
 }
 
 /* Reduzierte Bewegung: kein Eigenleben — das Skript bleibt ohnehin bei der

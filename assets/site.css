@@ -498,6 +498,12 @@ h2 {
 }
 .portrait-kontakt a:hover { background: var(--ink); color: #fff; }
 .portrait-kontakt svg { width: 17px; height: 17px; display: block; }
+/* Untereinander gestapelt brauchen die Portraits mehr Zeilenabstand: Die
+   Kontaktzeichen klebten sonst am nächsten Foto statt bei ihrer Person
+   (Gesetz der Nähe — Roman, 12.10.2026). */
+@media (max-width: 900px) {
+    .portraits { row-gap: var(--space-8); }
+}
 
 /* Stärken (Agentur): größere, plakative Fassung der Prinzipien-Blöcke —
    Light-Ziffer, kräftiger Titel, Fließtextgröße (Roman, 24.9.2026). */
@@ -1011,6 +1017,11 @@ body.menue-offen { overflow: hidden; }
 }
 .rollt .leistung-runter { opacity: 0; transition: opacity 1.2s ease; }
 .rollt .film-fertig .leistung-runter { opacity: .85; }
+/* Am Telefon ganz an die Unterkante: Die Teaser-Absätze ragten sonst in
+   den Pfeil (Roman, 12.10.2026). */
+@media (max-width: 900px) {
+    .leistung-runter { bottom: 12px; }
+}
 
 /* Auf der dunklen Seite mischt die Kopfzeile nicht: Über dem Video wurde
    die Differenz grau und unlesbar — Logo und Navigation bleiben hier
@@ -1106,7 +1117,12 @@ body.menue-offen { overflow: hidden; }
     .feld-fluss { max-width: none; }
     .feld-eintrag:nth-child(n) .feld-flieger {
         position: static;
+        /* Als <a> sonst inline — dann wirken die vertikalen Margins nicht. */
+        display: block;
         width: min(70%, 340px);
+        /* Deutlich Luft nach der Aufzählung zum Projektbild darunter
+           (Roman, 12.10.2026). */
+        margin-top: var(--space-7);
         margin-bottom: var(--space-5);
         opacity: 1;
         pointer-events: auto;
@@ -1225,6 +1241,11 @@ body.menue-offen { overflow: hidden; }
 .leistung-hero-leinwand .titel-gross { margin-top: 0; }
 .leistung-hero-leinwand .kopf-gross-zeile { margin-top: var(--space-9); }
 .leistung-hero-leinwand .kopf-gross-rechts p { margin-bottom: var(--space-7); }
+/* Am Telefon beginnt der Teaser früher — die langen Absätze ragten sonst
+   in den Scrollhinweis-Pfeil (Roman, 12.10.2026; Pfeil dort: bottom 12px). */
+@media (max-width: 900px) {
+    .leistung-hero-leinwand .kopf-gross-zeile { margin-top: var(--space-7); }
+}
 
 /* Mit JavaScript bekommt der Hero eine Scrollstrecke: die Leinwand bleibt
    stehen, die drei Absätze liegen übereinander und wechseln per Opacity
