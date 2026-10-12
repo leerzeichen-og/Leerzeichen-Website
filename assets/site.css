@@ -919,11 +919,12 @@ body.menue-offen { overflow: hidden; }
     line-height: 1.55;
     color: rgba(255, 255, 255, .85);
 }
-/* Das Leistungsverzeichnis bekommt Raum: echte Liste, zwei Spalten,
-   mit Luft nach oben und unten (Roman, 8.10.2026). */
+/* Das Leistungsverzeichnis: dezent unter dem Knopf — kleiner, gedämpft
+   und ohne Zeilenlinien, damit nichts nach weiteren Links aussieht
+   (Roman, 12.10.2026; vorher stand es groß mit Linien vor dem Knopf). */
 .leistung-liste {
     list-style: none;
-    margin: var(--space-7) 0 var(--space-8);
+    margin: var(--space-6) 0 0;
     padding: 0;
     width: 100%;
     max-width: 46rem;
@@ -931,15 +932,15 @@ body.menue-offen { overflow: hidden; }
     column-gap: var(--space-6);
 }
 .leistung-liste li {
-    padding: .7em 0;
-    font-size: var(--text-lg);
-    line-height: 1.4;
-    border-bottom: 1px solid rgba(255, 255, 255, .22);
+    padding: .3em 0;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, .62);
     break-inside: avoid;
 }
-/* margin-top: auto drückt den Knopf ans untere Ende — beide Boxen
-   schließen damit bündig ab, egal wie lang das Verzeichnis ist. */
-.leistung-kachel .knopf { margin-top: auto; }
+/* Der Knopf steht gleich unterm Teaser; ein wenig Zusatzluft trennt ihn
+   von Text und Verzeichnis. */
+.leistung-kachel .knopf { margin-top: var(--space-2, 8px); }
 @media (max-width: 640px) {
     .leistung-liste { columns: 1; }
 }
@@ -1134,6 +1135,18 @@ body.menue-offen { overflow: hidden; }
 /* Der Knopf „Alle …-Projekte" direkt unter dem Listen-Modul, an der
    Kante der zentrierten Textspalte. */
 .feld-knopf { max-width: 48%; margin: var(--space-8) auto 0; }
+
+/* Querverweis zur anderen Säule: ein Satz und ein Knopf, zentriert
+   (Roman, 12.10.2026 — auf beiden Säulen-Seiten baugleich). */
+.saeule-wechsel { text-align: center; }
+.saeule-wechsel-satz {
+    margin: 0 auto var(--space-6);
+    max-width: 34ch;
+    font-weight: 300;
+    font-size: clamp(1.35rem, 1.9vw, 1.85rem);
+    line-height: 1.35;
+    text-wrap: balance;
+}
 @media (max-width: 1100px) {
     .feld-knopf { max-width: none; }
 }

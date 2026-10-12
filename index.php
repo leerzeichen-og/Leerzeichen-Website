@@ -86,7 +86,7 @@ $saeulen_boxen = [
                     'Spielplatzkonzepte', 'Leitsysteme und Beschilderung', 'Interaktive Stationen'],
     ],
     [
-        'id' => 'marke', 'url' => '/grafikdesign/', 'eyebrow' => 'Säule 2 · Gestaltung für Unternehmen',
+        'id' => 'marke', 'url' => '/grafikdesign/', 'eyebrow' => 'Säule 2 · Grafik & Design',
         'titel' => 'Wir machen sichtbar, was Ihr Unternehmen ausmacht.',
         'text' => [
             'Zuerst das klare Bild: Logo, Farben, Schrift und Bildwelt. Daran erkennt man Sie auf den ersten Blick, auf Papier wie am Screen.',

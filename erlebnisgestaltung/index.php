@@ -157,6 +157,13 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
+<?php // Querverweis zur anderen Säule (Roman, 12.10.2026) — steht auf
+      // beiden Säulen-Seiten baugleich vor dem CTA. ?>
+<section class="lz-sec saeule-wechsel">
+  <p class="saeule-wechsel-satz">Sie suchen Corporate Design, Publikationen
+    oder eine Website?</p>
+  <a class="knopf knopf-hell" href="/grafikdesign/">Zum Grafikdesign <?= lz_pfeil() ?></a>
+</section>
 
 <script src="<?= e(lz_asset('/assets/hero-film.js')) ?>" defer></script>
 

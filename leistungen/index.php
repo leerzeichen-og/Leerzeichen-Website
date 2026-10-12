@@ -17,7 +17,7 @@ $bodyKlasse   = 'seite-dunkel';
 
 $saeulen = [
     [
-        'chip'   => 'Gestaltung für Unternehmen',
+        'chip'   => 'Grafik & Design',
         'titel'  => 'Identität sichtbar machen.',
         'text'   => 'Wir entwickeln Corporate Designs, Websites, Publikationen und '
                   . 'Werbemittel. Unsere Kunden sind Betriebe, die zeigen wollen, was '
@@ -114,12 +114,14 @@ require __DIR__ . '/../teile/kopf.php';
       <span class="chip"><?= e($s['chip']) ?></span>
       <h2><?= e($s['titel']) ?></h2>
       <span class="leistung-text"><?= e($s['text']) ?></span>
+      <?php // Knopf gleich unterm Teaser; das Verzeichnis folgt dezent
+            // darunter (Roman, 12.10.2026). ?>
+      <span class="knopf knopf-hell"><?= e($s['knopf']) ?> <?= lz_pfeil() ?></span>
       <ul class="leistung-liste">
         <?php foreach ($s['liste'] as $l): ?>
         <li><?= e($l) ?></li>
         <?php endforeach; ?>
       </ul>
-      <span class="knopf knopf-hell"><?= e($s['knopf']) ?> <?= lz_pfeil() ?></span>
     </span>
   </a>
   <?php endforeach; ?>

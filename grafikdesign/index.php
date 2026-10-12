@@ -93,7 +93,7 @@ require __DIR__ . '/../teile/kopf.php';
     <video class="leistung-hero-video" src="/assets/videos/leerzeichen-vernetzte-gestaltung.mp4"
       autoplay muted playsinline aria-hidden="true"></video>
     <div class="leistung-hero-inhalt">
-      <span class="chip">Gestaltung für Unternehmen</span>
+      <span class="chip">Grafik &amp; Design</span>
       <h1 class="titel-gross">Identität<br>sichtbar<br>machen.</h1>
       <div class="kopf-gross-zeile">
         <div class="kopf-gross-rechts">
@@ -162,6 +162,13 @@ require __DIR__ . '/../teile/kopf.php';
   </div>
 </section>
 
+<?php // Querverweis zur anderen Säule (Roman, 12.10.2026) — steht auf
+      // beiden Säulen-Seiten baugleich vor dem CTA. ?>
+<section class="lz-sec saeule-wechsel">
+  <p class="saeule-wechsel-satz">Sie planen eine Ausstellung, einen Themenweg
+    oder ein Erlebnis im Raum?</p>
+  <a class="knopf knopf-hell" href="/erlebnisgestaltung/">Zur Erlebnisgestaltung <?= lz_pfeil() ?></a>
+</section>
 
 <script src="<?= e(lz_asset('/assets/hero-film.js')) ?>" defer></script>
 
