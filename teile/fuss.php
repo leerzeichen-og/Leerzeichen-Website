@@ -7,6 +7,17 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
     . rawurlencode(FIRMA_STRASSE . ', ' . FIRMA_PLZ . ' ' . FIRMA_ORT);
 ?>
 </main>
+
+<?php // Schwebendes Brief-Icon rechts unten (Roman, 12.10.2026, Muster
+      // pixelart) — führt auf jeder Seite zur Projektanfrage. ?>
+<a class="lz-anfrage" href="/kontakt/anfrage/" aria-label="Projekt anfragen">
+  <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.6" y="5" width="18.8" height="14" rx="1.5"/>
+    <path d="M3.4 6.2 12 12.6l8.6-6.4"/>
+  </svg>
+</a>
+
 <footer class="lz-footer">
   <img class="lz-logo" src="/assets/logo/leerzeichen-logo-pos.svg" alt="" width="316" height="41">
   <div class="lz-footgrid">

@@ -1426,6 +1426,70 @@ body.seite-dunkel { background: #000; color: #fff; }
     .kontakt-lage { grid-template-columns: 1fr; gap: var(--space-6); }
 }
 
+/* --- Projektanfrage (kontakt/anfrage/, 12.10.2026) --------------------------- */
+
+/* Das schwebende Brief-Icon rechts unten: auf jeder Seite, dezent,
+   führt zur Projektanfrage. Auf dunklen Seiten invertiert. */
+.lz-anfrage {
+    position: fixed;
+    right: clamp(14px, 2vw, 28px);
+    bottom: clamp(14px, 2vw, 28px);
+    z-index: 28;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    transition: transform .25s var(--ease-out, ease-out);
+}
+.lz-anfrage svg { width: 22px; height: 22px; }
+.lz-anfrage:hover,
+.lz-anfrage:focus-visible { transform: scale(1.1); }
+.seite-dunkel .lz-anfrage { background: var(--paper); color: var(--ink); }
+@media print {
+    .lz-anfrage { display: none; }
+}
+
+/* Das Formular: zweispaltiges Raster in der Lesespalte, Nachricht über
+   die volle Breite; der Honigtopf ist für Menschen unsichtbar. */
+.anfrage { max-width: 60rem; }
+.anfrage-raster {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--space-5) var(--space-6);
+}
+.anfrage-breit { grid-column: 1 / -1; }
+.anfrage-form .lz-input { width: 100%; }
+.anfrage-form textarea.lz-input { resize: vertical; }
+.anfrage-falle {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.anfrage-hinweis {
+    margin: var(--space-6) 0;
+    max-width: 66ch;
+    font-size: var(--text-sm, .9rem);
+    line-height: 1.55;
+    color: var(--text-body);
+}
+.anfrage-hinweis a { text-decoration: underline; }
+.anfrage-fehler {
+    margin: 0 0 var(--space-6);
+    padding: var(--space-5);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-xs);
+}
+.anfrage-fehler p { margin: 0; font-weight: 600; }
+.anfrage-fehler p + p { margin-top: .4em; }
+.anfrage-danke h2 { margin-bottom: var(--space-5); }
+.anfrage-danke p { max-width: 50ch; font-size: var(--text-lg); line-height: var(--leading-body); }
+
 /* --- Abschluss-CTA (teile/cta.php) ------------------------------------------ */
 
 .kontakt-cta { text-align: center; }

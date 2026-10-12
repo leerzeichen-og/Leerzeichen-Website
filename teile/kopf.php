@@ -109,9 +109,9 @@ if (in_array($nav_aktiv, ['erlebnisgestaltung', 'grafikdesign'], true)) {
     $nav_aktiv = 'leistungen';
 }
 $nav = [
-    ['leistungen', 'Leistungen'],
-    ['referenzen', 'Referenzen'],
     ['agentur',    'Agentur'],
+    ['referenzen', 'Referenzen'],
+    ['leistungen', 'Leistungen'],
     ['kontakt',    'Kontakt'],
 ];
 
