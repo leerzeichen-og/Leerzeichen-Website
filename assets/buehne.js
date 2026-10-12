@@ -105,6 +105,36 @@
         };
     });
 
+    // --- Startlagen am Telefon: kein Objekt unter dem Claim ---------------------
+    // Zu Beginn (vor dem ersten Scrollen) darf kein Objekt im Band des
+    // Schriftzugs „Gemeinsam Zeichen setzen." liegen (Roman, 12.10.2026).
+    // Überlappende Bahnen weichen zur näheren Seite aus — ihre ganze
+    // Umlaufbahn verschiebt sich dafür um ein paar vh, die Verteilung über
+    // die Reise bleibt. Nach den Schriften noch einmal (load), die
+    // Claim-Höhe steht erst dann fest.
+    var claimTitel = buehne.querySelector('.buehne-claimblock h1');
+    function claimFreihalten() {
+        if (!claimTitel || window.innerWidth > 900 || (p || 0) > 0.02) { return; }
+        var vh = window.innerHeight / 100;
+        var r = claimTitel.getBoundingClientRect();
+        var oben  = (r.top + window.scrollY) / vh - 4;
+        var unten = (r.bottom + window.scrollY) / vh + 4;
+        zustand.forEach(function (s) {
+            var h = parseFloat(s.el.dataset.h);
+            if (s.y0 + h > oben && s.y0 < unten) {
+                s.y0 = (unten - s.y0 <= s.y0 + h - oben) ? unten : oben - h;
+                s.y = s.y0;
+                // Startlage auch im Markup nachziehen — macht die
+                // Verschiebung im Inspektor ablesbar und wirkt sofort,
+                // bevor der erste Animationsframe zeichnet.
+                s.el.dataset.y0 = s.y0;
+                s.el.style.transform = 'translate3d(' + s.x0 + 'vw,' + s.y0 + 'vh,0)';
+            }
+        });
+    }
+    claimFreihalten();
+    window.addEventListener('load', claimFreihalten);
+
     // --- Zeiger-Badge (Rechteck in Logo-Form) über den Objekten ---------------
     var feinzeiger = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     var badge = document.createElement('div');

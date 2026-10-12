@@ -48,6 +48,12 @@
         if (el.closest('.buehne')) {
             return;   // Bühne macht das selbst
         }
+        // Die Hero-Absätze der Film-Seiten steuert hero-film.js über die
+        // Scroll-Fenster (Inline-Opacity) — die .blende-Transition machte
+        // deren Wechsel träge und zeigte Absätze zur falschen Zeit an.
+        if (el.matches('.kopf-gross-rechts p') && el.closest('.leistung-hero')) {
+            return;
+        }
         el.classList.add('blende');
         ziele.push(el);
     });

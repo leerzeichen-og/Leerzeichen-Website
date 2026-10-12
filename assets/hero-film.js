@@ -72,8 +72,18 @@
         if (video) {
             if (video.ended) { ersterAbsatzFrei(); }
             video.addEventListener('ended', ersterAbsatzFrei);
-            setTimeout(function () {
-                if (video.currentTime === 0) { ersterAbsatzFrei(); }
+            // Blockiertes Autoplay erkennt man am PAUSIERTEN Video —
+            // currentTime 0 allein hieß am Telefon oft nur „lädt noch
+            // übers Funknetz" und zeigte den ersten Absatz mitten in den
+            // anlaufenden Film (Roman, 12.10.2026). Deshalb wiederholt
+            // geprüft; die 9-s-Obergrenze bleibt das letzte Netz.
+            var pruefer = setInterval(function () {
+                if (FENSTER[0][0] < 0 || video.ended) {
+                    clearInterval(pruefer);
+                } else if (video.paused && video.currentTime === 0) {
+                    clearInterval(pruefer);
+                    ersterAbsatzFrei();
+                }
             }, 1500);
             setTimeout(ersterAbsatzFrei, 9000);
         }
