@@ -82,14 +82,25 @@
         });
     });
 
-    // --- Zustand je Objekt: schwebt fast am Stand (kleines seitliches
-    //     Treiben), die Höhe hängt am Scroll-Fortschritt (y0 − p·tiefe).
-    var zustand = objekte.map(function (el) {
+    // --- Zustand je Objekt: pendelt sanft um seinen STAMMPLATZ (Sinus mit
+    //     eigener Phase und Periode), die Höhe hängt am Scroll-Fortschritt
+    //     (y0 − p·tiefe). Früher drifteten die Objekte frei und kamen am
+    //     anderen Rand wieder herein — bei lange offener Seite sammelten
+    //     sie sich sichtbar am rechten Rand (Roman, 12.10.2026); das Pendeln
+    //     hält die gestaltete Verteilung für immer.
+    var zustand = objekte.map(function (el, i) {
         return {
             el: el,
-            x: parseFloat(el.dataset.x), y0: parseFloat(el.dataset.y0),
-            tiefe: parseFloat(el.dataset.tiefe), vx: parseFloat(el.dataset.vx),
-            w: parseFloat(el.dataset.w), h: parseFloat(el.dataset.h),
+            x0: parseFloat(el.dataset.x),
+            x: parseFloat(el.dataset.x),
+            y0: parseFloat(el.dataset.y0),
+            tiefe: parseFloat(el.dataset.tiefe),
+            // |vx| aus dem Markup gibt den Takt vor (Periode ~11–16 s),
+            // die Phase streut die Bewegungen gegeneinander.
+            takt: 0.25 + Math.abs(parseFloat(el.dataset.vx)),
+            phase: i * 2.1,
+            weite: 2 + (i % 3),         // Pendelweite 2–4 vw
+            uhr: 0,                     // läuft nur, solange nichts armiert ist
             y: parseFloat(el.dataset.y0)   // angezeigte Höhe (geglättet, s. fliegen)
         };
     });
@@ -198,9 +209,8 @@
         zuletzt = jetzt;
         if (armiert === null) {
             zustand.forEach(function (s) {
-                s.x += s.vx * dt * 1.6;
-                if (s.x > 100) s.x = -s.w;
-                if (s.x < -s.w - 2) s.x = 100;
+                s.uhr += dt;
+                s.x = s.x0 + Math.sin(s.uhr * s.takt + s.phase) * s.weite;
             });
         }
         zustand.forEach(function (s) {
