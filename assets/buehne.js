@@ -243,6 +243,7 @@
 
     // --- Badge zeigen, Absprung zur Projektseite -------------------------------
     function entwaffnen() {
+        if (zoomZiel !== null) { return; }   // mitten im Absprung nichts löschen
         armiert = null;
         badgeDa = false;
         badge.classList.remove('da');
@@ -270,6 +271,7 @@
         );
         badge.classList.add('zoom');
         badge.style.transition = 'transform .55s cubic-bezier(.5, 0, .2, 1)';
+        void badge.offsetWidth;   // Reflow: Safari braucht die Transition VOR dem Ziel
         badge.style.transform = 'translate(' + (window.innerWidth / 2) + 'px,'
             + (window.innerHeight / 2) + 'px) translate(-50%, -50%) scale(' + faktor + ')';
         setTimeout(function () { window.location.href = zoomZiel; }, 580);
@@ -313,7 +315,8 @@
     }
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') entwaffnen(); });
     blick.addEventListener('click', function (e) {
-        if (armiert !== null && !e.target.closest('.buehne-obj')) entwaffnen();
+        if (armiert !== null && !e.target.closest('.buehne-obj')
+            && !e.target.closest('.buehne-zeigerbadge')) entwaffnen();
     });
 
     // Kommt jemand per Zurück-Knopf wieder, stellt der Browser die Seite
