@@ -30,8 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'nachricht'   => $feld('nachricht'),
     ];
 
-    if ($feld('website') !== '') {
-        // Honigtopf gefüllt: ein Bot. Still so tun, als wäre alles gut.
+    if ($feld('website') !== ''
+        || (ctype_digit($feld('seit')) && time() - (int) $feld('seit') < 3)) {
+        // Honigtopf gefüllt ODER unter drei Sekunden „ausgefüllt" (kein
+        // Mensch schafft das Formular so schnell): ein Bot. Still so tun,
+        // als wäre alles gut — keine Mail, keine Fehlermeldung.
         $gesendet = true;
     } else {
         if ($alt['vorname'] === '')  { $fehler[] = 'Bitte den Vornamen angeben.'; }
@@ -114,6 +117,9 @@ require __DIR__ . '/../../teile/kopf.php';
     <p class="anfrage-falle" aria-hidden="true">
       <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
     </p>
+    <?php // Zeitfalle: wann das Formular gerendert wurde — Antworten unter
+          // drei Sekunden verwirft der Versand oben als Bot. ?>
+    <input type="hidden" name="seit" value="<?= time() ?>">
 
     <div class="anfrage-raster">
       <label class="lz-field">

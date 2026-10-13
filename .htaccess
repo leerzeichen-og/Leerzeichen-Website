@@ -15,6 +15,29 @@ ErrorDocument 404 /404.php
 SetEnvIfNoCase Host ^neu\. LZ_STAGING
 Header set X-Robots-Tag "noindex, nofollow, noarchive" env=LZ_STAGING
 
+# --- Sicherheits-Header (Durchsicht 13.10.2026) ------------------------------
+# Browser dürfen Dateitypen nicht raten (nehmen den Content-Type wörtlich).
+Header set X-Content-Type-Options "nosniff"
+# Die Seite darf nirgends als Frame eingebettet werden (Clickjacking) —
+# doppelt gesetzt: dieser Header für ältere Browser, frame-ancestors unten.
+Header set X-Frame-Options "DENY"
+# Beim Klick auf externe Links geht nur die Domain als Herkunft mit.
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+# Browser-Funktionen, die diese Website nie braucht, ausdrücklich aus.
+Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+# HTTPS verbindlich merken (180 Tage; bewusst ohne Subdomains — space. und
+# analytics. verwalten sich selbst).
+Header set Strict-Transport-Security "max-age=15552000"
+# Content-Security-Policy: Laden nur von der eigenen Domain plus dem
+# eigenen Matomo — eingeschleuste Fremd-Skripte/-Bilder blockt der Browser.
+# 'unsafe-inline' bleibt nötig (JSON-LD, Seiten-Skripte, style-Attribute);
+# form-action erlaubt mailto: für das Newsletter-Formular.
+Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://analytics.leerzeichen.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://analytics.leerzeichen.at; font-src 'self'; connect-src 'self' https://analytics.leerzeichen.at; media-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' mailto:"
+
+# Punktdateien nie ausliefern (eine versehentlich hochgeladene .env o. Ä.
+# wäre sonst lesbar); .well-known bleibt frei (Zertifikats-Prüfungen).
+RedirectMatch 404 /\.(?!well-known)
+
 RewriteEngine On
 
 # Eine kanonische Adresse: leerzeichen.at (ohne www) leitet dauerhaft auf
