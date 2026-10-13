@@ -234,20 +234,43 @@ require __DIR__ . '/../teile/kopf.php';
     var scroller = document.querySelectorAll('.pj-scroller');
     if (!scroller.length) { return; }
     document.documentElement.classList.add('pj-rollt');
+    // Die Bühne klebt vertikal zentriert im Fenster; die Sektion ist um die
+    // horizontale Überlänge höher — 1 px senkrecht = 1 px waagrecht. So
+    // stehen erstes und letztes Bild in Ruhe im Bild, und das Tempo ist
+    // genau das Scrolltempo (Roman, 13.10.2026; vorher lief die Fahrt
+    // während der Viewport-Durchquerung und war am Telefon zu schnell).
+    function vermessen() {
+        scroller.forEach(function (sc) {
+            var buehne = sc.firstElementChild;
+            var spur = buehne.firstElementChild;
+            var weg = Math.max(0, spur.scrollWidth - buehne.clientWidth);
+            sc.style.height = (buehne.offsetHeight + weg) + 'px';
+            buehne.style.top = Math.max(0, (innerHeight - buehne.offsetHeight) / 2) + 'px';
+        });
+    }
     function lauf() {
         scroller.forEach(function (sc) {
-            var spur = sc.firstElementChild;
-            var r = sc.getBoundingClientRect();
-            // 0 = Modul tritt unten ein, 1 = es verlässt den Schirm oben.
-            var p = Math.min(1, Math.max(0, 1 - r.bottom / (innerHeight + r.height)));
-            var weg = spur.scrollWidth - sc.clientWidth;
-            if (weg > 0) {
-                spur.style.transform = 'translateX(' + (-weg * p).toFixed(1) + 'px)';
-            }
+            var buehne = sc.firstElementChild;
+            var spur = buehne.firstElementChild;
+            var weg = spur.scrollWidth - buehne.clientWidth;
+            var strecke = sc.offsetHeight - buehne.offsetHeight;
+            if (weg <= 0 || strecke <= 0) { return; }
+            var oben = parseFloat(buehne.style.top) || 0;
+            var p = Math.min(1, Math.max(0, (oben - sc.getBoundingClientRect().top) / strecke));
+            spur.style.transform = 'translateX(' + (-weg * p).toFixed(1) + 'px)';
         });
-        requestAnimationFrame(lauf);
     }
-    requestAnimationFrame(lauf);
+    vermessen();
+    lauf();
+    addEventListener('scroll', lauf, { passive: true });
+    addEventListener('resize', function () { vermessen(); lauf(); });
+    addEventListener('load', function () { vermessen(); lauf(); });
+    // Nachladende Bilder verändern die Spurlänge — danach neu vermessen.
+    scroller.forEach(function (sc) {
+        sc.querySelectorAll('img').forEach(function (b) {
+            b.addEventListener('load', function () { vermessen(); lauf(); });
+        });
+    });
 })();
 </script>
 

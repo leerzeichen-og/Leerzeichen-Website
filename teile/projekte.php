@@ -160,11 +160,14 @@ function pj_modul(array $m): string
             return $out . '</div>';
 
         case 'scroller':
-            $out = '<div class="pj-scroller"><div class="pj-scroller-spur">';
+            // Die Bühne ist der sichtbare Streifen: Mit JavaScript klebt sie
+            // im Fenster (sticky), während die Sektion die Scrollstrecke
+            // hergibt; ohne JavaScript ist sie von Hand wischbar.
+            $out = '<div class="pj-scroller"><div class="pj-scroller-buehne"><div class="pj-scroller-spur">';
             foreach ($bilder as $b) {
                 $out .= pj_medium($b, 'pj-scroller-medium', '70vw');
             }
-            return $out . '</div></div>';
+            return $out . '</div></div></div>';
 
         case 'foto_details':
             $out = pj_medium($bilder[0] ?? null, 'pj-foto', '100vw');

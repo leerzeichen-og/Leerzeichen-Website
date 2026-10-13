@@ -224,20 +224,29 @@
   .pj-doppel { grid-template-columns: 1fr; }
 }
 
-/* Scroller: drei bis fünf Medien in einer Reihe. Die Spur wandert quer
-   mit dem Seiten-Scroll (Skript der Projektseite, Klasse pj-rollt) —
-   ohne JavaScript oder bei reduzierter Bewegung bleibt sie von Hand
-   wischbar (overflow-x: auto, Rollbalken versteckt). */
+/* Scroller: drei bis fünf Medien in einer Reihe. Mit JavaScript klebt die
+   Bühne im Fenster (sticky), die Sektion bekommt die Überlänge als eigene
+   Scrollstrecke (Höhe setzt das Skript) — 1 px senkrecht = 1 px waagrecht,
+   erstes und letztes Bild stehen in Ruhe im Bild (Roman, 13.10.2026;
+   vorher lief die Fahrt während der Viewport-Durchquerung und war am
+   Telefon viel zu schnell). Ohne JavaScript oder bei reduzierter Bewegung
+   bleibt die Reihe von Hand wischbar (overflow-x: auto, Balken versteckt). */
 .pj-scroller {
   width: 100vw;
   max-width: 100vw;
   margin: var(--pj-luft) calc(50% - 50vw);
+}
+.pj-scroller-buehne {
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
 }
-.pj-scroller::-webkit-scrollbar { display: none; }
-html.pj-rollt .pj-scroller { overflow: hidden; }
+.pj-scroller-buehne::-webkit-scrollbar { display: none; }
+html.pj-rollt .pj-scroller-buehne {
+  position: sticky;
+  top: 0;              /* das Skript zentriert über den Inline-Stil */
+  overflow: hidden;
+}
 .pj-scroller-spur {
   display: flex;
   gap: clamp(12px, 1.6vw, 32px);
