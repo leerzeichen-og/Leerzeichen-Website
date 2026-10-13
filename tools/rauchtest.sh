@@ -32,7 +32,11 @@ done < <(find . -name 'index.php' -not -path './.git/*')
 for seite in $seiten; do
   code=$(curl -s -o /tmp/lz-seite.html -w "%{http_code}" "http://127.0.0.1:8931$seite")
   erwartet=200
-  case "$seite" in /404.php|/referenzen/projekt.php) erwartet=404 ;; esac
+  case "$seite" in
+    /404.php|/referenzen/projekt.php) erwartet=404 ;;
+    # Der Anmelde-Handler nimmt nur POST entgegen — GET leitet zur Startseite.
+    /newsletter/anmelden/) erwartet=302 ;;
+  esac
   if [ "$code" != "$erwartet" ] || grep -qE "Fatal error|Warning:|Deprecated:" /tmp/lz-seite.html; then
     echo "FEHLER $seite (HTTP $code)"
     grep -E "Fatal error|Warning:|Deprecated:" /tmp/lz-seite.html | head -3

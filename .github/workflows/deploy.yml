@@ -33,6 +33,20 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      # Zugangsdaten gehören nie ins Repo: Die Datei entsteht hier aus dem
+      # Repo-Secret BREVO_KEY (Settings → Secrets and variables → Actions)
+      # und geht mit dem Upload an den Server. Solange das Secret fehlt,
+      # zeigt das Newsletter-Formular einfach die mailto-Fassung.
+      # Felder und Vorlage: teile/geheim-vorlage.php.
+      - name: Brevo-Zugang hinterlegen (teile/geheim.php)
+        run: |
+          cat > teile/geheim.php << 'GEHEIM'
+          <?php
+          define('BREVO_KEY', '${{ secrets.BREVO_KEY }}');
+          define('BREVO_LISTE', 10);
+          define('BREVO_DOI_VORLAGE', 0);
+          GEHEIM
+
       - name: Upload per FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:

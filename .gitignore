@@ -1,3 +1,7 @@
 .DS_Store
 /daten/
 /bilder/
+
+# Zugangsdaten (Brevo): schreibt die Deploy-Action aus dem Repo-Secret,
+# lokal legt man sie nach der Vorlage teile/geheim-vorlage.php an.
+/teile/geheim.php
