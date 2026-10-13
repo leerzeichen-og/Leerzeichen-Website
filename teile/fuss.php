@@ -62,5 +62,23 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
   </div>
 </footer>
 <script src="<?= e(lz_asset('/assets/einblenden.js')) ?>" defer></script>
+<script>
+// Matomo-Ereignisse (13.10.2026): Klicks auf Telefonnummern, Mailadressen
+// und das schwebende Anfrage-Icon — die sieht die Seitenmessung sonst
+// nicht. Läuft nur, wenn das Matomo-Skript geladen ist (_paq); lokal und
+// ohne Matomo passiert nichts. Ziele dazu: Matomo → Verwaltung → Ziele.
+document.addEventListener('click', function (e) {
+    if (!window._paq || !e.target.closest) { return; }
+    var a = e.target.closest('a[href^="tel:"], a[href^="mailto:"], a.lz-anfrage');
+    if (!a) { return; }
+    var href = a.getAttribute('href') || '';
+    var ereignis = a.classList.contains('lz-anfrage')
+        ? ['Kontakt', 'Anfrage-Icon', location.pathname]
+        : href.indexOf('tel:') === 0
+            ? ['Kontakt', 'Anruf', href.slice(4)]
+            : ['Kontakt', 'E-Mail', href.slice(7).split('?')[0]];
+    _paq.push(['trackEvent', ereignis[0], ereignis[1], ereignis[2]]);
+}, true);
+</script>
 </body>
 </html>

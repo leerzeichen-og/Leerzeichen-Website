@@ -13,8 +13,8 @@ $beschreibung = 'Erzählen Sie uns von Ihrem Projekt — wir melden uns und '
 $brotkrumen   = [['Kontakt', '/kontakt/'], ['Projektanfrage', '/kontakt/anfrage/']];
 $voll_breit   = true;
 
-// --- Versand (POST auf dieselbe Seite) --------------------------------------
-$gesendet = false;
+// --- Versand (POST auf dieselbe Seite, Erfolg leitet auf ?gesendet=1) --------
+$gesendet = ($_GET['gesendet'] ?? '') === '1';
 $fehler   = [];
 $alt      = [];   // Eingaben bleiben bei Fehlern stehen
 
@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Honigtopf gefüllt ODER unter drei Sekunden „ausgefüllt" (kein
         // Mensch schafft das Formular so schnell): ein Bot. Still so tun,
         // als wäre alles gut — keine Mail, keine Fehlermeldung.
-        $gesendet = true;
+        header('Location: /kontakt/anfrage/?gesendet=1', true, 303);
+        exit;
     } else {
         if ($alt['vorname'] === '')  { $fehler[] = 'Bitte den Vornamen angeben.'; }
         if ($alt['nachname'] === '') { $fehler[] = 'Bitte den Nachnamen angeben.'; }
@@ -73,6 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $text, $kopf);
             if (!$gesendet) {
                 $fehler[] = 'Das Senden hat leider nicht geklappt — bitte schreiben Sie uns direkt an ' . FIRMA_MAIL . '.';
+            } else {
+                // Nach dem Versand auf die Danke-Adresse umleiten: Neuladen
+                // schickt keine zweite Mail, und Matomo kann „?gesendet=1"
+                // als Ziel zählen (13.10.2026).
+                header('Location: /kontakt/anfrage/?gesendet=1', true, 303);
+                exit;
             }
         }
     }
