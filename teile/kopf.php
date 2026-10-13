@@ -139,6 +139,12 @@ header('Cache-Control: no-cache');
 <title><?= e($titel) ?></title>
 <meta name="description" content="<?= e($beschreibung) ?>">
 <link rel="canonical" href="<?= e($kanonisch) ?>">
+<?php // Favicon-Satz (13.10.2026): das Logo-Rechteck. Das SVG wechselt im
+      // dunklen Browser-Thema auf Weiß; .ico und Apple-Icon liegen im
+      // Wurzelverzeichnis, wo Browser und Crawler sie auch ungefragt suchen. ?>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <?php // Vorschau beim Teilen (LinkedIn, WhatsApp, Signal …) und für
       // KI-Suchen. Seiten mit eigenem Motiv setzen vor dem Einbinden
       // $ogBild (absoluter Pfad oder volle Adresse, z. B. der
