@@ -43,6 +43,8 @@ $fragen = [
      'Ja, vom Konzept bis zur Eröffnung, mit allen Rollen im Prozess. Was wir nicht selbst machen, übernehmen Partner aus unserem Netzwerk.'],
     ['Wir haben schon ein Team. Kommen Sie trotzdem dazu?',
      'Gerne. Oft holt man uns für einen bestimmten Teil, etwa die Kinderebene oder die Ausstellungsdidaktik. Dann arbeiten wir mit allen Beteiligten zusammen.'],
+    ['Wie lange dauert das — vom Auftrag bis zur Eröffnung?',
+     'Je nach Umfang: Ein Erlebnisweg oder Spielplatz ist in rund 8 Monaten umgesetzt, eine umfangreiche Ausstellung braucht bis zu 18 Monate.'],
     ['Gibt es Förderungen dafür?',
      'Meistens ja. Wir kennen die LEADER-Regionen und die Ansprechpartner für Förderungen und sagen Ihnen früh, was in Frage kommt.'],
     ['Ist das barrierefrei?',
@@ -173,8 +175,6 @@ require __DIR__ . '/../teile/kopf.php';
       <p><?= e($antwort) ?></p>
     </details>
     <?php endforeach; ?>
-    <?php // Offen (Roman): „Wie lange dauert eine Ausstellung vom Auftrag
-          // bis zur Eröffnung?" — Antwort fehlt noch. ?>
   </div>
 </section>
 

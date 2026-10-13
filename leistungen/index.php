@@ -97,7 +97,8 @@ require __DIR__ . '/../teile/kopf.php';
       // ohne JavaScript stehen alle drei normal untereinander. ?>
 <section class="leistung-hero" id="l-hero">
   <div class="seiten-hero leistung-hero-leinwand">
-    <?php // Probe (Roman, 8.10.2026): circle.mp4 statt des Schiff-Films. ?>
+    <?php // Kreis-Film statt des Schiff-Films — aus der Probe wurde der
+          // fixe Bestand (Entscheidung Roman, 13.10.2026). ?>
     <video class="leistung-hero-video" src="/assets/videos/circle.mp4"
       autoplay muted playsinline aria-hidden="true"></video>
     <div class="leistung-hero-inhalt">
