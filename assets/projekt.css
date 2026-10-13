@@ -512,7 +512,7 @@ html.pj-rollt .pj-scroller { overflow: hidden; }
 .pj-karte:hover .pj-karte-bild,
 .pj-karte:focus-visible .pj-karte-bild { transform: scale(1.045); }
 
-/* ---- Referenzen im Mucho-Stil (Fassung 8.10.2026) --------------------------- */
+/* ---- Referenzen-Übersicht (Fassung 8.10.2026) ------------------------------- */
 /* Kopf im Kontakt-Muster (.kopf-gross aus site.css): links oben die
    Bereichs-Filter am Headline-Platz, gleich darunter die Kategorien als
    Fließzeile, der Einleitungssatz (h1) versetzt in der rechten Spalte. Danach je

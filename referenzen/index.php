@@ -1,5 +1,5 @@
 <?php
-// Referenzen-Übersicht im Mucho-Stil (Entscheidung Roman, 7.10.2026):
+// Referenzen-Übersicht (Entscheidung Roman, 7.10.2026):
 // oben links der Einleitungssatz (zugleich die h1), rechts daneben die
 // Kategorien als zweispaltige Pillen-Liste (Sprungmarken, kein Filter) —
 // darunter je Kategorie eine Gruppe: Überschrift, daneben und darunter

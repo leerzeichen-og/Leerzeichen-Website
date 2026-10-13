@@ -8,8 +8,8 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
 ?>
 </main>
 
-<?php // Schwebendes Brief-Icon rechts unten (Roman, 12.10.2026, Muster
-      // pixelart) — führt auf jeder Seite zur Projektanfrage. ?>
+<?php // Schwebendes Brief-Icon rechts unten (Roman, 12.10.2026) —
+      // führt auf jeder Seite zur Projektanfrage. ?>
 <a class="lz-anfrage" href="/kontakt/anfrage/" aria-label="Projekt anfragen">
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">

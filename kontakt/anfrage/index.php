@@ -1,6 +1,6 @@
 <?php
 // Projektanfrage — eigene Seite mit Kontaktformular (Beschluss Roman,
-// 12.10.2026, Muster pixelart-agency.com), erreichbar über das schwebende
+// 12.10.2026), erreichbar über das schwebende
 // Brief-Icon rechts unten (teile/fuss.php). Versand mit PHPs mail() an
 // FIRMA_MAIL — kein Backend, keine Datenbank, nichts wird gespeichert.
 // Spam-Schutz: ein unsichtbares Honigtopf-Feld („website"); füllt es ein

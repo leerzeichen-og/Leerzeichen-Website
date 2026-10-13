@@ -1,12 +1,12 @@
 // Scroll-Bühne der Startseite — schlichtes JavaScript, kein Framework.
-// Portiert aus dem Claude-Design-Entwurf (scroll-buehne.jsx, 16.9.2026):
+// Portiert aus dem Design-Entwurf (scroll-buehne.jsx, 16.9.2026):
 // Projekt-Objekte fliegen über den ersten Bildschirm, zwei Fragen erscheinen
 // wortweise am Scroll-Fortschritt, danach blendet die dunkle Fläche mit dem
 // Astronauten und der Antwort ein. Über einem Objekt erscheint ein schwarzes
 // Rechteck-Badge (Logo-Form) unter dem Zeiger — Projekttitel + „Ansehen";
 // ein Klick lässt es den Schirm füllen und führt zur Projektseite. Am
 // Telefon zeigt der erste Tipp das Badge am Objekt, der zweite springt ab
-// (Muster blossom.at, Beschluss Roman 12.10.2026).
+// (Beschluss Roman, 12.10.2026).
 //
 // Fortschrittlich verbessert: Ohne dieses Skript (oder bei reduzierter
 // Bewegung) bleibt die statische Fassung (#buehne-statisch) stehen; die

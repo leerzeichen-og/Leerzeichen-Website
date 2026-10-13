@@ -1,6 +1,6 @@
 /*
  * Startseite — Scroll-Bühne, Leistungsblöcke, Team, Newsletter, Kontakt-CTA.
- * Portiert aus dem Claude-Design-Projekt „Startseite" (16.9.2026).
+ * Portiert aus dem Design-Entwurf „Startseite" (16.9.2026).
  * Nur von der Startseite eingebunden; Tokens kommen aus site.css.
  */
 
@@ -271,7 +271,7 @@
     margin-top: var(--space-6);
 }
 
-/* Zeiger-Badge (Beschluss Roman, 12.10.2026, Muster blossom.at): ein
+/* Zeiger-Badge (Beschluss Roman, 12.10.2026): ein
    schwarzer KREIS folgt der Maus über den Objekten — Projekttitel und ein
    weißer Pfeil. Beim Klick füllt er den Schirm (Skript skaliert ihn) und
    die Projektseite lädt. Am Telefon erscheint er beim ersten Tipp über dem
