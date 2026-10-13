@@ -259,6 +259,11 @@ html.pj-rollt .pj-scroller-buehne {
   height: clamp(300px, 62vh, 680px);
   width: auto;
 }
+/* Am Telefon niedriger — so passt mehr vom Bildinhalt auf den Schirm
+   (Roman, 13.10.2026). */
+@media (max-width: 640px) {
+  .pj-scroller-medium { height: clamp(240px, 42vh, 380px); }
+}
 
 /* Die Fotos treten beim Scrollen sanft auf (einblenden.js) — etwas tiefer
    und langsamer als Text, das wirkt schwerer. :not(.blende-da), damit die
