@@ -69,9 +69,10 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         'redirectionUrl' => 'https://' . $host . '/newsletter/bestaetigt/',
     ];
     if ($feld('vorname') !== '' || $feld('nachname') !== '') {
+        // Attributnamen wie im Brevo-Konto angelegt (deutsch, geprüft 13.10.2026).
         $daten['attributes'] = array_filter([
-            'FIRSTNAME' => $feld('vorname'),
-            'LASTNAME'  => $feld('nachname'),
+            'VORNAME'  => $feld('vorname'),
+            'NACHNAME' => $feld('nachname'),
         ], fn($v) => $v !== '');
     }
 

@@ -6,4 +6,4 @@
 // aber ohnehin keine externen Anfragen — siehe Newsletter-Handler).
 define('BREVO_KEY', '');            // API-Schlüssel (xkeysib-…)
 define('BREVO_LISTE', 10);          // Brevo-Listen-ID „Empty Space"
-define('BREVO_DOI_VORLAGE', 0);     // ID der Double-Opt-in-Vorlage
+define('BREVO_DOI_VORLAGE', 7);     // ID der Double-Opt-in-Vorlage (angelegt 13.10.2026)
