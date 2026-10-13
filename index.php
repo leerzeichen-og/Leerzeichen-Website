@@ -13,8 +13,8 @@ require_once __DIR__ . '/teile/firma.php';
 require_once __DIR__ . '/teile/projekte.php';
 
 $titel        = 'leerzeichen — Erlebnisse und Gestaltung | Neumarkt/Ybbs';
-$beschreibung = 'Agentur für Ausstellungen, Erlebniswege und Corporate Design. '
-              . 'Seit 2008 in Neumarkt an der Ybbs. Für Museen, Gemeinden und Unternehmen.';
+$beschreibung = 'Agentur für Erlebnisse & Gestaltung: Wir entwickeln Ausstellungen, '
+              . 'Themenwege, Corporate Design & Websites für Gemeinden, Museen und Unternehmen.';
 $styles       = ['/assets/startseite.css'];
 $voll_breit   = true;
 
