@@ -44,7 +44,7 @@ jobs:
           <?php
           define('BREVO_KEY', '${{ secrets.BREVO_KEY }}');
           define('BREVO_LISTE', 10);
-          define('BREVO_DOI_VORLAGE', 7);
+          define('BREVO_DOI_VORLAGE', 2);
           GEHEIM
 
       - name: Upload per FTPS
