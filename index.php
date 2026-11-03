@@ -63,12 +63,37 @@ $bahnen = [
     ['w' => 26, 'h' => 17, 'x' => 88, 'y0' => 184, 'tiefe' => 940, 'vx' => 0.22],
 ];
 // Immer neun Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
+// Bühnen-Steuerung aus Space (3.11.2026): „sofort" fliegt schon im ersten
+// Bild, „spaeter" rückt erst beim Scrollen nach; steht die Bühne in Space
+// auf „aus", fehlt objekt im Export komplett. Die vorderen Bahnen (y0 < 90,
+// beim Seitenstart im Bild) bekommen deshalb nur sofort-Projekte. Ältere
+// Exporte ohne buehne-Schlüssel fliegen wie bisher über alle Bahnen.
 $objektProjekte = array_values(array_filter(pj_index(),
     fn($p) => !empty($p['objekt']['quellen'])));
-$flieger = [];
+$sofort  = array_values(array_filter($objektProjekte,
+    fn($p) => ($p['buehne'] ?? '') === 'sofort'));
+$spaeter = array_values(array_filter($objektProjekte,
+    fn($p) => ($p['buehne'] ?? '') !== 'sofort'));
+$neuesFormat = (bool) array_filter($objektProjekte,
+    fn($p) => array_key_exists('buehne', $p));
+
+$flieger = [];   // je Bahn ein Projekt — oder null, die Bahn bleibt dann leer
 if ($objektProjekte) {
-    for ($i = 0; $i < count($bahnen); $i++) {
-        $flieger[] = $objektProjekte[$i % count($objektProjekte)];
+    $iSofort  = 0;
+    $iSpaeter = 0;
+    foreach ($bahnen as $i => $b) {
+        if (!$neuesFormat) {
+            $flieger[] = $objektProjekte[$i % count($objektProjekte)];
+        } elseif ($b['y0'] < 90) {
+            // Erster Schirm: nur sofort-Projekte — gibt es keine, bleibt
+            // die Bahn frei (genau das heißt „spaeter").
+            $flieger[] = $sofort ? $sofort[$iSofort++ % count($sofort)] : null;
+        } else {
+            // Scroll-Strecke: spaeter-Projekte zuerst, sonst sofort —
+            // die dürfen überall fliegen.
+            $quelle = $spaeter ?: $sofort;
+            $flieger[] = $quelle ? $quelle[$iSpaeter++ % count($quelle)] : null;
+        }
     }
 }
 
@@ -144,7 +169,7 @@ require __DIR__ . '/teile/kopf.php';
 <section id="buehne" class="buehne" hidden>
   <div class="buehne-blick">
     <div class="buehne-objekte">
-      <?php foreach ($flieger as $i => $p): $b = $bahnen[$i]; ?>
+      <?php foreach ($flieger as $i => $p): if ($p === null) continue; $b = $bahnen[$i]; ?>
       <div class="buehne-obj"
            data-w="<?= $b['w'] ?>" data-h="<?= $b['h'] ?>"
            data-x="<?= $b['x'] ?>" data-y0="<?= $b['y0'] ?>"

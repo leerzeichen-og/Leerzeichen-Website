@@ -20,7 +20,7 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
       "saeule": "erlebnisse",
       "punchline": "Eine Ausstellung, die …",
       "schlagworte": ["Ausstellung", "Leitsystem"],
-      "startseite": "top",
+      "buehne": "sofort",
       "zitat": "Wir wollten einen Weg, der …",
       "zitat_von": "Herta Aubach, Bürgermeisterin",
       "teaser_quer": { …Bild-Objekt, siehe unten… },
@@ -32,8 +32,12 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
 ```
 
 - `saeule`: `erlebnisse` oder `gestaltung` (die zwei Säulen der Positionierung).
-- `startseite`: `top`, `erlebnisse`, `gestaltung` oder nicht gesetzt —
-  bestimmt die vier Plätze im Startseiten-Scroller.
+- `buehne` (seit 3.11.2026, ersetzt `startseite` ersatzlos): steht nur bei
+  Projekten mit `objekt` und sagt, wann das Objekt auf der Startseiten-Bühne
+  erscheint — `sofort` (schon im ersten Bild) oder `spaeter` (rückt erst beim
+  Scrollen nach). Steht die Bühne in Space auf „aus", fehlen `objekt` UND
+  `buehne` komplett. Exporte ohne `buehne`-Schlüssel (Altbestand) behandelt
+  die Startseite wie bisher: alles fliegt, ohne Erste-Schirm-Garantie.
 - `zitat`/`zitat_von` (seit 21.9.2026, optional): **Kundenstimme** — die
   Referenzen-Übersicht streut sie als schwarze Blöcke zwischen die Karten.
   Klartext ohne Anführungszeichen (setzt die Website), `zitat_von` als eine
@@ -43,9 +47,9 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
   Quer-Teaser per CSS.
 - `objekt` (seit 16.9.2026): **freigestelltes Objekt** des Projekts —
   transparentes WebP/PNG, das stellvertretend fürs Projekt steht. Schwebt auf
-  der Startseiten-Bühne (nur Projekte mit `objekt` fliegen dort mit, höchstens
-  acht) und ist als Slot auch im Beitrags-JSON zulässig. Contain, keine feste
-  Zielgröße; empfohlene Breitenstufen 320/640/960.
+  der Startseiten-Bühne (nur Projekte mit `objekt` fliegen dort mit; wann,
+  sagt `buehne`) und ist als Slot auch im Beitrags-JSON zulässig. Contain,
+  keine feste Zielgröße; empfohlene Breitenstufen 320/640/960.
 
 ## daten/projekte/{slug}.json
 

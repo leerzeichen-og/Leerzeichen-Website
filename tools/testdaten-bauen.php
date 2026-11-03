@@ -161,7 +161,7 @@ $projekte = [
     [
         'slug' => 'test-wasserwelt-erlebnisweg', 'palette' => 'wasser',
         'titel' => 'Verborgene Wasserwelt', 'kunde' => 'Gemeinde Nebelbach',
-        'jahr' => 2026, 'saeule' => 'erlebnisse', 'startseite' => 'top',
+        'jahr' => 2026, 'saeule' => 'erlebnisse', 'buehne' => 'sofort',
         'schlagworte' => ['Erlebnisweg', 'Ausstellung', 'Leitsystem'],
         'punchline' => 'Ein Bachlauf wird zum Museum: acht Stationen machen sichtbar, was unter der Oberfläche passiert.',
         'zitat' => 'Wir wollten einen Weg, der ohne Personal auskommt. Bekommen haben wir einen Ort, an dem Familien freiwillig einen halben Tag bleiben.',
@@ -211,7 +211,7 @@ $projekte = [
     [
         'slug' => 'test-zeitsprung-burgruine', 'palette' => 'burg',
         'titel' => 'Zeitsprung Burgruine', 'kunde' => 'Marktgemeinde Falkenstein am Berg',
-        'jahr' => 2025, 'saeule' => 'erlebnisse', 'startseite' => 'erlebnisse',
+        'jahr' => 2025, 'saeule' => 'erlebnisse', 'buehne' => 'spaeter',
         'schlagworte' => ['Ausstellung', 'Escape-Room'],
         'punchline' => 'Eine Ruine ohne Dach, ein Rätsel ohne Wärter: die Burg erzählt sich selbst.',
         'texte' => [
@@ -245,7 +245,7 @@ $projekte = [
     [
         'slug' => 'test-molkerei-sonnseit', 'palette' => 'molke',
         'titel' => 'Molkerei Sonnseit — Corporate Design', 'kunde' => 'Molkerei Sonnseit',
-        'jahr' => 2026, 'saeule' => 'gestaltung', 'startseite' => 'gestaltung',
+        'jahr' => 2026, 'saeule' => 'gestaltung', 'buehne' => 'sofort',
         'schlagworte' => ['Corporate Design', 'Verpackung'],
         'punchline' => 'Ein Familienbetrieb bekommt ein Gesicht, das im Kühlregal genauso trägt wie am Hoftor.',
         'zitat' => 'Zum ersten Mal schaut alles aus einem Guss aus — und unsere Druckerei kann jede neue Sorte selbst anlegen.',
@@ -278,7 +278,7 @@ $projekte = [
         'slug' => 'test-werksbericht-funkenflug', 'palette' => 'werk',
         'titel' => 'Schmiedwerk Brennmoser — Werksbericht und Mitarbeitermagazin „Funkenflug“',
         'kunde' => 'Schmiedwerk Brennmoser GmbH',
-        'jahr' => 2024, 'saeule' => 'gestaltung', 'startseite' => null,
+        'jahr' => 2024, 'saeule' => 'gestaltung', 'buehne' => 'aus',
         'schlagworte' => ['Publikation', 'Magazin', 'Fotografie', 'Redaktion'],
         'punchline' => 'Ein Industriebetrieb erzählt seinen 300 Beschäftigten zweimal im Jahr, woran sie eigentlich gemeinsam arbeiten — auf Papier, das man behalten will.',
         'texte' => [
@@ -382,10 +382,12 @@ foreach ($projekte as $nr => $p) {
         'schlagworte' => $p['schlagworte'],
         'teaser_quer' => $bilder['teaser_quer'],
         'teaser_hoch' => $bilder['teaser_hoch'],
-        'objekt' => $bilder['objekt'],
     ];
-    if (!empty($p['startseite'])) {
-        $zeile['startseite'] = $p['startseite'];
+    // Bühne (3.11.2026, ersetzt startseite): sofort/spaeter nur mit Objekt;
+    // steht sie auf „aus", fehlen objekt UND buehne — wie Space exportiert.
+    if (($p['buehne'] ?? 'aus') !== 'aus') {
+        $zeile['objekt'] = $bilder['objekt'];
+        $zeile['buehne'] = $p['buehne'];
     }
     // Kundenstimme (optional) — die Übersicht streut sie zwischen die Karten.
     if (!empty($p['zitat'])) {
