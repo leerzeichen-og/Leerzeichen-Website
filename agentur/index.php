@@ -67,12 +67,19 @@ function agentur_portrait(string $slug, string $variante): ?string
     return null;
 }
 // Porträt aus Space als <img> mit srcset (Breitenstufen aus team.json).
+// Die Pfade kommen mal mit, mal ohne führenden Schrägstrich — ohne ihn
+// suchte der Browser unter /agentur/bilder/… (Befund Roman, 17.11.2026),
+// deshalb wird er hier erzwungen.
 function agentur_foto_html(array $foto, string $name): string
 {
     $quellen = $foto['quellen'] ?? [];
     if (!$quellen) {
         return '';
     }
+    foreach ($quellen as &$q) {
+        $q['datei'] = '/' . ltrim((string) ($q['datei'] ?? ''), '/');
+    }
+    unset($q);
     usort($quellen, fn($a, $b) => ($a['breite'] ?? 0) <=> ($b['breite'] ?? 0));
     $srcset  = implode(', ', array_map(
         fn($q) => e((string) $q['datei']) . ' ' . (int) ($q['breite'] ?? 0) . 'w', $quellen));

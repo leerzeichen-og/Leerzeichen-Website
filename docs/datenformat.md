@@ -193,7 +193,7 @@ Porträts liegen unter `bilder/team/…` (WebP, Breiten 480/960).
         "breite": 960, "hoehe": 1280,
         "alt": "Portrait von Roman Dachsberger",
         "quellen": [
-          { "datei": "/bilder/team/roman-480.webp", "breite": 480 },
+          { "datei": "bilder/team/roman-480.webp", "breite": 480 },
           { "datei": "/bilder/team/roman-960.webp", "breite": 960 }
         ]
       }
@@ -204,6 +204,8 @@ Porträts liegen unter `bilder/team/…` (WebP, Breiten 480/960).
 
 - Alle Felder außer `name` dürfen leer bzw. `foto` darf `null` sein — die
   Website lässt Kurztext, Icons oder Bild dann einfach weg.
+- `datei`-Pfade mit oder ohne führenden `/` — die Website normalisiert
+  auf absolut (Space exportiert sie derzeit ohne).
 - `telefon` in Anzeigeschreibweise („0664 / 619 58 22"); die Website macht
   daraus selbst die wählbare +43-Form.
 - Mail und Telefon stehen NIE als mailto:/tel: im Quelltext (Spam-Schutz,
