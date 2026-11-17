@@ -483,6 +483,14 @@ h2 {
 .portrait img { width: 100%; height: auto; border-radius: var(--radius-xs); }
 .portrait figcaption { margin-top: var(--space-5); font-size: var(--text-lg); line-height: 1.4; }
 .portrait figcaption strong { font-weight: 700; }
+/* Kurztext je Person — kommt aus Space (Personal-Modul, team.json). */
+.portrait-text {
+    margin: var(--space-3, 12px) 0 0;
+    max-width: 44ch;
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--text-body);
+}
 
 /* Kontaktzeichen unter den Portraits: Mail und Telefon als runde Knöpfe.
    Die Adressen setzt erst JavaScript zusammen (SPAM-Schutz, agentur/index.php). */

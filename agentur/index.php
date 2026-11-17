@@ -12,16 +12,47 @@ $beschreibung = 'Wer wir sind, wie wir arbeiten, was wir machen. leerzeichen mul
 $brotkrumen   = [['Agentur', '/agentur/']];
 $voll_breit   = true;
 
-// Je Person: Bild-Slug, Name, Rolle, Mail-Benutzerteil, Telefon (Anzeige).
-// Die Adressen setzt erst das kleine Skript am Seitenende zusammen —
-// so stehen sie nirgends vollständig im Quelltext (SPAM-Schutz).
-$team = [
-    ['roman-dachsberger',  'Roman Dachsberger',  'Gestalter',    'roman',   '0664 / 619 58 22'],
-    ['johanna-eder',       'Johanna Eder',       'Gestalterin',  'johanna', '07412 / 53 638'],
-    ['susanne-pichelmann', 'Susanne Pichelmann', 'Gestalterin',  'susanne', '07412 / 53 638'],
-];
-// Zwei Portrait-Fassungen liegen bereit; Vergleich über ?portraits=…
-// (fehlt eine Fassung für eine Person, nimmt sie die vorhandene).
+// Team: seit 17.11.2026 aus Space — das Personal-Modul schreibt
+// daten/team.json und bilder/team/… (Format: docs/datenformat.md; nur
+// Personen mit Häkchen „Auf der Website zeigen"). Fehlt die Datei —
+// lokal oder bis zum ersten Push —, gilt die eingebaute Liste mit den
+// Porträts aus assets/bilder. Mail und Telefon setzt erst das kleine
+// Skript am Seitenende zusammen, so stehen sie nirgends vollständig
+// im Quelltext (SPAM-Schutz): data-post = Teil vor dem @, data-bei =
+// Domain, data-ruf = Telefon in Anzeigeschreibweise.
+$team = [];
+$teamRoh  = @file_get_contents(__DIR__ . '/../daten/team.json');
+$personen = $teamRoh !== false ? (json_decode($teamRoh, true)['personen'] ?? null) : null;
+if (is_array($personen) && $personen) {
+    foreach ($personen as $p) {
+        $mail = trim((string) ($p['mail'] ?? ''));
+        [$post, $bei] = str_contains($mail, '@') ? explode('@', $mail, 2) : ['', ''];
+        $team[] = [
+            'name'     => (string) ($p['name'] ?? ''),
+            'funktion' => (string) ($p['funktion'] ?? ''),
+            'text'     => trim((string) ($p['text'] ?? '')),
+            'post'     => $post,
+            'bei'      => $bei,
+            'telefon'  => trim((string) ($p['telefon'] ?? '')),
+            'foto'     => is_array($p['foto'] ?? null) ? $p['foto'] : null,
+            'slug'     => '',
+        ];
+    }
+} else {
+    foreach ([
+        ['roman-dachsberger',  'Roman Dachsberger',  'Gestalter',   'roman',   '0664 / 619 58 22'],
+        ['johanna-eder',       'Johanna Eder',       'Gestalterin', 'johanna', '07412 / 53 638'],
+        ['susanne-pichelmann', 'Susanne Pichelmann', 'Gestalterin', 'susanne', '07412 / 53 638'],
+    ] as [$slug, $name, $rolle, $post, $telefon]) {
+        $team[] = [
+            'name' => $name, 'funktion' => $rolle, 'text' => '',
+            'post' => $post, 'bei' => 'leerzeichen.at', 'telefon' => $telefon,
+            'foto' => null, 'slug' => $slug,
+        ];
+    }
+}
+// Zwei Portrait-Fassungen der eingebauten Liste; Vergleich über ?portraits=…
+// (nur Rückfall — Fotos aus Space bringen ihre Fassung selbst mit).
 $portraitVariante = ($_GET['portraits'] ?? 'quer') === 'hoch' ? 'hoch' : 'quer';
 function agentur_portrait(string $slug, string $variante): ?string
 {
@@ -34,6 +65,24 @@ function agentur_portrait(string $slug, string $variante): ?string
         }
     }
     return null;
+}
+// Porträt aus Space als <img> mit srcset (Breitenstufen aus team.json).
+function agentur_foto_html(array $foto, string $name): string
+{
+    $quellen = $foto['quellen'] ?? [];
+    if (!$quellen) {
+        return '';
+    }
+    usort($quellen, fn($a, $b) => ($a['breite'] ?? 0) <=> ($b['breite'] ?? 0));
+    $srcset  = implode(', ', array_map(
+        fn($q) => e((string) $q['datei']) . ' ' . (int) ($q['breite'] ?? 0) . 'w', $quellen));
+    $gross   = end($quellen);
+    $masse   = (!empty($foto['breite']) && !empty($foto['hoehe']))
+        ? ' width="' . (int) $foto['breite'] . '" height="' . (int) $foto['hoehe'] . '"'
+        : '';
+    $alt = trim((string) ($foto['alt'] ?? '')) !== '' ? (string) $foto['alt'] : 'Portrait von ' . $name;
+    return '<img src="' . e((string) $gross['datei']) . '" srcset="' . $srcset . '"'
+         . ' sizes="(max-width: 640px) 100vw, 420px" alt="' . e($alt) . '"' . $masse . ' loading="lazy">';
 }
 
 $prinzipien = [
@@ -88,19 +137,28 @@ require __DIR__ . '/../teile/kopf.php';
 <section class="lz-sec">
   <h2>Wir sind Leerzeichen.</h2>
   <div class="portraits">
-    <?php foreach ($team as [$slug, $name, $rolle, $postName, $telefon]): $bild = agentur_portrait($slug, $portraitVariante); ?>
+    <?php foreach ($team as $p): ?>
     <figure class="portrait">
-      <?php if ($bild): ?>
-      <img src="<?= e($bild) ?>" alt="Portrait von <?= e($name) ?>" loading="lazy">
+      <?php if ($p['foto']): ?>
+      <?= agentur_foto_html($p['foto'], $p['name']) ?>
+      <?php elseif ($p['slug'] !== '' && ($bild = agentur_portrait($p['slug'], $portraitVariante))): ?>
+      <img src="<?= e($bild) ?>" alt="Portrait von <?= e($p['name']) ?>" loading="lazy">
       <?php endif; ?>
-      <figcaption><strong><?= e($name) ?></strong><br><?= e($rolle) ?></figcaption>
+      <figcaption><strong><?= e($p['name']) ?></strong><br><?= e($p['funktion']) ?></figcaption>
+      <?php if ($p['text'] !== ''): ?>
+      <p class="portrait-text"><?= e($p['text']) ?></p>
+      <?php endif; ?>
       <span class="portrait-kontakt">
-        <a data-post="<?= e($postName) ?>" aria-label="E-Mail an <?= e($name) ?>">
+        <?php if ($p['post'] !== ''): ?>
+        <a data-post="<?= e($p['post']) ?>" data-bei="<?= e($p['bei']) ?>" aria-label="E-Mail an <?= e($p['name']) ?>">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="m3.5 6.5 8.5 7 8.5-7"/></svg>
         </a>
-        <a data-ruf="<?= e($telefon) ?>" aria-label="<?= e($name) ?> anrufen: <?= e($telefon) ?>">
+        <?php endif; ?>
+        <?php if ($p['telefon'] !== ''): ?>
+        <a data-ruf="<?= e($p['telefon']) ?>" aria-label="<?= e($p['name']) ?> anrufen: <?= e($p['telefon']) ?>">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3.5h4l1.5 4.5-2.3 1.7a13 13 0 0 0 6.1 6.1l1.7-2.3 4.5 1.5v4a1.5 1.5 0 0 1-1.6 1.5C10.4 20 4 13.6 3.5 5.1A1.5 1.5 0 0 1 5 3.5Z"/></svg>
         </a>
+        <?php endif; ?>
       </span>
     </figure>
     <?php endforeach; ?>
@@ -161,7 +219,7 @@ require __DIR__ . '/../teile/kopf.php';
 // SPAM-Schutz: Mail- und Telefon-Adressen entstehen erst hier im Browser —
 // Erntemaschinen lesen den Quelltext, führen aber selten JavaScript aus.
 document.querySelectorAll('[data-post]').forEach(function (a) {
-    a.href = 'mailto:' + a.dataset.post + '@' + ['leerzeichen', 'at'].join('.');
+    a.href = 'mailto:' + a.dataset.post + '@' + (a.dataset.bei || ['leerzeichen', 'at'].join('.'));
 });
 document.querySelectorAll('[data-ruf]').forEach(function (a) {
     // 0664 / … → +43664…, 07412 / … → +437412…

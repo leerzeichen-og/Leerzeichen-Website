@@ -172,3 +172,41 @@ reduzierter Bewegung an.
 - **Space schreibt, die Website liest** — nie umgekehrt.
 - Depublizieren: Space löscht `{slug}.json` + Bilder und schreibt index.json neu.
 - Die Deploy-Action der Website fasst `daten/` und `bilder/` nie an.
+
+## daten/team.json (seit 17.11.2026)
+
+Das Team der Agentur-Seite — schreibt das Space-**Personal-Modul** (Knopf
+„Team an die Website"; nur Personen mit Häkchen „Auf der Website zeigen").
+Porträts liegen unter `bilder/team/…` (WebP, Breiten 480/960).
+
+```json
+{
+  "stand": "2026-11-17T12:00:00+01:00",
+  "personen": [
+    {
+      "name": "Roman Dachsberger",
+      "funktion": "Gestalter",
+      "text": "Kurztext fürs Porträt …",
+      "mail": "roman@leerzeichen.at",
+      "telefon": "0664 / 619 58 22",
+      "foto": {
+        "breite": 960, "hoehe": 1280,
+        "alt": "Portrait von Roman Dachsberger",
+        "quellen": [
+          { "datei": "/bilder/team/roman-480.webp", "breite": 480 },
+          { "datei": "/bilder/team/roman-960.webp", "breite": 960 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+- Alle Felder außer `name` dürfen leer bzw. `foto` darf `null` sein — die
+  Website lässt Kurztext, Icons oder Bild dann einfach weg.
+- `telefon` in Anzeigeschreibweise („0664 / 619 58 22"); die Website macht
+  daraus selbst die wählbare +43-Form.
+- Mail und Telefon stehen NIE als mailto:/tel: im Quelltext (Spam-Schutz,
+  Skript der Agentur-Seite setzt sie im Browser zusammen).
+- **Fehlt die Datei**, zeigt die Agentur-Seite ihre eingebaute Liste mit den
+  Porträts aus `assets/bilder/` — lokal und bis zum ersten Push der Normalfall.
