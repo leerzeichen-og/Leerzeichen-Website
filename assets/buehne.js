@@ -82,25 +82,30 @@
         });
     });
 
-    // --- Zustand je Objekt: pendelt sanft um seinen STAMMPLATZ (Sinus mit
-    //     eigener Phase und Periode), die Höhe hängt am Scroll-Fortschritt
-    //     (y0 − p·tiefe). Früher drifteten die Objekte frei und kamen am
-    //     anderen Rand wieder herein — bei lange offener Seite sammelten
-    //     sie sich sichtbar am rechten Rand (Roman, 12.10.2026); das Pendeln
-    //     hält die gestaltete Verteilung für immer.
-    var zustand = objekte.map(function (el, i) {
+    // --- Zustand je Objekt: wandert frei über die ganze Breite — zwei
+    //     überlagerte Sinus je Achse (eine langsame große Schleife plus eine
+    //     schnellere kleine), Perioden und Phasen je Besuch zufällig. Das
+    //     ergibt unregelmäßige Wege statt Pendeln am Stand („zu berechnet",
+    //     Befund 18.11.2026), bleibt aber beschränkt: Anders als das freie
+    //     Driften von früher (sammelte sich am rechten Rand, 12.10.2026)
+    //     kehrt jede Schleife von selbst zurück. Beide Anteile starten bei 0,
+    //     damit die gestalteten Startlagen (und claimFreihalten) gelten.
+    //     Die Höhe hängt weiter am Scroll-Fortschritt (y0 − p·tiefe).
+    var TAU = Math.PI * 2;
+    var zustand = objekte.map(function (el) {
+        var r = function (von, bis) { return von + Math.random() * (bis - von); };
         return {
             el: el,
+            w: parseFloat(el.dataset.w),
             x0: parseFloat(el.dataset.x),
             x: parseFloat(el.dataset.x),
             y0: parseFloat(el.dataset.y0),
             tiefe: parseFloat(el.dataset.tiefe),
-            // |vx| aus dem Markup gibt den Takt vor (Periode ~11–16 s),
-            // die Phase streut die Bewegungen gegeneinander.
-            takt: 0.25 + Math.abs(parseFloat(el.dataset.vx)),
-            phase: i * 2.1,
-            weite: 2 + (i % 3),         // Pendelweite 2–4 vw
-            uhr: 0,                     // läuft nur, solange nichts armiert ist
+            a1: r(12, 22), f1: TAU / r(46, 76), p1: r(0, TAU),   // große Schleife (vw)
+            a2: r(4, 7),   f2: TAU / r(13, 22), p2: r(0, TAU),   // kleine darüber
+            ay: r(2, 3.5), fy: TAU / r(16, 26), py: r(0, TAU),   // senkrechtes Treiben (vh)
+            uhr: 0,                        // läuft nur, solange nichts armiert ist
+            wy: 0,                         // aktuelles senkrechtes Treiben
             y: parseFloat(el.dataset.y0)   // angezeigte Höhe (geglättet, s. fliegen)
         };
     });
@@ -113,6 +118,7 @@
     // die Reise bleibt. Nach den Schriften noch einmal (load), die
     // Claim-Höhe steht erst dann fest.
     var claimTitel = buehne.querySelector('.buehne-claimblock h1');
+    var runter     = buehne.querySelector('.buehne-runter');
     function claimFreihalten() {
         if (!claimTitel || window.innerWidth > 900 || (p || 0) > 0.02) { return; }
         var vh = window.innerHeight / 100;
@@ -180,6 +186,8 @@
     var FRAGEN_FENSTER = [[0.12, 0.32], [0.38, 0.56]];
 
     function malenFortschritt() {
+        // Der Scrollhinweis-Pfeil hat seinen Dienst getan, sobald gescrollt wird.
+        if (runter) { runter.style.opacity = p > 0.012 ? '0' : ''; }
         fragen.forEach(function (f, i) {
             var fenster = FRAGEN_FENSTER[i] || [0, 1];
             var t = (p - fenster[0]) / (fenster[1] - fenster[0]);
@@ -240,7 +248,13 @@
         if (armiert === null) {
             zustand.forEach(function (s) {
                 s.uhr += dt;
-                s.x = s.x0 + Math.sin(s.uhr * s.takt + s.phase) * s.weite;
+                // Beide Sinus starten bei 0 (− sin(Phase)), die Summe wird an
+                // den Bildrand geklemmt — mindestens die halbe Objektbreite
+                // bleibt im Bild.
+                var drift = s.a1 * (Math.sin(s.f1 * s.uhr + s.p1) - Math.sin(s.p1))
+                          + s.a2 * (Math.sin(s.f2 * s.uhr + s.p2) - Math.sin(s.p2));
+                s.x = Math.min(100 - s.w / 2, Math.max(-s.w / 2, s.x0 + drift));
+                s.wy = s.ay * (Math.sin(s.fy * s.uhr + s.py) - Math.sin(s.py));
             });
         }
         zustand.forEach(function (s) {
@@ -248,7 +262,7 @@
             // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
             // Scrollen her — ungefiltert sprangen die Objekte sichtbar
             // (Roman, 24.9.2026). So wird aus jedem Sprung eine weiche Fahrt.
-            var ziel = s.y0 - p * s.tiefe;
+            var ziel = s.y0 - p * s.tiefe + s.wy;
             s.y += (ziel - s.y) * Math.min(1, dt * 8);
             if (Math.abs(ziel - s.y) < 0.01) s.y = ziel;
             // Umlaufbahn: erst zur Anzeige wird die Höhe in die Spanne

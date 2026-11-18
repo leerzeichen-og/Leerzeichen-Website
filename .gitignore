@@ -5,3 +5,6 @@
 # Zugangsdaten (Brevo): schreibt die Deploy-Action aus dem Repo-Secret,
 # lokal legt man sie nach der Vorlage teile/geheim-vorlage.php an.
 /teile/geheim.php
+
+# Claude-Code-Sitzungsdateien (Vorschau-Server der Browser-Pane)
+/.claude/

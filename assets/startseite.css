@@ -10,7 +10,11 @@
    ACHTUNG display-gegen-hidden-Falle: Auf #buehne und #buehne-statisch selbst
    steht bewusst KEINE display-Angabe — das Skript schaltet sie mit `hidden`. */
 
-.buehne { position: relative; height: 980vh; background: var(--paper); }
+/* 860vh statt 980vh (18.11.2026): Die Scroll-Wege zwischen Claim, Fragen
+   und Antwort kamen einer Testperson zu lang vor — die Strecke ist um rund
+   ein Achtel kürzer, alle Zeitfenster hängen an Anteilen und skalieren mit
+   (die tiefe-Werte der Bahnen in index.php sind mitgezogen). */
+.buehne { position: relative; height: 860vh; background: var(--paper); }
 
 .buehne-blick {
     position: sticky;
@@ -35,6 +39,22 @@
     padding: calc(130px + var(--space-8)) 55px var(--space-9);
 }
 
+
+/* Scrollhinweis-Pfeil unter dem Claim (nur Schreibtisch, 18.11.2026):
+   derselbe Baustein wie auf den Säulen-Seiten, hier in Ink auf Weiß und an
+   der Textkante des Claims. Das Skript blendet ihn mit dem ersten Scrollen
+   aus (opacity, inline). */
+.buehne-runter {
+    position: absolute;
+    left: calc(55px - 27px);
+    bottom: clamp(4px, 1vh, 12px);
+    margin: 0;
+    color: var(--ink);
+    transition: opacity .6s ease;
+}
+@media (max-width: 900px) {
+    .buehne-runter { display: none; }
+}
 
 /* Schwebende Projekt-Objekte */
 .buehne-objekte {

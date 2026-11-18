@@ -40,7 +40,7 @@ $fragen = [
 // und wandern ans Scrollen gekoppelt nach oben: y0 = Startlage in vh,
 // tiefe = wie viele vh sie über die ganze Bühnenstrecke zurücklegen —
 // dadurch verteilen sie sich über die Fragen-Reise statt auf einen Schirm.
-// tiefe ≈ Bühnenhöhe (980vh): die Objekte ziehen etwa im Seitentempo vorbei
+// tiefe ≈ Bühnenhöhe (860vh): die Objekte ziehen etwa im Seitentempo vorbei
 // (kein Schwindel), leichte Unterschiede geben dezente Tiefe. y0 staffelt
 // sie über die Strecke — es sind immer nur zwei, drei zugleich im Bild.
 // Die Objekte laufen auf einer UMLAUFBAHN (buehne.js, Spanne 200 vh): Wer
@@ -52,15 +52,15 @@ $fragen = [
 // Neun Bahnen (vorher zehn — mit zwei statt drei Fragen wirkte die Bühne
 // zu dicht, Roman 12.10.2026), gleichmäßig über die 200-vh-Umlaufbahn.
 $bahnen = [
-    ['w' => 31, 'h' => 22, 'x' => 6,  'y0' => 8,   'tiefe' => 900, 'vx' => 0.28],
-    ['w' => 24, 'h' => 19, 'x' => 62, 'y0' => 30,  'tiefe' => 870, 'vx' => -0.22],
-    ['w' => 20, 'h' => 26, 'x' => 34, 'y0' => 52,  'tiefe' => 930, 'vx' => 0.20],
-    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 74,  'tiefe' => 850, 'vx' => -0.26],
-    ['w' => 22, 'h' => 24, 'x' => 12, 'y0' => 96,  'tiefe' => 960, 'vx' => 0.18],
-    ['w' => 28, 'h' => 19, 'x' => 52, 'y0' => 118, 'tiefe' => 890, 'vx' => -0.20],
-    ['w' => 25, 'h' => 16, 'x' => 76, 'y0' => 140, 'tiefe' => 920, 'vx' => 0.24],
-    ['w' => 21, 'h' => 15, 'x' => 28, 'y0' => 162, 'tiefe' => 860, 'vx' => -0.18],
-    ['w' => 26, 'h' => 17, 'x' => 88, 'y0' => 184, 'tiefe' => 940, 'vx' => 0.22],
+    ['w' => 31, 'h' => 22, 'x' => 6,  'y0' => 8,   'tiefe' => 790, 'vx' => 0.28],
+    ['w' => 24, 'h' => 19, 'x' => 62, 'y0' => 30,  'tiefe' => 765, 'vx' => -0.22],
+    ['w' => 20, 'h' => 26, 'x' => 34, 'y0' => 52,  'tiefe' => 815, 'vx' => 0.20],
+    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 74,  'tiefe' => 745, 'vx' => -0.26],
+    ['w' => 22, 'h' => 24, 'x' => 12, 'y0' => 96,  'tiefe' => 840, 'vx' => 0.18],
+    ['w' => 28, 'h' => 19, 'x' => 52, 'y0' => 118, 'tiefe' => 780, 'vx' => -0.20],
+    ['w' => 25, 'h' => 16, 'x' => 76, 'y0' => 140, 'tiefe' => 805, 'vx' => 0.24],
+    ['w' => 21, 'h' => 15, 'x' => 28, 'y0' => 162, 'tiefe' => 755, 'vx' => -0.18],
+    ['w' => 26, 'h' => 17, 'x' => 88, 'y0' => 184, 'tiefe' => 825, 'vx' => 0.22],
 ];
 // Immer neun Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
 // Bühnen-Steuerung aus Space (3.11.2026): „sofort" fliegt schon im ersten
@@ -81,6 +81,14 @@ $flieger = [];   // je Bahn ein Projekt — oder null, die Bahn bleibt dann leer
 if ($objektProjekte) {
     $iSofort  = 0;
     $iSpaeter = 0;
+    // sofort-Projekte, für die vorne kein Platz mehr ist, fliegen auf der
+    // Scroll-Strecke mit — VOR den spaeter-Projekten. Vorher verschwanden
+    // sie komplett, sobald die vorderen Bahnen voll waren (Befund 18.11.2026).
+    $vorneBahnen = count(array_filter($bahnen, fn($b) => $b['y0'] < 90));
+    $hinten = array_merge(array_slice($sofort, $vorneBahnen), $spaeter);
+    if (!$hinten) {
+        $hinten = $sofort;   // nur sofort-Projekte: die dürfen überall fliegen
+    }
     foreach ($bahnen as $i => $b) {
         if (!$neuesFormat) {
             $flieger[] = $objektProjekte[$i % count($objektProjekte)];
@@ -89,10 +97,7 @@ if ($objektProjekte) {
             // die Bahn frei (genau das heißt „spaeter").
             $flieger[] = $sofort ? $sofort[$iSofort++ % count($sofort)] : null;
         } else {
-            // Scroll-Strecke: spaeter-Projekte zuerst, sonst sofort —
-            // die dürfen überall fliegen.
-            $quelle = $spaeter ?: $sofort;
-            $flieger[] = $quelle ? $quelle[$iSpaeter++ % count($quelle)] : null;
+            $flieger[] = $hinten ? $hinten[$iSpaeter++ % count($hinten)] : null;
         }
     }
 }
@@ -231,6 +236,9 @@ require __DIR__ . '/teile/kopf.php';
 
   <div class="buehne-claimblock">
     <h1 class="lz-claim">Gemeinsam<br>Zeichen setzen.</h1>
+    <?php // Scrollhinweis wie auf den Säulen-Seiten — nur am Schreibtisch,
+          // das Skript blendet ihn mit dem ersten Scrollen aus. ?>
+    <span class="pj-runter buehne-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
   </div>
 </section>
 
