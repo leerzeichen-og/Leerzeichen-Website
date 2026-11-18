@@ -21,11 +21,6 @@
     --petrol-ink:  #0A6F69;
     --lilac:       #8A7CD8;
 
-    /* Die EINE Signalfarbe der Website (18.11.2026): farbige Unterbrechung
-       im Schwarz-Weiß, derzeit nur der Newsletter-Bereich. Zum Wechsel auf
-       Gelb genügt diese eine Zeile (z. B. #FFD400). */
-    --signal: #FF4D00;
-
     --grey-950: #0A0A0A;
     --grey-700: #3D3D3D;
     --grey-500: #757575;
@@ -759,24 +754,23 @@ body.menue-offen { overflow: hidden; }
    auch während die Postkarte noch einfliegt (sie startet 56 px tiefer).
    overflow: clip, weil die GEDREHTE Karte im Einflug-Zustand sonst rechts
    über die Seite hinausragt — am Telefon gab das Querscrollen (7.10.2026). */
-/* Signalfarbe statt Postkarten-Rahmen (Beschluss Roman, 18.11.2026): Der
-   Bereich ist die EINE farbige Unterbrechung im Schwarz-Weiß der Seite und
-   unterstreicht den Call-to-Action; die Karte selbst hat keine Kontur und
-   keinen eigenen Grund mehr, alles steht direkt auf der Fläche. Gilt auch
-   auf den dunklen Seiten — deshalb trägt der Bereich seine Textfarbe selbst. */
 .nl-bereich {
     padding-top: calc(var(--space-9) + 200px);
     padding-bottom: calc(var(--space-9) + 80px);
     overflow: clip;
-    background: var(--signal);
-    color: var(--ink);
 }
 
 .nl-karte {
     max-width: 1080px;
     margin: 0 auto;
+    /* Kräftige schwarze Kontur — die Karte ist eine Postkarte (Roman, 24.9.2026).
+       Die Signalfarben-Fassung vom 18.11.2026 ist zurückgenommen (Roman:
+       zu starker Eingriff in die Gesamtgestaltung). */
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-xs);
     padding: var(--space-8);
     padding-top: calc(var(--space-8) + 110px);
+    background: var(--paper);
     position: relative;
 }
 
@@ -802,11 +796,9 @@ body.menue-offen { overflow: hidden; }
     gap: var(--space-8);
 }
 
-/* Auf der Signalfläche tragen die Grautöne nicht — alles läuft in Ink
-   bzw. gedecktem Schwarz. */
 .nl-untertitel {
     margin: 8px 0 var(--space-6);
-    color: rgba(0, 0, 0, .82);
+    color: var(--text-body);
     font-size: var(--text-lg);
     line-height: var(--leading-body);
 }
@@ -826,7 +818,7 @@ body.menue-offen { overflow: hidden; }
     padding-left: 46px;
     position: relative;
     font-size: var(--text-lg);
-    color: rgba(0, 0, 0, .82);
+    color: var(--text-body);
     line-height: 1.5;
 }
 /* Listenzeichen: der von-bis-Pfeil (assets/icons, statt Plus) —
@@ -875,14 +867,10 @@ body.menue-offen { overflow: hidden; }
     gap: 10px;
     align-items: flex-start;
     font-size: var(--text-xs);
-    color: rgba(0, 0, 0, .72);
+    color: var(--text-muted);
     line-height: 1.5;
 }
 .nl-zustimmung input { margin-top: 3px; accent-color: var(--ink); }
-/* Feldbeschriftungen (geteilter Baustein) nur hier dunkler als das Grau;
-   der graue Fokus-Grund wirkte auf der Farbe schmutzig — Felder bleiben weiß. */
-.nl-bereich .lz-label { color: rgba(0, 0, 0, .72); }
-.nl-bereich .lz-input:focus { background: var(--paper); }
 
 /* --- Leistungen: zwei Säulen-Kacheln nebeneinander (7.10.2026) --------------- */
 
@@ -1417,8 +1405,13 @@ body.seite-dunkel { background: #000; color: #fff; }
     margin: clamp(120px, 16vh, 220px) 0;
     background: #000;
 }
-/* Der Newsletter-Bereich trägt Grund (Signalfarbe) und Schrift seit
-   18.11.2026 selbst — auf den dunklen Seiten ist nichts mehr zu übersteuern. */
+/* Der Newsletter steht auf den dunklen Seiten als heller Block auf
+   Papier — samt dunkler Schrift, die sonst vom weißen body-Text der
+   Seite geerbt würde. */
+.seite-dunkel .nl-bereich {
+    background: var(--paper);
+    color: var(--text-strong);
+}
 .seite-dunkel .ablauf-schritt::before,
 .seite-dunkel .ablauf-schritt::after { background: #fff; }
 .seite-dunkel .ablauf .ablauf-schritt p { color: rgba(255, 255, 255, .72); }
