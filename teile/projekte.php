@@ -248,14 +248,19 @@ function pj_anker(string $name): string
  * Karte der Referenzen-Übersicht (Fassung 19.11.2026), auch unter
  * „Weitere Projekte" auf den Projektseiten: Bild, darunter Kunde (klein),
  * Titel, Punchline und — beim Darüberfahren — die Kategorien.
+ * Die Kategorien sind eigene Links zum Filter der Übersicht. Weil Links
+ * nicht ineinander stehen dürfen, ist die Karte ein <div>: Der Titel-Link
+ * spannt sich per ::after über die ganze Karte, die Kategorien liegen
+ * darüber (CSS .pj-ref-titel::after / .pj-ref-kats).
  * $breit: über zwei Spalten und doppelt hoch (nur im Übersichtsraster).
  * $sichtbar: false setzt hidden (Filter ohne JavaScript).
+ * $filter: aktueller Säulen-Filter der Übersicht — die Kategorie-Links
+ * behalten ihn bei (ohne JavaScript).
  */
-function pj_ref_karte(array $p, bool $breit = false, bool $sichtbar = true): string
+function pj_ref_karte(array $p, bool $breit = false, bool $sichtbar = true, string $filter = ''): string
 {
     $tags = array_values(array_filter(array_map('strval', (array) ($p['schlagworte'] ?? []))));
-    $out  = '<a class="pj-ref-karte' . ($breit ? ' is-breit' : '') . '" href="/referenzen/'
-          . e($p['slug'] ?? '') . '/"'
+    $out  = '<div class="pj-ref-karte' . ($breit ? ' is-breit' : '') . '"'
           . ' data-saeule="' . e((string) ($p['saeule'] ?? '')) . '"'
           . ' data-kategorien="' . e(implode(' ', array_map('pj_anker', $tags))) . '"'
           . ($sichtbar ? '' : ' hidden') . '>';
@@ -267,18 +272,21 @@ function pj_ref_karte(array $p, bool $breit = false, bool $sichtbar = true): str
     if (!empty($p['kunde'])) {
         $out .= '<span class="pj-ref-kunde">' . e((string) $p['kunde']) . '</span>';
     }
-    $out .= '<span class="pj-ref-titel">' . e((string) ($p['titel'] ?? '')) . '</span>';
+    $out .= '<a class="pj-ref-titel" href="/referenzen/' . e($p['slug'] ?? '') . '/">'
+          . e((string) ($p['titel'] ?? '')) . '</a>';
     if (!empty($p['punchline'])) {
         $out .= '<span class="pj-ref-punchline">' . e((string) $p['punchline']) . '</span>';
     }
     if ($tags) {
         $out .= '<span class="pj-ref-kats">';
         foreach ($tags as $t) {
-            $out .= '<span class="pj-ref-kat">' . e($t) . '</span>';
+            $q = http_build_query(array_filter(['filter' => $filter, 'kategorie' => pj_anker($t)]));
+            $out .= '<a class="pj-ref-kat" href="/referenzen/?' . e($q) . '"'
+                  . ' data-kategorie="' . e(pj_anker($t)) . '">' . e($t) . '</a>';
         }
         $out .= '</span>';
     }
-    return $out . '</a>';
+    return $out . '</div>';
 }
 
 /**

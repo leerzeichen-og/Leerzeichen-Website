@@ -110,10 +110,16 @@ KUNST;
 require __DIR__ . '/../teile/kopf.php';
 ?>
 
-<section class="seiten-kopf pj-ref-kopf">
-  <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
-    am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
-    an Ausstellungen und Erlebniswegen.</h1>
+<?php // Einleitungssatz in der rechten Spalte des Kopf-Rasters — horizontal
+      // genau wie der Teaser auf Kontakt und Agentur (.kopf-gross-zeile). ?>
+<section class="kopf-gross pj-ref-kopf">
+  <div class="kopf-gross-zeile">
+    <div class="kopf-gross-rechts">
+      <h1 class="pj-intro-satz">Wir arbeiten mit Betrieben, Museen und Gemeinden —
+        am Erscheinungsbild, an Büchern und Magazinen, an Verpackungen und Websites,
+        an Ausstellungen und Erlebniswegen.</h1>
+    </div>
+  </div>
 </section>
 
 <?php if (!$projekte): ?>
@@ -146,7 +152,7 @@ require __DIR__ . '/../teile/kopf.php';
     <?php foreach ($projekte as $p):
         $passt = pj_passt($p, $saeuleJetzt, $kategorie);
         $sichtbar += $passt ? 1 : 0;
-        echo pj_ref_karte($p, !empty($p['breit']), $passt);
+        echo pj_ref_karte($p, !empty($p['breit']), $passt, $filter);
     endforeach; ?>
   </div>
   <p class="platzhalter pj-ref-leer"<?= $sichtbar ? ' hidden' : '' ?>>In dieser Auswahl sind noch keine
@@ -243,6 +249,18 @@ require __DIR__ . '/../teile/kopf.php';
         if (nav.classList.contains('is-schwebend')) {
             platz.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+    });
+
+    // Kategorien an den Karten: setzen den Kategorie-Filter (die Säule
+    // bleibt) und springen an den Rasteranfang.
+    document.querySelector('.pj-ref-raster').addEventListener('click', function (ev) {
+        var a = ev.target.closest('.pj-ref-kat');
+        if (!a || ev.metaKey || ev.ctrlKey || ev.shiftKey) { return; }
+        ev.preventDefault();
+        stand.kategorie = a.dataset.kategorie;
+        anwenden();
+        rand();
+        platz.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // Schweben: sobald die Zeile oben aus dem Fenster ist und solange das
