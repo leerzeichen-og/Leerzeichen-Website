@@ -15,26 +15,35 @@ $styles       = ['/assets/projekt.css'];
 $voll_breit   = true;
 $bodyKlasse   = 'seite-dunkel';
 
+// Je Zeile: Titel, Text, Kategorien (Schlagworte in Space). Das Bild daneben
+// zeigt das neueste Projekt mit einer dieser Kategorien, sonst einen
+// Platzhalter (pj_feld_flieger()). Die erste Kategorie ist die, die der
+// Platzhalter nennt.
 $felder = [
     ['Ausstellungen',
-     'Wir entwickeln Ausstellungen vom Konzept bis zur Eröffnung: Kuration, Raumkonzept, Grafik, Leitsystem und die Stationen im Raum. Manche Ausstellungen übernehmen wir komplett, bei anderen bringen wir einen Teil ein — etwa die Kinderebene oder die Didaktik.'],
+     'Wir entwickeln Ausstellungen vom Konzept bis zur Eröffnung: Kuration, Raumkonzept, Grafik, Leitsystem und die Stationen im Raum. Manche Ausstellungen übernehmen wir komplett, bei anderen bringen wir einen Teil ein — etwa die Kinderebene oder die Gestaltung.',
+     ['Ausstellung']],
     ['Escape-Rooms und Treasure-Trails',
-     'Wir entwickeln Escape-Rooms und Treasure-Trails vom Rätselkonzept bis zur fertigen Station: Geschichte, Rätsellogik, Gestaltung und Bau. Drinnen als Raum, draußen als Weg durch einen Ort — beide mit einem Spannungsbogen, der eine Gruppe von der ersten bis zur letzten Station bei der Sache hält.'],
+     'Wir entwickeln Escape-Rooms und Treasure-Trails vom Rätselkonzept bis zur fertigen Station: Geschichte, Rätsellogik, Gestaltung und Bau. Ob drinnen oder draußen — wir schaffen einen Spannungsbogen, der die Aufmerksamkeit von der ersten bis zur letzten Aufgabe auf sich zieht.',
+     ['Escape-Room', 'Treasure-Trail']],
     ['Spielplätze und Outdoor-Abenteuer',
-     'Wir gestalten Themenspielplätze mit einer eigenen Geschichte, wie die High-Five-Reihe am Großglockner: fünf Spielplätze, ein Thema. Dazu Entdeckerpfade und Outdoor-Stationen, die eine Landschaft erklären, während man sie durchquert.'],
+     'Spielend lernen steht hier ganz oben auf der Tagesordnung. Wir gestalten Themenspielplätze und interaktive Outdoor-Stationen, die eine Geschichte erzählen und Inhalte spielerisch vermitteln. Wer sie betritt, findet eine Welt, die zum Forschen, Staunen und Entdecken einlädt. Das weckt die kindliche Neugier, nicht nur bei den Jüngsten.',
+     ['Spielplatz']],
     ['Themenwege und Rundgänge',
-     'Wir gestalten Rundwege und Themenpfade mit Stationen entlang von Kultur- und Naturräumen. Der Weg erzählt eine Geschichte, und jede Station bringt sie ein Stück weiter.'],
+     'Wir inszenieren Rundwege und Themenpfade entlang von Kultur- und Naturräumen. Der Weg wird hier tatsächlich zum Ziel: Jede Station ist wie ein Puzzlestück, das sich in die Geschichte einfügt.',
+     ['Themenweg', 'Erlebnisweg']],
     ['Vermittlungsebenen für Familien',
-     'Wir entwickeln Kinderbegleitebenen zu neuen und bestehenden Ausstellungen: Rätselhefte, Hörstationen und Mitmach-Elemente, die ein Thema für Kinder öffnen und die Erwachsenen mitnehmen.'],
+     'Wir entwickeln Kinderbegleitebenen zu neuen und bestehenden Ausstellungen: Rätselhefte, Hörstationen und Mitmach-Elemente, die ein Thema für Kinder öffnen und gleichzeitig mit den Eltern erlebbar machen.',
+     ['Kinderebene']],
 ];
 
 $merkmale = [
-    ['Analog und begreifbar.',
-     'Wir bauen mit echtem Holz, mit Drehtrommeln, Klappen, Geruchs- und Taststationen. Was man angreifen kann, bleibt länger im Kopf — und hält im Betrieb länger durch als jeder Bildschirm.'],
+    ['Analog und zum Anfassen.',
+     'Wir bauen mit echtem Holz, mit Drehtrommeln, Klappen, Geruchs- und Taststationen. Was man angreifen kann, bleibt länger im Kopf — und hält im täglichen Einsatz länger durch als jeder Bildschirm.'],
     ['Digital mit Sinn.',
      'Audioguides, Screens und Medientechnik setzen wir ein, wenn sie etwas leisten, das analog nicht geht. Dann gehören sie dazu. Bis hin zu multimedial-immersiven Rauminstallationen.'],
     ['Für den Betrieb danach.',
-     'Wir liefern Anleitungen für den laufenden Betrieb mit: Handbücher für die Technik, Handlungsanweisungen für das Team vor Ort und Inhaltssammlungen für Kulturvermittler. Damit funktioniert die Ausstellung auch dann, wenn wir nicht mehr dabei sind.'],
+     'Wir liefern Anleitungen für den laufenden Betrieb mit: Handbücher für die Technik, Handlungsanweisungen für das Team vor Ort und Inhaltssammlungen für die Kulturvermittlung. Damit funktioniert die Ausstellung auch dann, wenn wir nicht mehr dabei sind.'],
 ];
 
 // Häufige Fragen — die Antwort zur Projektdauer fehlt noch (Roman).
@@ -69,8 +78,6 @@ $jsonld_extra = [
     ], $fragen),
 ];
 
-$referenzen = array_slice(array_values(array_filter(pj_index(),
-    fn($p) => ($p['saeule'] ?? '') === 'erlebnisse')), 0, 4);
 
 $ctaTitel = 'Planen Sie eine Ausstellung oder ein Ausflugsziel?';
 $ctaText  = 'Erzählen Sie uns von Ihrem Ort und Ihrer Geschichte.';
@@ -108,7 +115,7 @@ require __DIR__ . '/../teile/kopf.php';
       autoplay muted playsinline aria-hidden="true"></video>
     <div class="leistung-hero-inhalt">
       <span class="chip">Erlebnisse &amp; Abenteuer</span>
-      <h1 class="titel-gross">Inhalte<br>begehbar<br>machen.</h1>
+      <h1 class="titel-gross">Inhalte<br>begreifbar<br>machen.</h1>
       <div class="kopf-gross-zeile">
         <div class="kopf-gross-rechts">
       <p>Wir gestalten Ausstellungen, Themenwege und Spielplätze mit eigener
@@ -116,8 +123,8 @@ require __DIR__ . '/../teile/kopf.php';
         mitnehmen.</p>
       <p>Wissen wirkt am stärksten dort, wo man es spürt. Wir kuratieren,
         inszenieren und gestalten Erlebnisse, die komplexe Themen begreifbar
-        machen — für Familien, für Schulklassen, für alle, die am Sonntag einen
-        Ausflug machen. Unsere Auftraggeber sind Museen, Gemeinden,
+        machen — für Familien, für Schulklassen, für Neugierige jeden Alters. Zu
+        unseren Auftraggebern gehören Museen, Gemeinden,
         Tourismusregionen und Ausflugsziele.</p>
     </div>
       </div>
@@ -127,25 +134,17 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Was wir<br>gestalten</h2>
+  <h2 class="titel-gross">Was wir<br>gestalten.</h2>
   <?php // Zentrierte Liste; die Projektbilder schweben abwechselnd links
         // und rechts außerhalb und verlinken (nur sie) zum Portfolio-Eintrag. ?>
   <div class="feld-fluss">
-    <?php foreach ($felder as $i => [$feldTitel, $feldText]): ?>
-    <?php $feldProjekt = $referenzen ? $referenzen[$i % count($referenzen)] : null; ?>
+    <?php foreach ($felder as [$feldTitel, $feldText, $feldKategorien]): ?>
     <div class="feld-eintrag">
       <div class="feld-text">
         <h3><?= e($feldTitel) ?></h3>
         <p><?= e($feldText) ?></p>
       </div>
-      <?php if ($feldProjekt): ?>
-      <a class="feld-flieger" href="/referenzen/<?= e($feldProjekt['slug'] ?? '') ?>/"
-         aria-label="Zum Projekt <?= e((string) ($feldProjekt['titel'] ?? '')) ?>">
-        <span class="feld-flieger-innen">
-          <?= pj_bild($feldProjekt['teaser_quer'] ?? null, '', '(max-width: 1100px) 70vw, 20vw') ?>
-        </span>
-      </a>
-      <?php endif; ?>
+      <?= pj_feld_flieger($feldKategorien) ?>
     </div>
     <?php endforeach; ?>
   </div>
@@ -155,7 +154,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Wie wir<br>gestalten</h2>
+  <h2 class="titel-gross">Wie wir<br>gestalten.</h2>
   <div class="merkmale">
     <?php foreach ($merkmale as [$mTitel, $mText]): ?>
     <div class="merkmal">

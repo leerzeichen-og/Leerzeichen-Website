@@ -11,8 +11,9 @@
 //    wer sofort scrollt, bekommt die Absätze über ihre Scroll-Fenster.
 //    Zwei oder drei Absätze werden unterstützt (kürzere bzw. längere Strecke).
 // 2) Erscroll-Choreografie: Elemente treten erst auf (.wartet → .da), wenn
-//    man sie in die obere Bildschirmhälfte erscrollt — Zeitstrahl-Schritte,
-//    zweiter Stärken-Absatz, Ansatz-Merkmale.
+//    man sie in die obere Bildschirmhälfte erscrollt — zweiter
+//    Stärken-Absatz, Ansatz-Merkmale; Zeitstrahl-Schritte schon im unteren
+//    Drittel, kürzer und dezenter.
 //
 // Ohne JavaScript oder bei reduzierter Bewegung bleibt alles statisch
 // sichtbar und der Film steht auf dem ersten Bild.
@@ -83,7 +84,7 @@
     // geglättet) auf dem äußeren <a>; Drehung und Erscheinen liegen auf dem
     // inneren <span>, darum kein Konflikt. Die Zeile, deren Mitte der
     // Bildschirmmitte am nächsten ist, gilt als aktiv — ihr Bild erscheint
-    // (CSS .aktiv; am Zeiger-Gerät zeigt auch :hover). Unter 1100 px stehen
+    // (CSS .aktiv; am Zeiger-Gerät zeigt auch :hover). Bis 1280 px stehen
     // die Bilder im Fluss (CSS setzt transform ab).
     var flieger = document.querySelectorAll('.feld-flieger');
     if (!ruhig && flieger.length) {
@@ -92,7 +93,7 @@
             zustand.push({ el: el, zeile: el.parentElement, y: 0, faktor: i % 2 ? -0.14 : -0.09 });
         });
         var flug = function () {
-            if (innerWidth > 1100) {
+            if (innerWidth > 1280) {
                 var aktiv = null;
                 var abstand = Infinity;
                 zustand.forEach(function (s) {
@@ -116,8 +117,13 @@
     // Beobachtungsrand zählt alles OBERHALB des Fensters als erreicht —
     // schnelles Scrollen lässt sonst Elemente dauerhaft unsichtbar zurück.
     if (!ruhig && 'IntersectionObserver' in window) {
-        var elemente = document.querySelectorAll('.ablauf-schritt, .staerke-zwei, .merkmal');
-        if (elemente.length) {
+        // Zwei Auslöser: Stärken-Absatz und Merkmale erst in der oberen
+        // Bildschirmhälfte (Choreografie); die Zeitstrahl-Schritte schon,
+        // sobald sie ins untere Drittel kommen (Lektorat 19.11.2026 — sie
+        // erschienen zu spät).
+        [['.staerke-zwei, .merkmal', '-45%'], ['.ablauf-schritt', '-12%']].forEach(function (g) {
+            var elemente = document.querySelectorAll(g[0]);
+            if (!elemente.length) return;
             elemente.forEach(function (el) { el.classList.add('wartet'); });
             var io = new IntersectionObserver(function (eintraege) {
                 eintraege.forEach(function (e) {
@@ -126,8 +132,8 @@
                         io.unobserve(e.target);
                     }
                 });
-            }, { rootMargin: '10000px 0px -45% 0px' });
+            }, { rootMargin: '10000px 0px ' + g[1] + ' 0px' });
             elemente.forEach(function (el) { io.observe(el); });
-        }
+        });
     }
 })();

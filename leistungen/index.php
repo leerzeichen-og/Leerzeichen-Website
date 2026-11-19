@@ -109,8 +109,8 @@ require __DIR__ . '/../teile/kopf.php';
           werden soll. Ein Unternehmen braucht ein Erscheinungsbild. Eine
           Organisation eine Website. Eine Stadt ein Buch. Ein Museum eine
           Ausstellung.</p>
-        <p>Diese Projekte wirken grundsätzlich verschieden, haben aber dasselbe
-          Ziel: Die Information soll bei der richtigen Zielgruppe ankommen. Genau
+        <p>Diese Projekte wirken sehr verschieden, haben aber dasselbe
+          Ziel: Eine Information soll bei der richtigen Zielgruppe ankommen. Genau
           das können wir. Was zählt, ist das Zusammenspiel aus Inhalt, Didaktik
           und Form, und wir beherrschen die Werkzeuge dafür.</p>
         <p>Was sich ändert, sind die Mittel. Papier verhält sich anders als ein
@@ -155,12 +155,12 @@ require __DIR__ . '/../teile/kopf.php';
   <div class="staerke-spalten">
     <p>Die meisten Vorhaben bleiben nicht bei einem Format. Wir entwickeln
       eine Ausstellung und gestalten danach die Plakate, den Folder und die
-      Website dazu. Oder wir schärfen das Erscheinungsbild eines Betriebs und
-      übersetzen es in einen Messestand oder eine interaktive Station.</p>
+      Website dazu. Wir schärfen das Erscheinungsbild eines Betriebs und
+      übersetzen es dann in einen Messestand oder ein Magazin.</p>
     <p class="staerke-zwei">Das können wir, weil wir beide Seiten kennen. Weil
       wir wissen, wie Drucksachen produziert werden, wie Websites ihre Ziele
       erreichen und was eine Station im Freien jahrelang aushält. Wir gestalten
-      auf Papier und im Raum. Wir bauen interaktive Tools analog und digital.</p>
+      auf Papier und im Raum. Wir bauen interaktive Tools, analog und digital.</p>
   </div>
 </section>
 

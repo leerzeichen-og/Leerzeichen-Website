@@ -1185,7 +1185,11 @@ body.menue-offen { overflow: hidden; }
 .feld-flieger {
     position: absolute;
     top: 50%;
-    width: clamp(300px, 34vw, 540px);
+    /* Nie über den Text: höchstens so breit wie der Raum zwischen
+       Textspalte (100 % = Breite des Eintrags) und Seitenrand, abzüglich
+       Luft für die Schrägstellung (Lektorat 19.11.2026 — die Bilder
+       lagen vorher über dem Fließtext). */
+    width: min(540px, calc((100vw - 100%) / 2 - var(--rand) - 48px));
     transform: translateY(-50%);
     opacity: 0;
     pointer-events: none;
@@ -1208,13 +1212,36 @@ body.menue-offen { overflow: hidden; }
 .feld-eintrag:hover .feld-flieger-innen { transform: rotate(4deg) scale(1); }
 .feld-eintrag.aktiv:nth-child(even) .feld-flieger-innen,
 .feld-eintrag:hover:nth-child(even) .feld-flieger-innen { transform: rotate(-4deg) scale(1); }
+/* Platzhalter, solange kein Projekt die Kategorie trägt: im Format der
+   Teaser, gestrichelt — bewusst sichtbar, damit die fehlende Zuordnung
+   in Space auffällt (Roman, 19.11.2026). */
+.feld-platzhalter-bild {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .4em;
+    aspect-ratio: 3 / 2;
+    padding: var(--space-5);
+    border: 2px dashed currentColor;
+    border-radius: var(--radius-xs);
+    font-size: .95rem;
+    line-height: 1.35;
+    text-align: center;
+    opacity: .6;
+}
+.feld-platzhalter-bild span {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .75rem;
+}
 .feld-flieger img {
     display: block;
     width: 100%;
     height: auto;
     border-radius: var(--radius-xs);
 }
-@media (max-width: 1100px) {
+@media (max-width: 1280px) {
     /* Ohne Raum fürs Erscheinen stehen die Bilder im Fluss über dem Text,
        immer sichtbar und klickbar. */
     .feld-fluss { max-width: none; }
@@ -1387,6 +1414,14 @@ body.menue-offen { overflow: hidden; }
     margin: 0;
     opacity: 0;
 }
+/* Die Leinwand ist hier genau eine Bildschirmhöhe hoch und schneidet ab —
+   Headline und Absätze richten sich darum zusätzlich nach der Höhe, sonst
+   fiel auf niedrigeren Schirmen die letzte Zeile des längeren Absatzes
+   weg (Lektorat 19.11.2026). Auf großen Schirmen greift weiter die
+   gewohnte Größe. */
+.leistung-hero.rollt .titel-gross { font-size: min(clamp(2.7rem, 9vw, 9rem), 11svh); }
+.leistung-hero.rollt .kopf-gross-zeile { margin-top: min(var(--space-9), 4svh); }
+.leistung-hero.rollt .kopf-gross-rechts p { font-size: min(clamp(1.5rem, 2.4vw, 2.5rem), 2.9svh); }
 
 /* Der Ablauf als Zeitstrahl: acht Stationen, je Schritt eine große
    Light-Nummer, Titel und kurzer Text. Jeder Schritt bringt sein eigenes
@@ -1444,6 +1479,10 @@ body.menue-offen { overflow: hidden; }
     transition: opacity .7s ease, transform .7s ease;
 }
 .wartet.da { opacity: 1; transform: none; }
+.ablauf-schritt.wartet {
+    transform: translateY(10px);
+    transition-duration: .4s;
+}
 
 /* „Das ist unsere Stärke.": die zwei Absätze nahe nebeneinander im
    Teaser-Format; der rechte tritt erst beim Weiterscrollen dazu. Nach

@@ -340,3 +340,51 @@ function pj_zitat(array $eintrag): string
     }
     return $out . '</figure>';
 }
+
+/**
+ * Neuestes Projekt mit einer der Kategorien (Schlagworte, ohne Rücksicht
+ * auf Groß-/Kleinschreibung) — nur Projekte mit Quer-Teaser. „Neu" heißt
+ * höchstes Jahr; bei gleichem Jahr gilt die Reihenfolge aus index.json
+ * (= Referenzen-Übersicht). Null, wenn keines passt.
+ */
+function pj_neuestes_mit_kategorie(array $kategorien): ?array
+{
+    $gesucht = array_map(fn($k) => mb_strtolower(trim((string) $k)), $kategorien);
+    $beste = null;
+    foreach (pj_index() as $p) {
+        if (empty($p['teaser_quer'])) {
+            continue;
+        }
+        $tags = array_map(fn($t) => mb_strtolower(trim((string) $t)), (array) ($p['schlagworte'] ?? []));
+        if (!array_intersect($gesucht, $tags)) {
+            continue;
+        }
+        if ($beste === null || (int) ($p['jahr'] ?? 0) > (int) ($beste['jahr'] ?? 0)) {
+            $beste = $p;
+        }
+    }
+    return $beste;
+}
+
+/**
+ * Das schräge Projektbild neben einer Zeile der Säulen-Seiten („Was wir
+ * gestalten"). Fest über die Kategorie zugeordnet (Roman, 19.11.2026): Es
+ * erscheint das neueste Projekt mit dieser Kategorie. Gibt es keines, steht
+ * ein sichtbarer Platzhalter da — das Zeichen, in Space ein Projekt mit
+ * dieser Kategorie zu versehen.
+ */
+function pj_feld_flieger(array $kategorien): string
+{
+    $p = pj_neuestes_mit_kategorie($kategorien);
+    if ($p === null) {
+        return '<span class="feld-flieger feld-platzhalter" aria-hidden="true">'
+            . '<span class="feld-flieger-innen"><span class="feld-platzhalter-bild">'
+            . '<span>Platzhalter</span>Kategorie „' . e((string) ($kategorien[0] ?? '')) . '“ in Space zuordnen'
+            . '</span></span></span>';
+    }
+    return '<a class="feld-flieger" href="/referenzen/' . e((string) ($p['slug'] ?? '')) . '/"'
+        . ' aria-label="Zum Projekt ' . e((string) ($p['titel'] ?? '')) . '">'
+        . '<span class="feld-flieger-innen">'
+        . pj_bild($p['teaser_quer'] ?? null, '', '(max-width: 1280px) 70vw, 20vw')
+        . '</span></a>';
+}

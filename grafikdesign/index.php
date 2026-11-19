@@ -17,17 +17,26 @@ $styles       = ['/assets/projekt.css'];
 $voll_breit   = true;
 $bodyKlasse   = 'seite-dunkel';
 
+// Je Zeile: Titel, Text, Kategorien (Schlagworte in Space). Das Bild daneben
+// zeigt das neueste Projekt mit einer dieser Kategorien, sonst einen
+// Platzhalter (pj_feld_flieger()). Die erste Kategorie ist die, die der
+// Platzhalter nennt.
 $felder = [
     ['Corporate Design und Markenentwicklung',
-     'Wir entwickeln Logos, Farb- und Schriftwelten, Bildsprache und Gestaltungsprinzipien — für Betriebe, Institutionen und Gemeinden. Dazu alles, was Ihre Kommunikation braucht: Geschäftsdrucksorten, Social-Media-Vorlagen, Mappen und Roll-ups. Sie haben schon ein gutes Corporate Design? Dann arbeiten wir damit und entwickeln daraus die passenden Anwendungen.'],
+     'Wir entwickeln Logos, Farb- und Schriftwelten, Bildsprache und Gestaltungsprinzipien — für Betriebe, Institutionen und Gemeinden. Dazu alles, was Ihre Kommunikation braucht: Geschäftsdrucksorten, Social-Media-Vorlagen, Mappen und Roll-ups. Sie haben schon ein gutes Corporate Design? Dann arbeiten wir damit und entwickeln daraus die passenden Anwendungen.',
+     ['Corporate Design']],
     ['Magazine, Bücher und Chroniken',
-     'Wir gestalten Mitarbeiter- und Kundenmagazine, Festschriften, Jubiläumsbücher, Chroniken und Bildbände. Große Textmengen bringen wir in eine Form, die man gerne liest, und übernehmen Satz, Bildbearbeitung und die Druckabwicklung. Wo Inhalte erst entstehen müssen, organisieren wir, wer schreibt und wer liefert.'],
+     'Wir gestalten Mitarbeiter- und Kundenmagazine, Festschriften, Jubiläumsbücher, Chroniken und Bildbände. Große Textmengen bringen wir in eine Form, die man gerne liest, und übernehmen Layout, Bildbearbeitung und die Druckabwicklung. Wo Inhalte erst noch entstehen dürfen, organisieren wir, wer schreibt, wer lektoriert und wer freigibt.',
+     ['Publikation', 'Magazin']],
     ['Websites und digitale Auftritte',
-     'Wir bauen Unternehmens-Websites, Gemeindeportale, Microsites und Landingpages. Sie sind so gebaut, dass Ihr Team sie selbst pflegen kann.'],
+     'Wir bauen Unternehmens-Websites, Gemeindeportale, Microsites und Landingpages. Sie sind so gebaut, dass Ihr Team sie selbst pflegen kann.',
+     ['Website']],
     ['Verpackungen',
-     'Die richtige Form für Ihr Produkt. Wir beraten gerne bei der Wahl des Verpackungsmaterials und bei den Produktions- und Veredelungsmöglichkeiten. Wir gestalten Etiketten, Verpackungskartons und POS-Material.'],
+     'Die richtige Form für Ihr Produkt. Wir beraten Sie bei der Wahl des Verpackungsmaterials und bei den Produktions- und Veredelungsmöglichkeiten. Wir gestalten Etiketten, Verpackungskartons und POS-Material.',
+     ['Verpackung']],
     ['Werbemittel',
-     'Kataloge, Prospekte, Datenblätter, Plakate und Inserate, Messeauftritte, Beschriftungen für Fahrzeuge und Schaufenster — alles im selben Erscheinungsbild.'],
+     'Wir erstellen Kataloge, Prospekte, Datenblätter, Plakate, Inserate, Messeauftritte, Beschriftungen für Fahrzeuge und Schaufenster — alles im selben Erscheinungsbild und passend zu Ihrem Corporate Design.',
+     ['Werbemittel']],
 ];
 
 $merkmale = [
@@ -35,17 +44,17 @@ $merkmale = [
      'Bevor wir gestalten, verstehen wir, was Sie tun und für wen. Eine Gestaltung, die die Sache nicht trifft, ist auch dann falsch, wenn sie gut aussieht.'],
     ['Vom Charakter abgeleitet.',
      'Wir arbeiten mit dem, was da ist: der gewachsenen Geschichte eines Ortes, der Präzision eines Industriebetriebs, dem Handwerk eines Familienunternehmens. Daraus entsteht ein Auftritt, der zu Ihnen gehört und zu niemand anderem.'],
-    ['Verständlich aufbereitet.',
+    ['Stimmig aufbereitet.',
      'Verwaltungstexte, Chroniken und technische Dokumentation bereiten wir so auf, dass man sie liest: Rhythmus über hunderte Seiten, Bilder an der richtigen Stelle, eine Typografie, die den Inhalt trägt.'],
     ['Verlässlich bis zur Auslieferung.',
-     'Ob mehrsprachige Produktbroschüre oder Buch mit Autorenteam und festem Termin — wir koordinieren Lektorat, Korrekturen und Druckerei und liefern pünktlich.'],
+     'Ob mehrsprachige Produktbroschüre oder Buch mit Autorenteam und festem Termin — wir koordinieren Erstellung, Korrekturschleifen und Produktion und liefern pünktlich.'],
 ];
 
 $fragen = [
     ['Wie lange dauert ein Corporate Design?',
      'Je nach Umfang zwischen einem und sechs Monaten. Für ein Magazin gilt dieselbe Spanne.'],
-    ['Wie viel Zeit kostet das mich?',
-     'Wir halten die Termine kurz: ein Briefing-Gespräch, ein Angebotsgespräch, die Erstpräsentation. Korrekturen laufen persönlich oder per Mail, je nachdem was schneller geht.'],
+    ['Wie viel Zeit kostet mich das?',
+     'Wir halten die Termine kurz: ein Briefing-Gespräch, ein Angebotsgespräch, die Erstpräsentation. Freigaben laufen persönlich oder per Mail, je nachdem was schneller geht.'],
     ['Was kostet das?',
      'Kreativleistungen wie ein Corporate Design rechnen wir pauschal ab, einzelne Drucksorten und laufende Betreuung nach Aufwand. Das Erstgespräch und das Angebot sind kostenlos.'],
     ['Wir haben schon ein Corporate Design. Geht das trotzdem?',
@@ -61,7 +70,7 @@ $fragen = [
     ['Wir arbeiten schon mit einer anderen Agentur. Ist das ein Problem?',
      'Nein. Wir liefern zu und stimmen uns ab. Es ist genug für alle da.'],
     ['Wir sitzen nicht in der Nähe. Geht das?',
-     'Ja. Wir sind regelmäßig zwischen Wien, Salzburg und Graz unterwegs, und Termine gehen persönlich wie virtuell. Anfahrtskosten sind in der Pauschale berücksichtigt oder wir vereinbaren etwas.'],
+     'Ja. Wir sind regelmäßig zwischen Wien, Salzburg und Graz unterwegs, und Termine gehen persönlich wie virtuell. Anfahrtskosten sind in der Pauschale berücksichtigt oder wir vereinbaren etwas anderes.'],
 ];
 
 // FAQPage-JSON-LD — laut Website-Briefing der wichtigste Einzelposten
@@ -76,8 +85,6 @@ $jsonld_extra = [
     ], $fragen),
 ];
 
-$referenzen = array_slice(array_values(array_filter(pj_index(),
-    fn($p) => ($p['saeule'] ?? '') === 'gestaltung')), 0, 6);
 
 $ctaTitel = 'Was dürfen wir für Sie gestalten?';
 $ctaText  = 'Erzählen Sie uns von Ihrem Projekt.';
@@ -125,25 +132,17 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Was wir<br>gestalten</h2>
+  <h2 class="titel-gross">Was wir<br>gestalten.</h2>
   <?php // Zentrierte Liste; die Projektbilder schweben abwechselnd links
         // und rechts außerhalb und verlinken (nur sie) zum Portfolio-Eintrag. ?>
   <div class="feld-fluss">
-    <?php foreach ($felder as $i => [$feldTitel, $feldText]): ?>
-    <?php $feldProjekt = $referenzen ? $referenzen[$i % count($referenzen)] : null; ?>
+    <?php foreach ($felder as [$feldTitel, $feldText, $feldKategorien]): ?>
     <div class="feld-eintrag">
       <div class="feld-text">
         <h3><?= e($feldTitel) ?></h3>
         <p><?= e($feldText) ?></p>
       </div>
-      <?php if ($feldProjekt): ?>
-      <a class="feld-flieger" href="/referenzen/<?= e($feldProjekt['slug'] ?? '') ?>/"
-         aria-label="Zum Projekt <?= e((string) ($feldProjekt['titel'] ?? '')) ?>">
-        <span class="feld-flieger-innen">
-          <?= pj_bild($feldProjekt['teaser_quer'] ?? null, '', '(max-width: 1100px) 70vw, 20vw') ?>
-        </span>
-      </a>
-      <?php endif; ?>
+      <?= pj_feld_flieger($feldKategorien) ?>
     </div>
     <?php endforeach; ?>
   </div>
@@ -153,7 +152,7 @@ require __DIR__ . '/../teile/kopf.php';
 </section>
 
 <section class="lz-sec viel-luft">
-  <h2 class="titel-gross">Wie wir<br>gestalten</h2>
+  <h2 class="titel-gross">Wie wir<br>gestalten.</h2>
   <div class="merkmale">
     <?php foreach ($merkmale as [$mTitel, $mText]): ?>
     <div class="merkmal">
