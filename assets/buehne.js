@@ -82,27 +82,33 @@
         });
     });
 
-    // --- Zustand je Objekt: wandert frei über die ganze Breite — zwei
-    //     überlagerte Sinus je Achse (eine langsame große Schleife plus eine
-    //     schnellere kleine), Perioden und Phasen je Besuch zufällig. Das
-    //     ergibt unregelmäßige Wege statt Pendeln am Stand („zu berechnet",
-    //     Befund 18.11.2026), bleibt aber beschränkt: Anders als das freie
-    //     Driften von früher (sammelte sich am rechten Rand, 12.10.2026)
-    //     kehrt jede Schleife von selbst zurück. Beide Anteile starten bei 0,
-    //     damit die gestalteten Startlagen (und claimFreihalten) gelten.
-    //     Die Höhe hängt weiter am Scroll-Fortschritt (y0 − p·tiefe).
+    // --- Zustand je Objekt: wandert in zwei überlagerten Sinus-Schleifen je
+    //     Achse (eine langsame große plus eine schnellere kleine), Perioden
+    //     und Phasen je Besuch zufällig — unregelmäßige Wege statt Pendeln
+    //     am Stand („zu berechnet", Befund 18.11.2026). Die Amplituden
+    //     werden auf den SPIELRAUM zur Bildkante gestutzt (Roman, 19.11.2026:
+    //     Objekte hingen an der Kante, weil die harte Klemme ständig griff) —
+    //     die Wege orientieren sich dadurch am Zentrum, und die Klemme in
+    //     fliegen() ist nur noch das Netz. Die waagrechten Phasen sind 0
+    //     oder π: Beide Anteile starten bei 0 und schwingen symmetrisch um
+    //     die Startlage, damit die gestaltete Verteilung (und claimFreihalten)
+    //     gilt. Die Höhe hängt weiter am Scroll-Fortschritt (y0 − p·tiefe).
     var TAU = Math.PI * 2;
     var zustand = objekte.map(function (el) {
         var r = function (von, bis) { return von + Math.random() * (bis - von); };
+        var w  = parseFloat(el.dataset.w);
+        var x0 = parseFloat(el.dataset.x);
+        var a1 = r(7, 12), a2 = r(2.5, 4.5);
+        // Spielraum: 2 vw Abstand zur Kante bleiben immer.
+        var raum = Math.max(3, Math.min(x0 - 2, 98 - w - x0));
+        var f = raum / (a1 + a2);
+        if (f < 1) { a1 *= f; a2 *= f; }
         return {
-            el: el,
-            w: parseFloat(el.dataset.w),
-            x0: parseFloat(el.dataset.x),
-            x: parseFloat(el.dataset.x),
+            el: el, w: w, x0: x0, x: x0,
             y0: parseFloat(el.dataset.y0),
             tiefe: parseFloat(el.dataset.tiefe),
-            a1: r(12, 22), f1: TAU / r(46, 76), p1: r(0, TAU),   // große Schleife (vw)
-            a2: r(4, 7),   f2: TAU / r(13, 22), p2: r(0, TAU),   // kleine darüber
+            a1: a1, f1: TAU / r(46, 76), p1: Math.random() < 0.5 ? 0 : Math.PI,
+            a2: a2, f2: TAU / r(13, 22), p2: Math.random() < 0.5 ? 0 : Math.PI,
             ay: r(2, 3.5), fy: TAU / r(16, 26), py: r(0, TAU),   // senkrechtes Treiben (vh)
             uhr: 0,                        // läuft nur, solange nichts armiert ist
             wy: 0,                         // aktuelles senkrechtes Treiben
@@ -248,12 +254,12 @@
         if (armiert === null) {
             zustand.forEach(function (s) {
                 s.uhr += dt;
-                // Beide Sinus starten bei 0 (− sin(Phase)), die Summe wird an
-                // den Bildrand geklemmt — mindestens die halbe Objektbreite
-                // bleibt im Bild.
-                var drift = s.a1 * (Math.sin(s.f1 * s.uhr + s.p1) - Math.sin(s.p1))
-                          + s.a2 * (Math.sin(s.f2 * s.uhr + s.p2) - Math.sin(s.p2));
-                s.x = Math.min(100 - s.w / 2, Math.max(-s.w / 2, s.x0 + drift));
+                // Phasen 0/π → sin(Phase) = 0, der Weg startet in der
+                // Startlage; die Amplituden sind auf den Spielraum gestutzt,
+                // die Klemme ist nur noch das Netz (2 vw Kantenabstand).
+                var drift = s.a1 * Math.sin(s.f1 * s.uhr + s.p1)
+                          + s.a2 * Math.sin(s.f2 * s.uhr + s.p2);
+                s.x = Math.min(98 - s.w, Math.max(2, s.x0 + drift));
                 s.wy = s.ay * (Math.sin(s.fy * s.uhr + s.py) - Math.sin(s.py));
             });
         }
@@ -374,6 +380,47 @@
         badgeDa = false;
         entwaffnen();
     });
+
+    // --- Wortwechsler im Handwerk-Abschnitt (19.11.2026, ersetzt die zwei
+    //     Laufbänder): Ein stehender Satz, in dem die Leistung durchwechselt —
+    //     das Wort fährt hinter seiner Maske hinaus, das nächste herein
+    //     (dieselbe Masken-Bewegung wie die Fragen), die Maskenbreite gleitet
+    //     mit (Transition im CSS). Ohne dieses Skript oder bei reduzierter
+    //     Bewegung (frühes return oben) bleibt der ausgeschriebene Satz stehen.
+    var wwSatz     = document.querySelector('.ww-satz');
+    var wwStatisch = document.querySelector('.ww-statisch');
+    if (wwSatz && wwStatisch) {
+        var wwWoerter = [];
+        try { wwWoerter = JSON.parse(wwSatz.dataset.woerter || '[]'); } catch (e) { }
+        if (wwWoerter.length > 1) {
+            wwStatisch.hidden = true;
+            wwSatz.hidden = false;
+            var wwMaske = wwSatz.querySelector('.ww-maske');
+            var wwWort  = wwSatz.querySelector('.ww-wort');
+            var wwAn = 0;
+            wwMaske.style.width = wwWort.offsetWidth + 'px';
+            setInterval(function () {
+                // Nur wechseln, solange der Satz im Bild ist.
+                var r = wwSatz.getBoundingClientRect();
+                if (r.bottom < 0 || r.top > window.innerHeight) { return; }
+                wwAn = (wwAn + 1) % wwWoerter.length;
+                wwWort.style.transform = 'translateY(-115%)';    // hinaus nach oben
+                setTimeout(function () {
+                    wwWort.style.transition = 'none';
+                    wwWort.textContent = wwWoerter[wwAn];
+                    wwWort.style.transform = 'translateY(115%)'; // unten bereitstellen
+                    var alt = wwMaske.offsetWidth;               // Breite gleitet zur neuen
+                    wwMaske.style.width = 'auto';
+                    var neu = wwWort.offsetWidth;
+                    wwMaske.style.width = alt + 'px';
+                    void wwMaske.offsetWidth;                    // Reflow: Startwerte festschreiben
+                    wwMaske.style.width = neu + 'px';
+                    wwWort.style.transition = '';
+                    wwWort.style.transform = 'translateY(0)';    // herein von unten
+                }, 340);
+            }, 2600);
+        }
+    }
 
     lesen();
     requestAnimationFrame(fliegen);

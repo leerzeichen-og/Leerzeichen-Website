@@ -51,16 +51,19 @@ $fragen = [
 // wandern, damit die Verteilung lebendig bleibt.
 // Neun Bahnen (vorher zehn — mit zwei statt drei Fragen wirkte die Bühne
 // zu dicht, Roman 12.10.2026), gleichmäßig über die 200-vh-Umlaufbahn.
+// Startlagen x zur Mitte orientiert (Roman, 19.11.2026): Kein Objekt startet
+// mehr angeschnitten an der Kante, und buehne.js stutzt die Wander-Amplituden
+// auf den Spielraum zur Bildkante — nichts hängt mehr am Rand.
 $bahnen = [
-    ['w' => 31, 'h' => 22, 'x' => 6,  'y0' => 8,   'tiefe' => 790, 'vx' => 0.28],
-    ['w' => 24, 'h' => 19, 'x' => 62, 'y0' => 30,  'tiefe' => 765, 'vx' => -0.22],
-    ['w' => 20, 'h' => 26, 'x' => 34, 'y0' => 52,  'tiefe' => 815, 'vx' => 0.20],
-    ['w' => 27, 'h' => 18, 'x' => 80, 'y0' => 74,  'tiefe' => 745, 'vx' => -0.26],
-    ['w' => 22, 'h' => 24, 'x' => 12, 'y0' => 96,  'tiefe' => 840, 'vx' => 0.18],
-    ['w' => 28, 'h' => 19, 'x' => 52, 'y0' => 118, 'tiefe' => 780, 'vx' => -0.20],
-    ['w' => 25, 'h' => 16, 'x' => 76, 'y0' => 140, 'tiefe' => 805, 'vx' => 0.24],
+    ['w' => 31, 'h' => 22, 'x' => 12, 'y0' => 8,   'tiefe' => 790, 'vx' => 0.28],
+    ['w' => 24, 'h' => 19, 'x' => 56, 'y0' => 30,  'tiefe' => 765, 'vx' => -0.22],
+    ['w' => 20, 'h' => 26, 'x' => 36, 'y0' => 52,  'tiefe' => 815, 'vx' => 0.20],
+    ['w' => 27, 'h' => 18, 'x' => 62, 'y0' => 74,  'tiefe' => 745, 'vx' => -0.26],
+    ['w' => 22, 'h' => 24, 'x' => 16, 'y0' => 96,  'tiefe' => 840, 'vx' => 0.18],
+    ['w' => 28, 'h' => 19, 'x' => 44, 'y0' => 118, 'tiefe' => 780, 'vx' => -0.20],
+    ['w' => 25, 'h' => 16, 'x' => 60, 'y0' => 140, 'tiefe' => 805, 'vx' => 0.24],
     ['w' => 21, 'h' => 15, 'x' => 28, 'y0' => 162, 'tiefe' => 755, 'vx' => -0.18],
-    ['w' => 26, 'h' => 17, 'x' => 88, 'y0' => 184, 'tiefe' => 825, 'vx' => 0.22],
+    ['w' => 26, 'h' => 17, 'x' => 52, 'y0' => 184, 'tiefe' => 825, 'vx' => 0.22],
 ];
 // Immer neun Flieger: gibt es weniger Projekte mit Objekt, wiederholen sie sich.
 // Bühnen-Steuerung aus Space (3.11.2026): „sofort" fliegt schon im ersten
@@ -130,6 +133,45 @@ $saeulen_boxen = [
 ];
 // Säulen-Gestaltung: Variante „frei" (Beschluss Roman 17.9.2026) —
 // offene, schmale Spalten mit kräftiger Oberlinie, viel Weißraum.
+
+// Je Säule ein Motiv (Roman, 19.11.2026): der Quer-Teaser des neuesten
+// Projekts der Säule, über der Oberlinie — automatisch aktuell, kein
+// eigenes Bildmaterial nötig. Ohne Projekt der Säule entfällt das Bild.
+$saeulen_motiv = ['erlebnis' => null, 'marke' => null];
+$saeulen_quelle = ['erlebnis' => 'erlebnisse', 'marke' => 'gestaltung'];
+foreach (pj_index() as $p) {
+    foreach ($saeulen_quelle as $boxId => $saeule) {
+        if ($saeulen_motiv[$boxId] === null && ($p['saeule'] ?? '') === $saeule
+            && !empty($p['teaser_quer']['quellen'])) {
+            $saeulen_motiv[$boxId] = $p['teaser_quer'];
+        }
+    }
+}
+
+// Wortwechsler statt der zwei Laufbänder (Beschluss Roman, 19.11.2026):
+// EIN stehender Satz, in dem die Leistung durchwechselt — dieselbe
+// Masken-Bewegung wie die Bühnen-Fragen, also kein Fremdkörper. KURZE
+// Formen der Begriffe beider Säulen, alternierend gemischt — die langen
+// Listeneinträge („Rundwege mit interaktiven Stationen") sprengten den
+// Satz am Telefon. Ohne JavaScript (oder bei reduzierter Bewegung) steht
+// der Satz mit den vollen Begriffen beider Listen ausgeschrieben.
+$ww_kurz = [
+    ['Ausstellungen', 'Escape-Rooms', 'Treasure Trails', 'Erlebniswege',
+     'Outdoor-Abenteuer', 'Spielplätze', 'Leitsysteme', 'Kinderebenen',
+     'interaktive Stationen'],
+    ['Corporate Designs', 'Logos', 'Mitarbeitermagazine', 'Kundenmagazine',
+     'Bücher', 'Kataloge', 'Geschäftsausstattung', 'Microsites', 'Websites'],
+];
+$ww_woerter = [];
+for ($i = 0, $n = max(count($ww_kurz[0]), count($ww_kurz[1])); $i < $n; $i++) {
+    foreach ($ww_kurz as $liste) {
+        if (isset($liste[$i])) {
+            $ww_woerter[] = $liste[$i];
+        }
+    }
+}
+// Die statische Fassung nennt die vollen Begriffe beider Säulen.
+$ww_statisch = array_merge($saeulen_boxen[0]['liste'], $saeulen_boxen[1]['liste']);
 
 // Team-Text (Kurzfassung „Über uns") — steht jetzt im Splash-Akt der Bühne.
 $teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff '
@@ -273,11 +315,23 @@ require __DIR__ . '/teile/kopf.php';
 
 
 <section id="handwerk" class="lz-sec">
-  <?= lz_laufband($saeulen_boxen[0]['liste'], 'kipp-a') ?>
+  <?php // Wortwechsler (ersetzt die zwei Laufbänder, 19.11.2026): Die
+        // statische Fassung nennt alle Begriffe; buehne.js schaltet auf den
+        // Satz mit wechselndem Wort um (hidden-Muster, nie display). ?>
+  <div class="ww">
+    <p class="ww-statisch">Wir gestalten
+      <?= e(implode(', ', array_slice($ww_statisch, 0, -1))) ?> und <?= e(end($ww_statisch)) ?>.</p>
+    <?php // Maske und Punkt teilen sich einen nowrap-Span — der Punkt darf
+          // nie allein in die nächste Zeile rutschen. ?>
+    <p class="ww-satz" hidden data-woerter="<?= e(json_encode($ww_woerter, JSON_UNESCAPED_UNICODE)) ?>">Wir gestalten <span class="ww-paar"><span class="ww-maske"><span class="ww-wort"><?= e($ww_woerter[0]) ?></span></span>.</span></p>
+  </div>
   <h2 class="handwerk-titel"><span class="buehne-zeile">Gestaltung ist</span><span class="buehne-zeile">unser Handwerk.</span></h2>
   <div class="lz-saeulen">
-    <?php foreach ($saeulen_boxen as $box): ?>
-    <article id="<?= e($box['id']) ?>" class="lz-saeule">
+    <?php foreach ($saeulen_boxen as $box): $motiv = $saeulen_motiv[$box['id']] ?? null; ?>
+    <article id="<?= e($box['id']) ?>" class="lz-saeule<?= $motiv ? ' hat-bild' : '' ?>">
+      <?php if ($motiv): ?>
+      <?= pj_bild($motiv, 'lz-saeule-bild', '(max-width: 900px) 100vw, 420px') ?>
+      <?php endif; ?>
       <h3 class="lz-saeule-titel"><?= e($box['titel']) ?></h3>
       <?php foreach ($box['text'] as $t): ?>
       <p class="lz-saeule-text"><?= e($t) ?></p>
@@ -287,11 +341,6 @@ require __DIR__ . '/teile/kopf.php';
       </div>
     </article>
     <?php endforeach; ?>
-  </div>
-
-  <?php // 100 px Luft zwischen Säulen-Texten und dem zweiten Band (Roman, 24.9.2026). ?>
-  <div style="margin-top:100px">
-    <?= lz_laufband($saeulen_boxen[1]['liste'], 'laufband-retour kipp-b') ?>
   </div>
 </section>
 

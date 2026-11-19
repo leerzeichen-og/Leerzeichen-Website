@@ -373,6 +373,51 @@
 
 #handwerk { padding-top: calc(2 * var(--space-10)); }
 
+/* Wortwechsler (ersetzt die zwei Laufbänder, 19.11.2026): ein zentrierter
+   Satz, in dem die Leistung durchwechselt. Die statische Fassung nennt alle
+   Begriffe (ohne JavaScript/bei reduzierter Bewegung sichtbar); auf den
+   Satz-Absätzen steht bewusst KEIN display — das Skript schaltet mit hidden
+   um (die bekannte Falle). */
+.ww { text-align: center; }
+.ww-statisch {
+    margin: 0 auto;
+    max-width: 72ch;
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+.ww-satz {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(1.35rem, 2.4vw, 2.3rem);
+    line-height: 1.25;
+    color: var(--ink);
+}
+.ww-paar { white-space: nowrap; }
+.ww-maske {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: calc(100vw - 2 * var(--rand));
+    vertical-align: bottom;
+    transition: width .4s cubic-bezier(.3, 0, .2, 1);
+    font-weight: var(--weight-display);
+}
+.ww-wort { display: inline-block; transition: transform .32s ease; }
+
+/* Säulen-Motiv (19.11.2026): der Quer-Teaser des neuesten Projekts der
+   Säule steht ÜBER der Oberlinie — die Linie wandert dafür vom Artikel ans
+   Bild (border-bottom), der Abstand zum Titel bleibt derselbe. */
+.lz-saeule.hat-bild { border-top: 0; padding-top: 0; }
+.lz-saeule-bild {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-3, 10px);
+}
+
 .handwerk-titel {
     margin: var(--space-8) 0 0;
     text-align: center;
