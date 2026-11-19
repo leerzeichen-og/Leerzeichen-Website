@@ -446,53 +446,6 @@ html.pj-rollt .pj-scroller-buehne {
   margin-top: 1.4rem;
 }
 
-/* Übergeordnete Bereichs-Filter (Roman, 8.10.2026): die zwei Säulen als
-   große Schalter über den Kategorien — serverseitig über ?filter=…. */
-.pj-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: var(--space-6);
-}
-
-.pj-filter-pille {
-  padding: .55rem 1.35rem;
-  border: 2px solid var(--tinte);
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
-  line-height: 1.2;
-  color: var(--tinte);
-  transition: background .18s ease, color .18s ease;
-}
-
-.pj-filter-pille:hover,
-.pj-filter-pille[aria-current="true"] {
-  background: var(--tinte);
-  color: var(--papier);
-}
-
-/* Kategorien-Pillen: seit 8.10.2026 prominenter — größere Schrift,
-   Ink-Kontur statt Hairline, gefüllt beim Zeigen. */
-.pj-pille {
-  padding: .45rem 1.1rem;
-  /* Gleiche Konturstärke wie die Bereichs-Filter (Roman, 8.10.2026). */
-  border: 2px solid var(--tinte);
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: clamp(.95rem, 1.15vw, 1.05rem);
-  line-height: 1.3;
-  transition: background .18s ease, color .18s ease;
-}
-
-.pj-pille:hover,
-.pj-pille[aria-current="true"] {
-  background: var(--tinte);
-  border-color: var(--tinte);
-  color: var(--papier);
-}
-
 /* ---- Collage der Referenzen-Übersicht -------------------------------------- */
 /* Sechs Rasterspalten, die Karten-Varianten aus pj_karte() belegen 2 oder 4:
    je Fünfergruppe füllen drei Hochformate die erste Zeile, groß+hoch die
@@ -526,12 +479,12 @@ html.pj-rollt .pj-scroller-buehne {
 .pj-karte:hover .pj-karte-bild,
 .pj-karte:focus-visible .pj-karte-bild { transform: scale(1.045); }
 
-/* ---- Referenzen-Übersicht (Fassung 8.10.2026) ------------------------------- */
-/* Kopf im Kontakt-Muster (.kopf-gross aus site.css): links oben die
-   Bereichs-Filter am Headline-Platz, gleich darunter die Kategorien als
-   Fließzeile, der Einleitungssatz (h1) versetzt in der rechten Spalte. Danach je
-   Kategorie eine Gruppe: Überschrift in der ersten Rasterzelle, die
-   Beiträge daneben und darunter. */
+/* ---- Referenzen-Übersicht (Fassung 19.11.2026) ----------------------------- */
+/* Vorbild pentagram.com/work: Einleitungssatz oben, eine Filterzeile, dann
+   ein Raster aus drei Spalten — breite Karten (Schalter in Space) über zwei.
+   Alle Bilder einer Zeile sind gleich hoch: Die Höhe rechnet sich aus der
+   Spaltenbreite (Containerbreite, cqw), nicht aus dem Seitenverhältnis der
+   Karte — sonst wäre eine breite Karte doppelt so hoch wie ihre Nachbarn. */
 
 .pj-intro-satz {
   margin: 0;
@@ -541,71 +494,189 @@ html.pj-rollt .pj-scroller-buehne {
   max-width: 30ch;
   text-wrap: pretty;
 }
-/* Gleich unter den Bereichs-Filtern; die Breite begrenzt die Zeile auf
-   rund fünf Pillen, dann geht es in der nächsten weiter. */
-.pj-kategorien {
+
+.pj-ref { padding-top: var(--space-7); }
+
+/* Filterzeile: eine Zeile, die bei Platzmangel für sich seitlich scrollt
+   (nie die Seite). */
+.pj-ref-filterplatz {
+  margin-bottom: clamp(32px, 4vw, 56px);
+  /* Nach dem Filtern springt die Seite hierher — unter die fixierte Kopfzeile. */
+  scroll-margin-top: calc(var(--kopf-frei) + var(--space-3));
+}
+.pj-ref-filter { display: flex; }
+.pj-ref-filter-zeile {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px;            /* Platz für den Fokusring */
+  -webkit-overflow-scrolling: touch;
+}
+.pj-ref-filter-zeile::-webkit-scrollbar { display: none; }
+/* Geht die Zeile über den Rand hinaus, deutet ein Auslaufen an, dass sie
+   seitlich weitergeht (Klassen setzt das Seitenskript). */
+.pj-ref-filter-zeile.mehr-rechts { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent);
+                             mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent); }
+.pj-ref-filter-zeile.mehr-links  { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 56px), transparent);
+                             mask-image: linear-gradient(to left, #000 calc(100% - 56px), transparent); }
+.pj-ref-filter-zeile.mehr-links.mehr-rechts {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+}
+
+.pj-ref-pille {
+  flex: none;
+  padding: .45rem 1.1rem;
+  border: 2px solid var(--tinte);
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: clamp(.95rem, 1.1vw, 1.05rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--tinte);
+  transition: background .18s ease, color .18s ease;
+}
+.pj-ref-pille-kat { font-weight: 400; }
+.pj-ref-pille:hover,
+.pj-ref-pille[aria-current="true"] {
+  background: var(--tinte);
+  color: var(--papier);
+}
+/* display-gegen-hidden-Falle: ausgeblendete Kategorien wirklich weg. */
+.pj-ref-pille[hidden] { display: none; }
+.pj-ref-trenner {
+  flex: none;
+  width: 2px;
+  height: 1.6rem;
+  margin: 0 6px;
+  background: var(--hairline);
+}
+
+/* Schwebend am unteren Fensterrand (setzt das Skript, sobald die Zeile
+   oben hinausgescrollt ist und bis das Raster endet). */
+.pj-ref-filter.is-schwebend {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: clamp(12px, 2.5vh, 28px);
+  transform: translateX(-50%);
+  width: max-content;
+  /* Rechts unten sitzt der runde Anfrage-Knopf (.lz-anfrage) — die
+     schwebende Zeile hält zu beiden Seiten dessen Breite Abstand. */
+  max-width: calc(100% - 2 * 104px);
+  padding: 8px;
+  background: var(--papier);
+  border-radius: 999px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .16), 0 0 0 1px var(--hairline);
+  animation: pj-ref-auf .35s var(--ease-out, ease-out);
+}
+.pj-ref-filter.is-schwebend .pj-ref-pille { padding: .38rem 1rem; font-size: .95rem; }
+@keyframes pj-ref-auf {
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+/* Am Telefon links bündig bis knapp vor den Anfrage-Knopf. */
+@media (max-width: 640px) {
+  .pj-ref-filter.is-schwebend {
+    left: 12px;
+    transform: none;
+    max-width: calc(100% - 12px - 84px);
+    animation-name: pj-ref-auf-links;
+  }
+}
+@keyframes pj-ref-auf-links {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pj-ref-filter.is-schwebend { animation: none; }
+}
+
+/* Das Raster. */
+.pj-ref-raster {
+  --pj-ref-spalten: 3;
+  --pj-ref-abstand: clamp(20px, 2.4vw, 40px);
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(var(--pj-ref-spalten), minmax(0, 1fr));
+  grid-auto-flow: dense;   /* Lücke vor einer breiten Karte füllt die nächste schmale */
+  column-gap: var(--pj-ref-abstand);
+  row-gap: clamp(40px, 5vw, 80px);
+  align-items: start;
+}
+.pj-ref-karte { display: block; min-width: 0; text-decoration: none; color: inherit; }
+.pj-ref-karte[hidden] { display: none; }
+.pj-ref-karte.is-breit { grid-column: span 2; }
+
+.pj-ref-bild {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-xs);
+  background: var(--hairline);
+  /* Seitenverhältnis des Quer-Teasers (2288 × 1520), gemessen an EINER Spalte. */
+  height: calc((100cqw - (var(--pj-ref-spalten) - 1) * var(--pj-ref-abstand))
+               / var(--pj-ref-spalten) / 1.505);
+}
+.pj-ref-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease-out, ease-out);
+}
+.pj-ref-karte:hover .pj-ref-img,
+.pj-ref-karte:focus-visible .pj-ref-img { transform: scale(1.035); }
+
+/* Kategorien: beim Darüberfahren auf dem Bild. */
+.pj-ref-kats {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  max-width: 48rem;
-  margin-top: var(--space-5);
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .25s ease, transform .35s var(--ease-out, ease-out);
+  pointer-events: none;
 }
+.pj-ref-karte:hover .pj-ref-kats,
+.pj-ref-karte:focus-visible .pj-ref-kats { opacity: 1; transform: none; }
+/* Ohne Maus (Telefon, Tablet) gibt es kein Darüberfahren — die Kategorien
+   bleiben dort weg (sie verdeckten sonst jedes Bild); die Filterzeile
+   nennt sie ohnehin. */
 
-.pj-gruppe {
-  display: grid;
-  /* Dieselbe Teilung wie .kopf-gross-zeile (Kontakt-Raster) — dadurch
-     fluchtet der Einleitungssatz oben mit den Karten der rechten Spalte,
-     und die Bilder haben die Breite des Kontakt-Fotos. */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  column-gap: var(--space-8);
-  row-gap: clamp(40px, 6vw, 100px);
-  align-items: start;
-  /* Anker-Sprünge landen unter der fixierten Kopfzeile. */
-  scroll-margin-top: calc(var(--kopf-frei) + var(--space-5));
+.pj-ref-titel {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: var(--text-lg, 1.3125rem);
+  line-height: 1.25;
 }
-/* Rund 200 px Luft zwischen den Kategorien (am Telefon weniger). */
-.pj-gruppe + .pj-gruppe { margin-top: clamp(110px, 14vw, 200px); }
+.pj-ref-punchline {
+  display: block;
+  margin-top: .3rem;
+  max-width: 46ch;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--gedaempft);
+}
+.pj-ref-karte:hover .pj-ref-titel { text-decoration: underline; text-underline-offset: .15em; }
 
-/* Typografie kommt vom h2-Standard (site.css, Muster „So finden Sie
-   uns.") — in der Rasterzelle braucht es nur den Abstand nicht. */
-.pj-gruppe-titel { margin: 0; }
-
-/* Der Kategorien-Knopf gehört dem Telefon — am Schreibtisch stehen die
-   Pillen immer offen. :not([hidden]) wegen der display-gegen-hidden-Falle:
-   Der Knopf bleibt hidden, bis das Seitenskript ihn verdrahtet hat. */
-.pj-kategorien-knopf { display: none; }
+.pj-ref-leer[hidden] { display: none; }
 
 @media (max-width: 900px) {
-  .pj-gruppe { grid-template-columns: 1fr; }
-
-  /* Erster Schirm (Roman, 12.10.2026): Bereichs-Filter, gleich darunter
-     der Einleitungssatz, dann der Kategorien-Knopf — so ist unterhalb
-     schon der erste Beitrag zu erkennen. Umsortiert wird per Flex-Order,
-     das Markup bleibt in der Schreibtisch-Reihenfolge. */
-  .pj-intro { display: flex; flex-direction: column; align-items: flex-start; }
-  .pj-intro .pj-filter { order: 1; margin-bottom: 0; }
-  .pj-intro .kopf-gross-zeile { order: 2; margin-top: var(--space-6); }
-  .pj-kategorien-knopf:not([hidden]) {
-    order: 3;
-    display: inline-flex;
-    align-items: center;
-    gap: .6em;
-    margin-top: var(--space-6);
-    padding: .45rem 1.1rem;
-    border: 2px solid var(--tinte);
-    border-radius: 999px;
-    background: none;
-    color: var(--tinte);
-    font: inherit;
-    font-size: .95rem;
-    line-height: 1.3;
-    cursor: pointer;
-  }
-  .pj-kategorien-knopf::after { content: "+"; font-weight: 600; }
-  .pj-kategorien-knopf[aria-expanded="true"]::after { content: "–"; }
-  .pj-intro .pj-kategorien { order: 4; margin-top: var(--space-5); }
-  /* Zusammengeklappt erst, wenn das Skript den Knopf gezeigt hat. */
-  .pj-kategorien.pj-klappbar:not(.offen) { display: none; }
+  .pj-ref-raster { --pj-ref-spalten: 2; }
+}
+@media (max-width: 560px) {
+  .pj-ref-raster { --pj-ref-spalten: 1; }
+  .pj-ref-karte.is-breit { grid-column: auto; }
 }
 
 .pj-fr-titel {

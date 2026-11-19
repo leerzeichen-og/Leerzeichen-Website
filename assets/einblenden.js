@@ -21,7 +21,7 @@
     // Was eingeblendet wird. Bewusst eine Liste konkreter Bausteine —
     // pauschal „alle Absätze" erwischte auch Fußzeile und Formulare.
     var AUSWAHL = [
-        '.titel-seite', '.titel-gross', '.pj-intro-satz', '.pj-gruppe-titel',
+        '.titel-seite', '.titel-gross', '.pj-intro-satz',
         '.seiten-kopf .chip', '.seiten-hero .chip',
         '.text-spalte p', '.kopf-gross-rechts p', '.lz-lead', '.lz-h2',
         // Stärken-Absätze — außer .staerke-zwei, den choreografiert die
@@ -38,7 +38,7 @@
         '.nl-karte',
         // .pj-text selbst trägt den Spaltenversatz — deshalb werden dort
         // die Absätze eingeblendet, nicht der Block; Fotos treten mit auf.
-        '.pj-header-inhalt', '.pj-text p', '.pj-zitat', '.pj-karte',
+        '.pj-header-inhalt', '.pj-text p', '.pj-zitat', '.pj-karte', '.pj-ref-karte',
         '.pj .pj-foto', '.pj-doppel', '.pj-scroller',
         '.buero-kachel', '.buero-text', '.portrait',
     ].join(',');

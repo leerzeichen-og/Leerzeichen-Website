@@ -6,7 +6,10 @@ rendert sie. Dieses Dokument ist der Vertrag zwischen beiden Seiten —
 
 ## daten/projekte/index.json
 
-Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
+Liste aller veröffentlichten Projekte **in der Reihenfolge der
+Referenzen-Übersicht** (seit 19.11.2026; gepflegt in Space unter Portfolio →
+„Reihenfolge auf der Website"; noch nicht Einsortiertes steht vorne, neueste
+zuerst). Die Website übernimmt die Reihenfolge unverändert:
 
 ```json
 {
@@ -21,6 +24,7 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
       "punchline": "Eine Ausstellung, die …",
       "schlagworte": ["Ausstellung", "Leitsystem"],
       "buehne": "sofort",
+      "breit": true,
       "zitat": "Wir wollten einen Weg, der …",
       "zitat_von": "Herta Aubach, Bürgermeisterin",
       "teaser_quer": { …Bild-Objekt, siehe unten… },
@@ -38,6 +42,9 @@ Liste aller veröffentlichten Projekte, neueste zuerst (Jahr, dann Anlage):
   Scrollen nach). Steht die Bühne in Space auf „aus", fehlen `objekt` UND
   `buehne` komplett. Exporte ohne `buehne`-Schlüssel (Altbestand) behandelt
   die Startseite wie bisher: alles fliegt, ohne Erste-Schirm-Garantie.
+- `breit` (seit 19.11.2026, optional): `true` = die Karte zieht sich auf der
+  Referenzen-Übersicht über zwei von drei Spalten (Schalter „Breit" auf der
+  Portfolio-Karte in Space). Fehlt der Schlüssel, ist die Karte eine Spalte breit.
 - `zitat`/`zitat_von` (seit 21.9.2026, optional): **Kundenstimme** — die
   Referenzen-Übersicht streut sie als schwarze Blöcke zwischen die Karten.
   Klartext ohne Anführungszeichen (setzt die Website), `zitat_von` als eine
