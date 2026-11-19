@@ -552,6 +552,7 @@ h2 {
 .buero-text { margin-top: var(--space-7); max-width: 52ch; }
 .buero-text h3 { margin: 0 0 var(--space-4); }
 .buero-text p { margin: 0; font-size: var(--text-fliess); line-height: 1.55; color: var(--text-body); }
+.buero-text .buero-knopf { margin-top: var(--space-6); }
 @media (max-width: 900px) {
     .buero-gross, .buero-hoch { grid-column: 1 / -1; }
     .buero-hoch img { aspect-ratio: 16 / 10; }

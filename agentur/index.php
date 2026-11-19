@@ -94,11 +94,11 @@ function agentur_foto_html(array $foto, string $name): string
 
 $prinzipien = [
     ['Ansatz',
-     'Form follows Function, wörtlich genommen. Was wir gestalten, funktioniert: im Druck, am Screen, in einer Ausstellung, die jahrelang von Kindern benutzt wird. Zeitlose Gestaltung ist unser Anspruch. Unsere Konzepte und Gestaltungen sollen langlebig ihre Wirkung entfalten.'],
+     'Form follows Function, wörtlich genommen. Was wir gestalten, funktioniert: im Druck, am Screen oder in einer Ausstellung. Wir folgen nicht einfach jedem Trend. Unsere Konzepte und Gestaltungen sind zeitlos und langlebig.'],
     ['Technik',
-     'Vom Screendesign fürs Handydisplay über Bücher mit mehreren hundert Seiten bis zum 30-Meter-Print haben wir alles schon produziert. Technologisch legen wir uns nicht fest, analog wie digital. KI setzen wir dort ein, wo sie Arbeit abnimmt und Ihren Nutzen vergrößert.'],
+     'Vom Screendesign fürs Handydisplay über Bücher mit mehreren hundert Seiten bis zum 30-Meter-Print haben wir alles schon produziert. Technologisch legen wir uns nicht fest, analog wie digital. KI setzen wir dort ein, wo sie Arbeit abnimmt und den Nutzen für Sie steigert.'],
     ['Netzwerk',
-     'Für die Produktion holen wir Leute dazu, mit denen wir seit Jahren arbeiten: Experten und Unternehmen, die außergewöhnliche Projekte mit uns umsetzen. Medientechniker, Motion Designer, Druckereien, Werbetechniker, Lektorinnen, Illustratoren, Architekten. Wir nutzen unser Netzwerk und bleiben verantwortlich, bis das Projekt steht.'],
+     'Für besondere Aufgaben holen wir uns zusätzliche Expertise: Medientechnik, Motion Design, Druck, Werbetechnik, Lektorat, Illustration, Architektur. Unser Netzwerk besteht aus Menschen und Unternehmen, mit denen wir seit Jahren arbeiten und außergewöhnliche Projekte umsetzen. Wir nutzen diesen Wissenspool und bleiben verantwortlich, bis das Projekt abgeschlossen ist.'],
 ];
 
 $ctaTitel = 'Unser Büro ist einen Besuch wert.';
@@ -212,10 +212,13 @@ require __DIR__ . '/../teile/kopf.php';
   <div class="buero-text">
     <h3 class="lz-h3">Zeitlose Ideen in historischer Architektur.</h3>
     <p>Wir arbeiten im
-      altehrwürdigen Rathaus von <?= e(FIRMA_ORT) ?>, erbaut im 16. Jahrhundert. Es
-      wurde schon als Mauthaus, Gefängnis, Volksschule, Post, Kindergarten und
+      altehrwürdigen Rathaus von <?= e(FIRMA_ORT) ?>, erbaut im 16. Jahrhundert. Das
+      Gebäude wurde schon als Mauthaus, Gefängnis, Volksschule, Post, Kindergarten und
       Musikschule genutzt. Wir sind also in guter Gesellschaft, was wechselnde
       Aufgaben angeht.</p>
+    <div class="knopf-wrap buero-knopf">
+      <a class="knopf" href="/kontakt/">Senden Sie uns Ihre gestalterische Challenge <?= lz_pfeil() ?></a>
+    </div>
   </div>
 </section>
 
