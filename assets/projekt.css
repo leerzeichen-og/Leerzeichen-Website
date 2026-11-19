@@ -350,10 +350,20 @@ html.pj-rollt .pj-scroller-buehne {
   color: var(--pj-gedaempft);
 }
 
-.pj-credit { display: flex; gap: .6rem; padding: .4em 0; }
-.pj-credit dt { margin: 0; }
-.pj-credit dt::after { content: ":"; }
-.pj .pj-credit dd { margin: 0; color: var(--pj-ink); }
+/* Tabellarisch (19.11.2026): Tätigkeit in der linken Spalte, Personen in
+   der rechten, je Person eine Zeile. Die Gruppen lösen sich ins Raster
+   auf (display: contents) — so fluchten alle Personen an derselben Kante. */
+.pj-credits {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+}
+.pj-credit { display: contents; }
+.pj-credit dt { grid-column: 1; margin: 0; padding-top: .7em; }
+.pj .pj-credit dd { grid-column: 2; margin: 0; color: var(--pj-ink); }
+.pj .pj-credit dt + dd { padding-top: .7em; }
+.pj-credit:first-child dt,
+.pj .pj-credit:first-child dt + dd { padding-top: 0; }
 
 @media (max-width: 900px) {
   .pj-abschluss { grid-template-columns: 1fr; padding-top: clamp(70px, 10vh, 120px); }
@@ -383,8 +393,9 @@ html.pj-rollt .pj-scroller-buehne {
 }
 
 .pj-weitere h2 { margin-bottom: var(--space-7); }
+.pj-weitere-alle { margin: clamp(48px, 6vw, 96px) 0 0; }
 
-.pj-weitere-liste,
+
 .pj-liste {
   display: grid;
   /* min(100%, …) — sonst schiebt die Mindestbreite am Telefon die Seite auf */
@@ -482,9 +493,10 @@ html.pj-rollt .pj-scroller-buehne {
 /* ---- Referenzen-Übersicht (Fassung 19.11.2026) ----------------------------- */
 /* Vorbild pentagram.com/work: Einleitungssatz oben, eine Filterzeile, dann
    ein Raster aus drei Spalten — breite Karten (Schalter in Space) über zwei.
-   Alle Bilder einer Zeile sind gleich hoch: Die Höhe rechnet sich aus der
-   Spaltenbreite (Containerbreite, cqw), nicht aus dem Seitenverhältnis der
-   Karte — sonst wäre eine breite Karte doppelt so hoch wie ihre Nachbarn. */
+   Alle einspaltigen Bilder sind gleich hoch: Die Höhe rechnet sich aus der
+   Spaltenbreite (Containerbreite, cqw). Breite Karten sind zwei Spalten
+   breit und zwei Zeilen hoch (Roman, 19.11.2026). Dieselben Karten stehen
+   unter „Weitere Projekte" auf den Projektseiten (pj_ref_karte). */
 
 .pj-intro-satz {
   margin: 0;
@@ -600,17 +612,37 @@ html.pj-rollt .pj-scroller-buehne {
 .pj-ref-raster {
   --pj-ref-spalten: 3;
   --pj-ref-abstand: clamp(20px, 2.4vw, 40px);
+  /* Höhe eines einspaltigen Bildes: Seitenverhältnis des Quer-Teasers
+     (2288 × 1520), gemessen an EINER Spalte der Containerbreite (cqw). */
+  --pj-ref-bildhoehe: calc((100cqw - (var(--pj-ref-spalten) - 1) * var(--pj-ref-abstand))
+                           / var(--pj-ref-spalten) / 1.505);
   container-type: inline-size;
   display: grid;
   grid-template-columns: repeat(var(--pj-ref-spalten), minmax(0, 1fr));
-  grid-auto-flow: dense;   /* Lücke vor einer breiten Karte füllt die nächste schmale */
+  grid-auto-flow: dense;   /* Lücken neben breiten Karten füllen die schmalen */
   column-gap: var(--pj-ref-abstand);
-  row-gap: clamp(40px, 5vw, 80px);
+  row-gap: clamp(60px, 7.5vw, 120px);
   align-items: start;
 }
-.pj-ref-karte { display: block; min-width: 0; text-decoration: none; color: inherit; }
+.pj-ref-karte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--tinte);
+}
 .pj-ref-karte[hidden] { display: none; }
-.pj-ref-karte.is-breit { grid-column: span 2; }
+
+/* Breite Karten (Schalter in Space): zwei Spalten breit und zwei Zeilen
+   hoch — das Bild wächst, bis der Text unten mit der zweiten Zeile der
+   Nachbarspalte fluchtet; mindestens doppelte Bildhöhe, falls neben der
+   Karte nichts steht. */
+.pj-ref-karte.is-breit { grid-column: span 2; grid-row: span 2; align-self: stretch; }
+.pj-ref-karte.is-breit .pj-ref-bild {
+  flex: 1 0 auto;
+  height: auto;
+  min-height: calc(2 * var(--pj-ref-bildhoehe));
+}
 
 .pj-ref-bild {
   position: relative;
@@ -618,11 +650,11 @@ html.pj-rollt .pj-scroller-buehne {
   overflow: hidden;
   border-radius: var(--radius-xs);
   background: var(--hairline);
-  /* Seitenverhältnis des Quer-Teasers (2288 × 1520), gemessen an EINER Spalte. */
-  height: calc((100cqw - (var(--pj-ref-spalten) - 1) * var(--pj-ref-abstand))
-               / var(--pj-ref-spalten) / 1.505);
+  height: var(--pj-ref-bildhoehe);
 }
 .pj-ref-img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -632,26 +664,12 @@ html.pj-rollt .pj-scroller-buehne {
 .pj-ref-karte:hover .pj-ref-img,
 .pj-ref-karte:focus-visible .pj-ref-img { transform: scale(1.035); }
 
-/* Kategorien: beim Darüberfahren auf dem Bild. */
-.pj-ref-kats {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .25s ease, transform .35s var(--ease-out, ease-out);
-  pointer-events: none;
+.pj-ref-kunde {
+  display: block;
+  margin-top: 1rem;
+  font-size: .875rem;
+  line-height: 1.35;
 }
-.pj-ref-karte:hover .pj-ref-kats,
-.pj-ref-karte:focus-visible .pj-ref-kats { opacity: 1; transform: none; }
-/* Ohne Maus (Telefon, Tablet) gibt es kein Darüberfahren — die Kategorien
-   bleiben dort weg (sie verdeckten sonst jedes Bild); die Filterzeile
-   nennt sie ohnehin. */
-
 .pj-ref-titel {
   display: block;
   margin-top: 1rem;
@@ -659,15 +677,44 @@ html.pj-rollt .pj-scroller-buehne {
   font-size: var(--text-lg, 1.3125rem);
   line-height: 1.25;
 }
+.pj-ref-kunde + .pj-ref-titel { margin-top: .2rem; }
 .pj-ref-punchline {
   display: block;
   margin-top: .3rem;
   max-width: 46ch;
   font-size: 1rem;
   line-height: 1.45;
-  color: var(--gedaempft);
 }
 .pj-ref-karte:hover .pj-ref-titel { text-decoration: underline; text-underline-offset: .15em; }
+
+/* Kategorien: dezent unter der Punchline, beim Darüberfahren. Der Platz
+   bleibt reserviert, damit beim Einblenden nichts springt. Ohne Maus
+   (Telefon, Tablet) gibt es kein Darüberfahren — dort stehen sie immer. */
+.pj-ref-kats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: .75rem;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .25s ease, transform .35s var(--ease-out, ease-out);
+}
+.pj-ref-kat {
+  padding: .25rem .6rem;
+  border-radius: 2px;
+  background: var(--grey-100);
+  color: var(--grey-700);
+  font-size: var(--text-2xs, .75rem);
+  letter-spacing: var(--tracking-wide, .04em);
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.pj-ref-karte:hover .pj-ref-kats,
+.pj-ref-karte:focus-visible .pj-ref-kats { opacity: 1; transform: none; }
+@media (hover: none) {
+  .pj-ref-kats { opacity: 1; transform: none; }
+}
 
 .pj-ref-leer[hidden] { display: none; }
 
@@ -676,7 +723,8 @@ html.pj-rollt .pj-scroller-buehne {
 }
 @media (max-width: 560px) {
   .pj-ref-raster { --pj-ref-spalten: 1; }
-  .pj-ref-karte.is-breit { grid-column: auto; }
+  .pj-ref-karte.is-breit { grid-column: auto; grid-row: auto; }
+  .pj-ref-karte.is-breit .pj-ref-bild { min-height: var(--pj-ref-bildhoehe); }
 }
 
 .pj-fr-titel {

@@ -7,7 +7,7 @@
 //   3. ein dreispaltiges Raster, jedes Projekt genau einmal. Karten mit
 //      "breit" (Schalter in Space) ziehen sich über zwei Spalten; Titel und
 //      Punchline stehen unter dem Bild, die Kategorien erscheinen beim
-//      Darüberfahren auf dem Bild.
+//      Darüberfahren darunter (Karte: pj_ref_karte in teile/projekte.php).
 // Reihenfolge = Reihenfolge in index.json (in Space unter Portfolio →
 // „Reihenfolge auf der Website" gepflegt).
 //
@@ -31,14 +31,6 @@ $filterWahl = [
     'erlebnis'   => ['Erlebnis',   'erlebnisse'],
     'gestaltung' => ['Gestaltung', 'gestaltung'],
 ];
-
-// Kategorie-Anker aus dem Namen (nur a-z, 0-9, Bindestrich) — für die
-// Adresse (?kategorie=…) und die data-Attribute der Karten.
-function pj_anker(string $name): string
-{
-    $s = strtr(mb_strtolower($name), ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss']);
-    return trim(preg_replace('/[^a-z0-9]+/', '-', $s) ?? '', '-');
-}
 
 // Alle Kategorien des Bestands (Anker → Name), alphabetisch.
 $kategorien = [];
@@ -154,28 +146,8 @@ require __DIR__ . '/../teile/kopf.php';
     <?php foreach ($projekte as $p):
         $passt = pj_passt($p, $saeuleJetzt, $kategorie);
         $sichtbar += $passt ? 1 : 0;
-        $tags  = array_values(array_filter(array_map('strval', (array) ($p['schlagworte'] ?? []))));
-        $breit = !empty($p['breit']);
-    ?>
-    <a class="pj-ref-karte<?= $breit ? ' is-breit' : '' ?>" href="/referenzen/<?= e($p['slug'] ?? '') ?>/"
-      data-saeule="<?= e((string) ($p['saeule'] ?? '')) ?>"
-      data-kategorien="<?= e(implode(' ', array_map('pj_anker', $tags))) ?>"<?= $passt ? '' : ' hidden' ?>>
-      <span class="pj-ref-bild">
-        <?= pj_bild($p['teaser_quer'] ?? null, 'pj-ref-img', $breit
-            ? '(max-width: 560px) 100vw, (max-width: 900px) 100vw, 66vw'
-            : '(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw') ?>
-        <?php if ($tags): ?>
-        <span class="pj-ref-kats">
-          <?php foreach ($tags as $t): ?><span class="chip"><?= e($t) ?></span><?php endforeach; ?>
-        </span>
-        <?php endif; ?>
-      </span>
-      <span class="pj-ref-titel"><?= e((string) ($p['titel'] ?? '')) ?></span>
-      <?php if (!empty($p['punchline'])): ?>
-      <span class="pj-ref-punchline"><?= e((string) $p['punchline']) ?></span>
-      <?php endif; ?>
-    </a>
-    <?php endforeach; ?>
+        echo pj_ref_karte($p, !empty($p['breit']), $passt);
+    endforeach; ?>
   </div>
   <p class="platzhalter pj-ref-leer"<?= $sichtbar ? ' hidden' : '' ?>>In dieser Auswahl sind noch keine
     Projekte veröffentlicht — <a href="/referenzen/">alle zeigen</a>.</p>

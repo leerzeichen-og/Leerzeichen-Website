@@ -235,6 +235,86 @@ function pj_karte(array $eintrag, string $variante = ''): string
 }
 
 /**
+ * Kategorie-Anker aus dem Namen (nur a-z, 0-9, Bindestrich) — für die
+ * Adresse (?kategorie=…) und die data-Attribute der Karten.
+ */
+function pj_anker(string $name): string
+{
+    $s = strtr(mb_strtolower($name), ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss']);
+    return trim(preg_replace('/[^a-z0-9]+/', '-', $s) ?? '', '-');
+}
+
+/**
+ * Karte der Referenzen-Übersicht (Fassung 19.11.2026), auch unter
+ * „Weitere Projekte" auf den Projektseiten: Bild, darunter Kunde (klein),
+ * Titel, Punchline und — beim Darüberfahren — die Kategorien.
+ * $breit: über zwei Spalten und doppelt hoch (nur im Übersichtsraster).
+ * $sichtbar: false setzt hidden (Filter ohne JavaScript).
+ */
+function pj_ref_karte(array $p, bool $breit = false, bool $sichtbar = true): string
+{
+    $tags = array_values(array_filter(array_map('strval', (array) ($p['schlagworte'] ?? []))));
+    $out  = '<a class="pj-ref-karte' . ($breit ? ' is-breit' : '') . '" href="/referenzen/'
+          . e($p['slug'] ?? '') . '/"'
+          . ' data-saeule="' . e((string) ($p['saeule'] ?? '')) . '"'
+          . ' data-kategorien="' . e(implode(' ', array_map('pj_anker', $tags))) . '"'
+          . ($sichtbar ? '' : ' hidden') . '>';
+    $out .= '<span class="pj-ref-bild">'
+          . pj_bild($p['teaser_quer'] ?? null, 'pj-ref-img', $breit
+              ? '(max-width: 560px) 100vw, (max-width: 900px) 100vw, 66vw'
+              : '(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw')
+          . '</span>';
+    if (!empty($p['kunde'])) {
+        $out .= '<span class="pj-ref-kunde">' . e((string) $p['kunde']) . '</span>';
+    }
+    $out .= '<span class="pj-ref-titel">' . e((string) ($p['titel'] ?? '')) . '</span>';
+    if (!empty($p['punchline'])) {
+        $out .= '<span class="pj-ref-punchline">' . e((string) $p['punchline']) . '</span>';
+    }
+    if ($tags) {
+        $out .= '<span class="pj-ref-kats">';
+        foreach ($tags as $t) {
+            $out .= '<span class="pj-ref-kat">' . e($t) . '</span>';
+        }
+        $out .= '</span>';
+    }
+    return $out . '</a>';
+}
+
+/**
+ * Credits als Tabelle: Tätigkeit links, je Person eine Zeile rechts.
+ * Mehrere Personen kommen entweder als eigene Einträge mit derselben
+ * Tätigkeit oder in EINEM Feld, getrennt durch Zeilenumbruch, Komma oder
+ * Strichpunkt („und"/„&" trennen nicht — die stehen in Firmennamen).
+ * Liefert [[tätigkeit, [person, …]], …] in Reihenfolge des ersten Auftretens.
+ */
+function pj_credits_gruppiert(array $credits): array
+{
+    $gruppen = [];
+    foreach ($credits as $c) {
+        if (!is_array($c)) {
+            continue;
+        }
+        $bereich  = trim((string) ($c['bereich'] ?? ''));
+        $personen = array_values(array_filter(array_map('trim',
+            preg_split('/[\r\n,;]+/', (string) ($c['person'] ?? '')) ?: []), 'strlen'));
+        if ($bereich === '' && !$personen) {
+            continue;
+        }
+        $schluessel = mb_strtolower($bereich);
+        if (!isset($gruppen[$schluessel])) {
+            $gruppen[$schluessel] = [$bereich, []];
+        }
+        foreach ($personen as $person) {
+            if (!in_array($person, $gruppen[$schluessel][1], true)) {
+                $gruppen[$schluessel][1][] = $person;
+            }
+        }
+    }
+    return array_values($gruppen);
+}
+
+/**
  * Kundenstimme als schwarzer, leicht gedrehter Block zwischen den Karten der
  * Referenzen-Übersicht. Kommt aus den Feldern zitat/zitat_von des Eintrags
  * (optional, gepflegt in Space) — ohne Zitat gibt es keinen Block.

@@ -141,7 +141,7 @@ require __DIR__ . '/../teile/kopf.php';
   // Format ist cta ein Klartext-Feld, im alten ein texte-Eintrag.
   $ctaRoh = trim((string) ($projekt['cta'] ?? ($projekt['texte']['call_to_action'] ?? '')));
   $cta    = $ctaRoh !== '' ? '<div class="pj-text pj-cta-text">' . pj_absaetze($ctaRoh) . '</div>' : '';
-  $credits = $projekt['credits'] ?? [];
+  $credits = pj_credits_gruppiert(is_array($projekt['credits'] ?? null) ? $projekt['credits'] : []);
   if ($cta !== '' || $credits): ?>
   <section class="pj-abschluss">
     <div class="pj-cta">
@@ -149,11 +149,14 @@ require __DIR__ . '/../teile/kopf.php';
       <a class="knopf" href="/kontakt/">Kontaktieren Sie uns <?= lz_pfeil() ?></a>
     </div>
     <?php if ($credits): ?>
+    <?php // Tabellarisch: Tätigkeit links, je Person eine eigene Zeile. ?>
     <dl class="pj-credits">
-      <?php foreach ($credits as $c): if (empty($c['bereich']) && empty($c['person'])) continue; ?>
+      <?php foreach ($credits as [$bereich, $personen]): ?>
       <div class="pj-credit">
-        <dt><?= e((string) ($c['bereich'] ?? '')) ?></dt>
-        <dd><?= e((string) ($c['person'] ?? '')) ?></dd>
+        <dt><?= e($bereich) ?></dt>
+        <?php foreach ($personen ?: [''] as $person): ?>
+        <dd><?= e($person) ?></dd>
+        <?php endforeach; ?>
       </div>
       <?php endforeach; ?>
     </dl>
@@ -178,16 +181,21 @@ require __DIR__ . '/../teile/kopf.php';
   <?php endif; ?>
 
   <?php
-  // Weitere Projekte derselben Säule, neueste zuerst (Reihenfolge der index.json).
+  // Weitere Projekte derselben Säule, in der Reihenfolge der index.json
+  // (= Reihenfolge der Referenzen-Übersicht).
   $weitere = array_filter(pj_index(), fn($p) =>
       ($p['saeule'] ?? '') === ($projekt['saeule'] ?? '-') && ($p['slug'] ?? '') !== $projekt['slug']);
   $weitere = array_slice($weitere, 0, 3);
   if ($weitere): ?>
   <section class="pj-weitere">
     <h2>Weitere Projekte</h2>
-    <div class="pj-weitere-liste">
-      <?php foreach ($weitere as $w) { echo pj_karte($w); } ?>
+    <?php // Karten wie auf der Referenzen-Übersicht (pj_ref_karte), ohne Breit. ?>
+    <div class="pj-ref-raster pj-weitere-raster">
+      <?php foreach ($weitere as $w) { echo pj_ref_karte($w); } ?>
     </div>
+    <p class="pj-weitere-alle">
+      <a class="knopf" href="/referenzen/">Alle Referenzen <?= lz_pfeil() ?></a>
+    </p>
   </section>
   <?php endif; ?>
 
