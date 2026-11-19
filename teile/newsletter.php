@@ -13,6 +13,13 @@ $nlBrevo = defined('BREVO_KEY') && BREVO_KEY !== ''
         && defined('BREVO_DOI_VORLAGE') && BREVO_DOI_VORLAGE > 0;
 ?>
 <section id="newsletter" class="lz-sec nl-bereich">
+  <?php // Bühne der Postkarte (19.11.2026, Entwurf Roman): hinter der leicht
+        // geneigten Karte schiebt sich eine türkise Fläche hervor, links
+        // fliegen drei Striche als Flugspur mit. Fläche und Striche stehen
+        // im DOM NACH der Karte, damit CSS sie über „.nl-karte.blende-da ~"
+        // an deren Einflug (einblenden.js) koppeln kann; die Schichten
+        // regelt z-index. Beides ist reine Zierde (aria-hidden). ?>
+  <div class="nl-rahmen">
   <div class="nl-karte">
     <img class="nl-kuvert" src="/assets/bilder/newsletter-baum.webp" alt=""
       width="1356" height="1164" loading="lazy">
@@ -50,5 +57,8 @@ $nlBrevo = defined('BREVO_KEY') && BREVO_KEY !== ''
         <div><button class="knopf" type="submit">Jetzt anmelden</button></div>
       </form>
     </div>
+  </div>
+  <div class="nl-flaeche" aria-hidden="true"></div>
+  <div class="nl-striche" aria-hidden="true"><i></i><i></i><i></i></div>
   </div>
 </section>

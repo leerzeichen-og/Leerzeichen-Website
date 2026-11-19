@@ -105,6 +105,7 @@
         if (f < 1) { a1 *= f; a2 *= f; }
         return {
             el: el, w: w, x0: x0, x: x0,
+            h: parseFloat(el.dataset.h),
             y0: parseFloat(el.dataset.y0),
             tiefe: parseFloat(el.dataset.tiefe),
             a1: a1, f1: TAU / r(46, 76), p1: Math.random() < 0.5 ? 0 : Math.PI,
@@ -263,6 +264,13 @@
                 s.wy = s.ay * (Math.sin(s.fy * s.uhr + s.py) - Math.sin(s.py));
             });
         }
+        // Schutzzone (Roman, 19.11.2026): In den oberen 80 px fliegt nichts —
+        // dort hingen angeschnittene, nicht anklickbare Stückchen unter dem
+        // Seitenkopf. Wer nach oben hinauswandert, löst sich auf, BEVOR die
+        // Oberkante die Zone berührt (Fade über 6 vh darunter), und
+        // Unsichtbare nehmen keine Klicks an. Die Startlagen in index.php
+        // beginnen deshalb erst unterhalb von Zone + Fade.
+        var zone = 80 / (window.innerHeight / 100) + 1;   // in vh, mit Luft
         zustand.forEach(function (s) {
             // Die Höhe folgt dem Scroll-Ziel GEGLÄTTET (Exponentialfilter):
             // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
@@ -276,6 +284,9 @@
             // wieder herein (geglättet wird die UNgefaltete Höhe, sonst
             // würde jeder Umlauf als schnelle Durchfahrt animiert).
             var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
+            var frei = klemm((zeig - zone) / 6);          // 0 an der Zone, 1 ab 6 vh darunter
+            s.el.style.opacity = frei;
+            s.el.style.pointerEvents = frei < 0.5 ? 'none' : '';
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
         });
         // Das Badge fährt seinem Ziel weich hinterher (Maus bzw. Objekt) —
@@ -312,8 +323,12 @@
     // es zur Projektseite — die beginnt ohnehin dunkel, der Übergang sitzt.
     function absprung(i) {
         if (zoomZiel !== null) { return; }
-        zoomZiel = objekte[i].dataset.url;
         badgeZeigen(i);
+        absprungNach(objekte[i].dataset.url);
+    }
+    function absprungNach(url) {
+        if (zoomZiel !== null) { return; }
+        zoomZiel = url;
         var r = badge.getBoundingClientRect();
         var faktor = 2 * Math.max(
             window.innerWidth / Math.max(1, r.width),
@@ -380,6 +395,33 @@
         badgeDa = false;
         entwaffnen();
     });
+
+    // --- Kreis-Hover auch auf den Säulen-Motiven (19.11.2026): dasselbe
+    //     Badge wie über den fliegenden Objekten — es ist fixed und die
+    //     fliegen()-Schleife fährt es ohnehin dauerhaft der Maus nach.
+    //     Am Telefon bleibt der Link ein gewöhnlicher Link.
+    if (feinzeiger) {
+        document.querySelectorAll('.lz-saeule-bildlink').forEach(function (a) {
+            a.classList.add('hat-kreis');   // cursor: none nur mit Skript
+            a.addEventListener('mouseenter', function () {
+                badgeTitel.textContent = a.dataset.titel || '';
+                badgeDa = true;
+                badge.classList.add('da');
+            });
+            a.addEventListener('mouseleave', function () {
+                if (zoomZiel === null) { badgeDa = false; badge.classList.remove('da'); }
+            });
+            a.addEventListener('mousemove', function (e) {
+                bzx = e.clientX;
+                bzy = e.clientY;
+                if (!badgeDa) { bx = bzx; by = bzy; }
+            });
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                absprungNach(a.href);
+            });
+        });
+    }
 
     // --- Wortwechsler im Handwerk-Abschnitt (19.11.2026, ersetzt die zwei
     //     Laufbänder): Ein stehender Satz, in dem die Leistung durchwechselt —

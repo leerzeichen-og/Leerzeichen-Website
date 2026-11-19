@@ -53,12 +53,13 @@ $fragen = [
 // zu dicht, Roman 12.10.2026), gleichmäßig über die 200-vh-Umlaufbahn.
 // Startlagen x zur Mitte orientiert (Roman, 19.11.2026): Kein Objekt startet
 // mehr angeschnitten an der Kante, und buehne.js stutzt die Wander-Amplituden
-// auf den Spielraum zur Bildkante — nichts hängt mehr am Rand.
+// auf den Spielraum zur Bildkante — nichts hängt mehr am Rand. y0 beginnt
+// erst unterhalb der oberen Schutzzone (80 px + Fade, siehe buehne.js).
 $bahnen = [
-    ['w' => 31, 'h' => 22, 'x' => 12, 'y0' => 8,   'tiefe' => 790, 'vx' => 0.28],
-    ['w' => 24, 'h' => 19, 'x' => 56, 'y0' => 30,  'tiefe' => 765, 'vx' => -0.22],
-    ['w' => 20, 'h' => 26, 'x' => 36, 'y0' => 52,  'tiefe' => 815, 'vx' => 0.20],
-    ['w' => 27, 'h' => 18, 'x' => 62, 'y0' => 74,  'tiefe' => 745, 'vx' => -0.26],
+    ['w' => 31, 'h' => 22, 'x' => 12, 'y0' => 18,  'tiefe' => 790, 'vx' => 0.28],
+    ['w' => 24, 'h' => 19, 'x' => 56, 'y0' => 38,  'tiefe' => 765, 'vx' => -0.22],
+    ['w' => 20, 'h' => 26, 'x' => 36, 'y0' => 56,  'tiefe' => 815, 'vx' => 0.20],
+    ['w' => 27, 'h' => 18, 'x' => 62, 'y0' => 76,  'tiefe' => 745, 'vx' => -0.26],
     ['w' => 22, 'h' => 24, 'x' => 16, 'y0' => 96,  'tiefe' => 840, 'vx' => 0.18],
     ['w' => 28, 'h' => 19, 'x' => 44, 'y0' => 118, 'tiefe' => 780, 'vx' => -0.20],
     ['w' => 25, 'h' => 16, 'x' => 60, 'y0' => 140, 'tiefe' => 805, 'vx' => 0.24],
@@ -137,13 +138,16 @@ $saeulen_boxen = [
 // Je Säule ein Motiv (Roman, 19.11.2026): der Quer-Teaser des neuesten
 // Projekts der Säule, über der Oberlinie — automatisch aktuell, kein
 // eigenes Bildmaterial nötig. Ohne Projekt der Säule entfällt das Bild.
+// Verlinkt auf die Projektseite, am Zeigegerät mit dem Kreis-Hover der
+// Bühne (buehne.js, 19.11.2026) — gespeichert wird deshalb das ganze
+// Projekt (Slug und Titel), nicht nur das Bild.
 $saeulen_motiv = ['erlebnis' => null, 'marke' => null];
 $saeulen_quelle = ['erlebnis' => 'erlebnisse', 'marke' => 'gestaltung'];
 foreach (pj_index() as $p) {
     foreach ($saeulen_quelle as $boxId => $saeule) {
         if ($saeulen_motiv[$boxId] === null && ($p['saeule'] ?? '') === $saeule
             && !empty($p['teaser_quer']['quellen'])) {
-            $saeulen_motiv[$boxId] = $p['teaser_quer'];
+            $saeulen_motiv[$boxId] = $p;
         }
     }
 }
@@ -315,22 +319,28 @@ require __DIR__ . '/teile/kopf.php';
 
 
 <section id="handwerk" class="lz-sec">
-  <?php // Wortwechsler (ersetzt die zwei Laufbänder, 19.11.2026): Die
-        // statische Fassung nennt alle Begriffe; buehne.js schaltet auf den
-        // Satz mit wechselndem Wort um (hidden-Muster, nie display). ?>
-  <div class="ww">
-    <p class="ww-statisch">Wir gestalten
-      <?= e(implode(', ', array_slice($ww_statisch, 0, -1))) ?> und <?= e(end($ww_statisch)) ?>.</p>
-    <?php // Maske und Punkt teilen sich einen nowrap-Span — der Punkt darf
-          // nie allein in die nächste Zeile rutschen. ?>
-    <p class="ww-satz" hidden data-woerter="<?= e(json_encode($ww_woerter, JSON_UNESCAPED_UNICODE)) ?>">Wir gestalten <span class="ww-paar"><span class="ww-maske"><span class="ww-wort"><?= e($ww_woerter[0]) ?></span></span>.</span></p>
-  </div>
   <h2 class="handwerk-titel"><span class="buehne-zeile">Gestaltung ist</span><span class="buehne-zeile">unser Handwerk.</span></h2>
   <div class="lz-saeulen">
-    <?php foreach ($saeulen_boxen as $box): $motiv = $saeulen_motiv[$box['id']] ?? null; ?>
+    <?php foreach ($saeulen_boxen as $nr => $box): $motiv = $saeulen_motiv[$box['id']] ?? null; ?>
+    <?php if ($nr === 1): ?>
+    <?php // Wortwechsler (ersetzt die zwei Laufbänder, 19.11.2026; seit dem
+          // 19.11. abends ZWISCHEN den Säulen, zweizeilig, ohne Punkt —
+          // Wunsch Roman): Die statische Fassung nennt alle vollen Begriffe;
+          // buehne.js schaltet auf den Satz mit wechselndem Wort um
+          // (hidden-Muster, nie display). ?>
+    <div class="ww">
+      <p class="ww-statisch">Wir gestalten
+        <?= e(implode(', ', array_slice($ww_statisch, 0, -1))) ?> und <?= e(end($ww_statisch)) ?>.</p>
+      <p class="ww-satz" hidden data-woerter="<?= e(json_encode($ww_woerter, JSON_UNESCAPED_UNICODE)) ?>"><span class="ww-vorspann">Wir gestalten</span> <span class="ww-maske"><span class="ww-wort"><?= e($ww_woerter[0]) ?></span></span></p>
+    </div>
+    <?php endif; ?>
     <article id="<?= e($box['id']) ?>" class="lz-saeule<?= $motiv ? ' hat-bild' : '' ?>">
       <?php if ($motiv): ?>
-      <?= pj_bild($motiv, 'lz-saeule-bild', '(max-width: 900px) 100vw, 420px') ?>
+      <a class="lz-saeule-bildlink" href="/referenzen/<?= e((string) ($motiv['slug'] ?? '')) ?>/"
+         data-titel="<?= e((string) ($motiv['titel'] ?? '')) ?>"
+         aria-label="Zum Projekt <?= e((string) ($motiv['titel'] ?? '')) ?>">
+        <?= pj_bild($motiv['teaser_quer'], 'lz-saeule-bild', '(max-width: 900px) 100vw, 420px') ?>
+      </a>
       <?php endif; ?>
       <h3 class="lz-saeule-titel"><?= e($box['titel']) ?></h3>
       <?php foreach ($box['text'] as $t): ?>

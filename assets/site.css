@@ -760,18 +760,71 @@ body.menue-offen { overflow: hidden; }
     overflow: clip;
 }
 
-.nl-karte {
+/* Bühne der Postkarte (19.11.2026, Entwurf Roman): Der Rahmen zentriert
+   Karte, Türkis-Fläche und Flugspur-Striche gemeinsam; die Karte liegt mit
+   z-index 1 obenauf. */
+.nl-rahmen {
+    position: relative;
     max-width: 1080px;
     margin: 0 auto;
+}
+
+.nl-karte {
     /* Kräftige schwarze Kontur — die Karte ist eine Postkarte (Roman, 24.9.2026).
        Die Signalfarben-Fassung vom 18.11.2026 ist zurückgenommen (Roman:
-       zu starker Eingriff in die Gesamtgestaltung). */
+       zu starker Eingriff in die Gesamtgestaltung); stattdessen liegt sie
+       seit 19.11.2026 leicht geneigt auf der türkisen Fläche. */
     border: 2px solid var(--ink);
     border-radius: var(--radius-xs);
     padding: var(--space-8);
     padding-top: calc(var(--space-8) + 110px);
     background: var(--paper);
     position: relative;
+    z-index: 1;
+    transform: rotate(-1.2deg);
+}
+
+/* Die türkise Fläche schiebt sich nach der Landung der Karte schräg hinter
+   ihr hervor (gekoppelt an die blende-Klassen von einblenden.js). */
+.nl-flaeche {
+    position: absolute;
+    inset: 90px 90px -140px -170px;
+    background: #03FFF5;   /* Türkis aus Romans Entwurf (19.11.2026) */
+    transform: rotate(-2.4deg);
+    transition: transform .9s cubic-bezier(.2, .7, .3, 1) .25s, opacity .5s ease .25s;
+}
+.nl-karte.blende:not(.blende-da) ~ .nl-flaeche {
+    transform: translate(140px, -80px) rotate(.5deg);
+    opacity: 0;
+}
+
+/* Drei Flugspur-Striche links der Karte, rechtsbündig gestaffelt; sie
+   schieben mit der Landung nacheinander heraus. Auf schmalen Schirmen ist
+   links kein Platz (das overflow: clip des Bereichs schneidet Überstand). */
+.nl-striche {
+    position: absolute;
+    top: 44%;
+    right: calc(100% + 70px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 84px;
+}
+.nl-striche i {
+    display: block;
+    height: 3px;
+    background: var(--ink);
+    transition: transform .8s cubic-bezier(.2, .7, .3, 1) .3s, opacity .5s ease .3s;
+}
+.nl-striche i:nth-child(1) { width: 270px; }
+.nl-striche i:nth-child(2) { width: 440px; transition-delay: .4s; }
+.nl-striche i:nth-child(3) { width: 340px; transition-delay: .5s; }
+.nl-karte.blende:not(.blende-da) ~ .nl-striche i {
+    transform: translateX(180px);
+    opacity: 0;
+}
+@media (max-width: 1150px) {
+    .nl-striche { display: none; }
 }
 
 /* Die Postkarte fliegt als GANZES ein (spürbar gedreht), nicht in
@@ -1633,6 +1686,9 @@ body.seite-dunkel { background: #000; color: #fff; }
     .nl-spalten { grid-template-columns: 1fr; gap: var(--space-6); }
     .nl-kuvert { top: -140px; width: min(300px, 64vw); }
     .nl-bereich { padding-top: calc(var(--space-8) + 140px); }
+    /* Die Türkis-Fläche ragt am Telefon nur dezent heraus — mehr Überstand
+       schnitte das overflow: clip des Bereichs ohnehin ab. */
+    .nl-flaeche { inset: 50px 30px -40px -16px; }
 }
 
 @media (max-width: 640px) {
