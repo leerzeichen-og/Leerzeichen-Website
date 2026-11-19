@@ -404,7 +404,11 @@
     font-weight: 300;
     font-size: 1.45rem;
     line-height: 1.4;
+    /* Der Kreis ist ein Link auf die Leistungs-Seite (20.11.2026). */
+    text-decoration: none;
+    transition: transform .35s var(--ease-out, ease);
 }
+.ww-satz:hover, .ww-satz:focus-visible { transform: scale(1.04); }
 .ww-satz:not([hidden]) {
     display: grid;
     place-content: center;

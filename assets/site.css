@@ -788,33 +788,40 @@ body.menue-offen { overflow: hidden; }
 
 /* Die türkise Fläche schiebt sich nach der Landung der Karte schräg hinter
    ihr hervor (gekoppelt an die blende-Klassen von einblenden.js) und
-   bleibt danach dauerhaft zart in Bewegung (Roman, 20.11.2026). Einflug
-   und Treiben teilen sich transform: Die Keyframes starten deshalb exakt
-   im Grundzustand und beginnen erst, wenn die Einflug-Transition
-   (Verzögerung + Dauer) sicher gelandet ist — sonst spränge die Fläche. */
+   bleibt dauerhaft zart in Bewegung (Roman, 20.11.2026). WICHTIG: Einflug
+   (Transition) und Treiben (Keyframes) liegen auf GETRENNTEN Ebenen —
+   das Element fliegt ein, sein ::before (die eigentliche Farbfläche)
+   treibt endlos. Teilten sie sich ein transform, übernähme die Animation
+   das Element beim Start mit einem sichtbaren Ruck und die Transition
+   wäre tot (Befund Roman, 20.11.2026). */
 .nl-flaeche {
     position: absolute;
     inset: 90px 90px -140px -170px;
-    background: #03FFF5;   /* Türkis aus Romans Entwurf (19.11.2026) */
     transform: rotate(-2.4deg);
     transition: transform 1.6s cubic-bezier(.2, .7, .3, 1) .35s, opacity .9s ease .35s;
+}
+.nl-flaeche::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #03FFF5;   /* Türkis aus Romans Entwurf (19.11.2026) */
+    animation: nl-flaeche-treiben 13s ease-in-out infinite;
 }
 .nl-karte.blende:not(.blende-da) ~ .nl-flaeche {
     transform: translate(140px, -80px) rotate(.5deg);
     opacity: 0;
 }
-.nl-karte.blende-da ~ .nl-flaeche {
-    animation: nl-flaeche-treiben 17s ease-in-out 2.2s infinite;
-}
 @keyframes nl-flaeche-treiben {
-    0%, 100% { transform: rotate(-2.4deg); }
-    50%      { transform: translate(7px, -9px) rotate(-1.7deg); }
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50%      { transform: translate(9px, -12px) rotate(.8deg); }
 }
 
 /* Drei Flugspur-Striche links der Karte, rechtsbündig gestaffelt; sie
    schieben mit der Landung nacheinander heraus und treiben danach in
-   eigenen Takten weiter. Auf schmalen Schirmen ist links kein Platz
-   (das overflow: clip des Bereichs schneidet Überstand). */
+   eigenen Takten weiter — dieselbe Trennung: <i> fliegt ein, sein
+   ::before (der sichtbare Strich) treibt endlos; negative Delays streuen
+   die Phasen. Auf schmalen Schirmen ist links kein Platz (das
+   overflow: clip des Bereichs schneidet Überstand). */
 .nl-striche {
     position: absolute;
     top: 44%;
@@ -826,30 +833,36 @@ body.menue-offen { overflow: hidden; }
 }
 .nl-striche i {
     display: block;
+    position: relative;
     height: 3px;
-    background: var(--ink);
     transition: transform 1.4s cubic-bezier(.2, .7, .3, 1) .4s, opacity .9s ease .4s;
+}
+.nl-striche i::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    animation: nl-strich-treiben 10s ease-in-out infinite;
 }
 .nl-striche i:nth-child(1) { width: 270px; }
 .nl-striche i:nth-child(2) { width: 440px; transition-delay: .6s; }
 .nl-striche i:nth-child(3) { width: 340px; transition-delay: .8s; }
+.nl-striche i:nth-child(2)::before { animation-duration: 13s;   animation-delay: -4s; }
+.nl-striche i:nth-child(3)::before { animation-duration: 11.5s; animation-delay: -7s; animation-direction: reverse; }
 .nl-karte.blende:not(.blende-da) ~ .nl-striche i {
     transform: translateX(180px);
     opacity: 0;
 }
-.nl-karte.blende-da ~ .nl-striche i:nth-child(1) { animation: nl-strich-treiben 10s ease-in-out 2.4s infinite; }
-.nl-karte.blende-da ~ .nl-striche i:nth-child(2) { animation: nl-strich-treiben 13s ease-in-out 2.8s infinite; }
-.nl-karte.blende-da ~ .nl-striche i:nth-child(3) { animation: nl-strich-treiben 11s ease-in-out 3.2s infinite reverse; }
 @keyframes nl-strich-treiben {
     0%, 100% { transform: translateX(0); }
-    50%      { transform: translateX(-16px); }
+    50%      { transform: translateX(-22px); }
 }
 @media (max-width: 1150px) {
     .nl-striche { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .nl-karte.blende-da ~ .nl-flaeche,
-    .nl-karte.blende-da ~ .nl-striche i { animation: none; }
+    .nl-flaeche::before,
+    .nl-striche i::before { animation: none; }
 }
 
 /* Die Postkarte fliegt als GANZES ein (spürbar gedreht), nicht in

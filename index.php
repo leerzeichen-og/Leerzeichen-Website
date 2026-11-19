@@ -331,7 +331,9 @@ require __DIR__ . '/teile/kopf.php';
     <div class="ww">
       <p class="ww-statisch">Wir gestalten
         <?= e(implode(', ', array_slice($ww_statisch, 0, -1))) ?> und <?= e(end($ww_statisch)) ?>.</p>
-      <p class="ww-satz" hidden data-woerter="<?= e(json_encode($ww_woerter, JSON_UNESCAPED_UNICODE)) ?>"><span class="ww-vorspann">Wir gestalten</span> <span class="ww-maske"><span class="ww-wort"><?= e($ww_woerter[0]) ?></span></span></p>
+      <?php // Der Kreis ist ein Link auf die Leistungs-Seite (Roman, 20.11.2026). ?>
+      <a class="ww-satz" hidden href="/leistungen/" aria-label="Zu unseren Leistungen"
+         data-woerter="<?= e(json_encode($ww_woerter, JSON_UNESCAPED_UNICODE)) ?>"><span class="ww-vorspann">Wir gestalten</span> <span class="ww-maske"><span class="ww-wort"><?= e($ww_woerter[0]) ?></span></span></a>
     </div>
     <?php endif; ?>
     <article id="<?= e($box['id']) ?>" class="lz-saeule<?= $motiv ? ' hat-bild' : '' ?>">
