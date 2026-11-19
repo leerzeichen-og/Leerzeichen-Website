@@ -264,13 +264,17 @@
                 s.wy = s.ay * (Math.sin(s.fy * s.uhr + s.py) - Math.sin(s.py));
             });
         }
-        // Schutzzone (Roman, 19.11.2026): In den oberen 80 px fliegt nichts —
+        // Schutzzone (Roman, 19.11.2026): In den oberen 80 px fliegt nichts,
+        // solange die Seite GANZ OBEN steht (Präzisierung Roman, 20.11.) —
         // dort hingen angeschnittene, nicht anklickbare Stückchen unter dem
-        // Seitenkopf. Wer nach oben hinauswandert, löst sich auf, BEVOR die
+        // Seitenkopf. Wer oben hinauswandert, löst sich auf, bevor die
         // Oberkante die Zone berührt (Fade über 6 vh darunter), und
-        // Unsichtbare nehmen keine Klicks an. Die Startlagen in index.php
-        // beginnen deshalb erst unterhalb von Zone + Fade.
-        var zone = 80 / (window.innerHeight / 100) + 1;   // in vh, mit Luft
+        // Unsichtbare nehmen keine Klicks an. Beim Scrollen verliert die
+        // Zone ihre Wirkung (deckel), die Objekte ziehen dann sichtbar bis
+        // zur Kante hinaus. Die Startlagen in index.php beginnen unterhalb
+        // von Zone + Fade.
+        var zone   = 80 / (window.innerHeight / 100) + 1;   // in vh, mit Luft
+        var deckel = 1 - klemm(p / 0.03);                   // nur am Seitenanfang scharf
         zustand.forEach(function (s) {
             // Die Höhe folgt dem Scroll-Ziel GEGLÄTTET (Exponentialfilter):
             // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
@@ -284,7 +288,7 @@
             // wieder herein (geglättet wird die UNgefaltete Höhe, sonst
             // würde jeder Umlauf als schnelle Durchfahrt animiert).
             var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
-            var frei = klemm((zeig - zone) / 6);          // 0 an der Zone, 1 ab 6 vh darunter
+            var frei = 1 - (1 - klemm((zeig - zone) / 6)) * deckel;
             s.el.style.opacity = frei;
             s.el.style.pointerEvents = frei < 0.5 ? 'none' : '';
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
