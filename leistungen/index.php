@@ -41,10 +41,10 @@ $saeulen = [
                   . 'Museen, Gemeinden, Tourismusregionen und Ausflugsziele. Die Frage '
                   . 'dahinter ist immer dieselbe: Was bringt Besucher zum Staunen und '
                   . 'zum Bleiben?',
-        'liste'  => ['Ausstellungen und Ausstellungsgestaltung', 'Kinderbegleitebenen',
-                     'Escape-Rooms', 'Treasure Trails',
-                     'Rundwege mit interaktiven Stationen', 'Outdoor-Abenteuer',
-                     'Spielplatzkonzepte', 'Leitsysteme und Beschilderung',
+        'liste'  => ['Ausstellungen', 'Kinderbegleitebenen',
+                     'Escape-Rooms', 'Treasure-Trails',
+                     'Rundwege mit Begleitebenen', 'Outdoor-Abenteuer',
+                     'Spielplatzkonzepte', 'Leitsysteme und Beschilderungen',
                      'Immersive multimediale Rauminstallationen'],
         'url'    => '/erlebnisgestaltung/',
         'knopf'  => 'Zur Erlebnisgestaltung',

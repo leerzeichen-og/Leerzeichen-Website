@@ -18,8 +18,8 @@ $bodyKlasse   = 'seite-dunkel';
 $felder = [
     ['Ausstellungen',
      'Wir entwickeln Ausstellungen vom Konzept bis zur Eröffnung: Kuration, Raumkonzept, Grafik, Leitsystem und die Stationen im Raum. Manche Ausstellungen übernehmen wir komplett, bei anderen bringen wir einen Teil ein — etwa die Kinderebene oder die Didaktik.'],
-    ['Escape-Rooms und Treasure Trails',
-     'Wir entwickeln Escape-Rooms und Treasure Trails vom Rätselkonzept bis zur fertigen Station: Geschichte, Rätsellogik, Gestaltung und Bau. Drinnen als Raum, draußen als Weg durch einen Ort — beide mit einem Spannungsbogen, der eine Gruppe von der ersten bis zur letzten Station bei der Sache hält.'],
+    ['Escape-Rooms und Treasure-Trails',
+     'Wir entwickeln Escape-Rooms und Treasure-Trails vom Rätselkonzept bis zur fertigen Station: Geschichte, Rätsellogik, Gestaltung und Bau. Drinnen als Raum, draußen als Weg durch einen Ort — beide mit einem Spannungsbogen, der eine Gruppe von der ersten bis zur letzten Station bei der Sache hält.'],
     ['Spielplätze und Outdoor-Abenteuer',
      'Wir gestalten Themenspielplätze mit einer eigenen Geschichte, wie die High-Five-Reihe am Großglockner: fünf Spielplätze, ein Thema. Dazu Entdeckerpfade und Outdoor-Stationen, die eine Landschaft erklären, während man sie durchquert.'],
     ['Themenwege und Rundgänge',

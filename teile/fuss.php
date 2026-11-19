@@ -23,7 +23,7 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
   <div class="lz-footgrid">
     <div class="lz-footcol">
       <p><strong><?= e(FIRMA_NAME) ?></strong><br>
-        Agentur für Design, Abenteuer und Erfolg</p>
+        Agentur für Gestaltung &amp; Erlebnis</p>
       <p><?= e(FIRMA_STRASSE) ?><br>
         <?= e(FIRMA_PLZ) ?> <?= e(FIRMA_ORT) ?><br>
         <a href="<?= e($routenplaner) ?>" rel="noopener noreferrer" target="_blank">Routenplaner</a></p>
@@ -45,10 +45,10 @@ $routenplaner = 'https://www.google.com/maps/search/?api=1&query='
         <a href="/agentur/">Agentur</a> in <?= e(FIRMA_ORT) ?> Erlebnisse
         <strong>für Tourismus, Kultur und Gemeinden:</strong>
         <a href="/referenzen/">Ausstellungen</a>, Escape-Rooms,
-        Treasure Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer,
+        Treasure-Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer,
         Spielplätze und Kinderebenen. <strong>Für Unternehmen</strong> entwickeln wir
-        <a href="/referenzen/">Corporate Design</a>, Logos, Leitsysteme,
-        Mitarbeitermagazine, Bücher, Kataloge, Microsites und Landingpages.
+        <a href="/referenzen/">Corporate Designs</a>, Logos, Leitsysteme,
+        Magazine, Bücher, Kataloge, Microsites und Landingpages.
         <a href="/kontakt/">Lassen Sie uns reden!</a></p>
       <p><a class="lz-foot-badge" href="https://www.kreativwirtschaft.at/"
           rel="noopener noreferrer" target="_blank">

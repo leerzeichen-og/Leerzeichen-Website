@@ -110,22 +110,22 @@ if ($objektProjekte) {
 $saeulen_boxen = [
     [
         'id' => 'erlebnis', 'url' => '/erlebnisgestaltung/', 'eyebrow' => 'Säule 1 · Erlebnisse',
-        'titel' => 'Wir schaffen Erlebnisse — und bringen Neues in die Welt.',
+        'titel' => 'Wir schaffen Erlebnisse, die in Erinnerung bleiben.',
         'text' => [
-            'Erlebnisse haben viele Formen: Ausstellungen, Escape-Rooms und Treasure Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer, Spielplätze mit ihrer eigenen Geschichte, Kinderebenen, die eine Ausstellung für Familien öffnen. Am Ende steht immer dieselbe Frage: Was bringt Besucher zum Staunen?',
-            'Wir arbeiten für Museen, Gemeinden, Ausflugsziele und Tourismusregionen. Oft an Kinder und ihre Familien gerichtet. Analog und begreifbar. Digital dort, wo es Sinn stiftet.',
+            'Inhalte erfahren und gleichzeitig etwas erleben: Ausstellungen, Escape-Rooms und Treasure-Trails, Rundwege mit interaktiven Stationen, Outdoor-Abenteuer, Themenspielplätze, Kinderebenen, die eine Ausstellung für Familien öffnen. Am Ende steht immer dieselbe Frage: Was bringt Besucher zum Staunen?',
+            'Wir arbeiten für Museen, Gemeinden, Ausflugsziele und Tourismusregionen. Oft an Familien und Kinder gerichtet. Analog und begreifbar. Digital dort, wo es Sinn stiftet.',
         ],
-        'liste' => ['Ausstellungen und Ausstellungsgestaltung', 'Kinderbegleitebenen', 'Escape-Rooms',
-                    'Treasure Trails', 'Rundwege mit interaktiven Stationen', 'Outdoor-Abenteuer',
-                    'Spielplatzkonzepte', 'Leitsysteme und Beschilderung', 'Interaktive Stationen'],
+        'liste' => ['Ausstellungen', 'Kinderbegleitebenen', 'Escape-Rooms',
+                    'Treasure-Trails', 'Rundwege mit Begleitebenen', 'Outdoor-Abenteuer',
+                    'Spielplatzkonzepte', 'Leitsysteme und Beschilderungen', 'Interaktive Stationen'],
     ],
     [
         'id' => 'marke', 'url' => '/grafikdesign/', 'eyebrow' => 'Säule 2 · Grafik & Design',
         'titel' => 'Wir machen sichtbar, was Ihr Unternehmen ausmacht.',
         'text' => [
-            'Zuerst das klare Bild: Logo, Farben, Schrift und Bildwelt. Daran erkennt man Sie auf den ersten Blick, auf Papier wie am Screen.',
-            'Dann beginnt Ihre Marke zu agieren: ein Mitarbeitermagazin, das gelesen wird. Ein Buch, das im Regal bleibt. Eine Microsite, die Ihre neue Produktlinie in die Auslage stellt.',
-            'Unsere Kunden sind meist regional, aber ihre Geschichten wirken (Europa)weit.',
+            'Logo, Farben, Schrift, Bild und Layout ergeben einen einheitlichen Auftritt Ihrer Organisation und schaffen Wiedererkennungswert, auf Papier wie am Screen.',
+            'Darauf aufbauend machen wir Ihre Botschaft greifbar: als Magazin, das gerne gelesen wird. Als Buch, das immer wieder aus dem Regal genommen wird. Als Microsite, die Ihre neue Produktlinie präsentiert.',
+            'Unsere Kunden sind meist regional verankert, aber ihre Geschichten wirken (europa)weit.',
         ],
         'liste' => ['Corporate Design und Redesign', 'Logoentwicklung', 'Mitarbeitermagazine',
                     'Kundenmagazine', 'Bücher und Publikationen', 'Kataloge und Prospekte',
@@ -160,7 +160,7 @@ foreach (pj_index() as $p) {
 // Satz am Telefon. Ohne JavaScript (oder bei reduzierter Bewegung) steht
 // der Satz mit den vollen Begriffen beider Listen ausgeschrieben.
 $ww_kurz = [
-    ['Ausstellungen', 'Escape-Rooms', 'Treasure Trails', 'Erlebniswege',
+    ['Ausstellungen', 'Escape-Rooms', 'Treasure-Trails', 'Erlebniswege',
      'Outdoor-Abenteuer', 'Spielplätze', 'Leitsysteme', 'Kinderebenen',
      'interaktive Stationen'],
     ['Corporate Designs', 'Logos', 'Mitarbeitermagazine', 'Kundenmagazine',
@@ -178,10 +178,10 @@ for ($i = 0, $n = max(count($ww_kurz[0]), count($ww_kurz[1])); $i < $n; $i++) {
 $ww_statisch = array_merge($saeulen_boxen[0]['liste'], $saeulen_boxen[1]['liste']);
 
 // Team-Text (Kurzfassung „Über uns") — steht jetzt im Splash-Akt der Bühne.
-$teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der kleinste Eingriff '
-          . 'entscheidet darüber, ob etwas ankommt. Und der Abstand ist es, der den '
-          . 'Blick lenkt und dem Wichtigen Raum gibt. Dem folgend begleiten wir seit '
-          . FIRMA_GEGRUENDET . ' Projekte von der ersten Skizze bis zur Übergabe.';
+$teamText = 'Ohne Leerzeichen wäre dieser Satz kaum zu lesen. Der Abstand ist es, der '
+          . 'den Blick lenkt und dem Wichtigen Raum gibt. Der kleinste Eingriff entscheidet '
+          . 'darüber, ob und wie eine Botschaft ankommt. Diesem Leitgedanken folgend begleiten '
+          . 'wir seit ' . FIRMA_GEGRUENDET . ' Projekte von der ersten Skizze bis zur Übergabe.';
 
 // Motive: greifen automatisch, sobald die Datei unter assets/bilder/ liegt.
 function startseite_bild(string $name): ?string
