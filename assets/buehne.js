@@ -113,6 +113,7 @@
             ay: r(2, 3.5), fy: TAU / r(16, 26), py: r(0, TAU),   // senkrechtes Treiben (vh)
             uhr: 0,                        // läuft nur, solange nichts armiert ist
             wy: 0,                         // aktuelles senkrechtes Treiben
+            off: null,                     // eingefrorene Faltung (s. fliegen)
             y: parseFloat(el.dataset.y0)   // angezeigte Höhe (geglättet, s. fliegen)
         };
     });
@@ -220,13 +221,15 @@
         var textWeg   = klemm((p - 0.87) / 0.03);      // … hält, geht
         var splashIn  = klemm((p - 0.88) / 0.11);      // Splash scrollt herein
 
-        // Die Objekte werden nicht mehr ausgeblendet (Roman, 20.11.2026) —
-        // sie verschwinden durchs Scrollen aus dem Blick, und das
-        // hereinfahrende Übergangsbild deckt den Rest zu. Nur Klicks nehmen
-        // sie ab dem Übergang keine mehr an: Das Bild selbst lässt Zeiger
-        // durch (pointer-events: none), unsichtbar Anklickbares darunter
-        // wäre eine Falle.
-        huelle.style.pointerEvents = p > 0.55 ? 'none' : '';
+        // Ab dem Übergang legt sich die Objektebene ÜBER Bild und schwarzen
+        // Akt (Roman, 20.11.2026 abends): Die Objekte schweben dann über
+        // „Darauf finden wir gemeinsam Antworten" und scrollen hinaus statt
+        // zu verschwinden. Vor dem Übergang bleibt sie unter den Fragen
+        // (z auto) — beim Umschalten bei 0.56 ist Frage 2 gerade
+        // ausgeblendet, niemand sieht den Ebenenwechsel. Klicks regeln die
+        // Objekte selbst (die Hülle lässt Zeiger durch, CSS), die Knöpfe
+        // des Antwort-Akts bleiben dadurch erreichbar.
+        huelle.style.zIndex = p >= 0.56 ? '5' : '';
         if (uebergang) {
             uebergang.style.transform = 'translateY(' + (100 - uIn * 200) + 'vh)';
         }
@@ -257,14 +260,16 @@
     function fliegen(jetzt) {
         var dt = Math.min(64, jetzt - zuletzt) / 1000;
         zuletzt = jetzt;
-        // Hinter dem Übergang (alle Objekte unsichtbar, p > 0.8) ruht die
-        // Objekt-Schleife: Im Antwort- und Team-Akt bewegen sich ohnehin
-        // schon drei große Bildebenen je Frame — die neun Style-Writes
-        // obendrauf kosteten am Telefon spürbar (Roman, 20.11.2026).
-        // Ein letzter Durchlauf nach dem Eintritt schreibt noch opacity 0;
-        // das Badge (unten) fährt IMMER weiter — es dient auch dem
-        // Kreis-Hover der Säulen-Motive nach der Bühne.
-        var ruhig = p > 0.8;
+        // Sind alle Objekte hinausgescrollt (Faltungs-Stopp ab 0.66, der
+        // letzte Nachzügler ist spätestens bei p ≈ 0.9 oben draußen), ruht
+        // die Objekt-Schleife: Im Team-Akt bewegen sich ohnehin schon drei
+        // große Bildebenen je Frame — die neun Style-Writes obendrauf
+        // kosteten am Telefon spürbar (Roman, 20.11.2026). Der letzte
+        // Durchlauf nach dem Eintritt setzt die Höhen ungedämpft (Snap),
+        // damit beim schnellen Scrollen keiner halb im Bild einfriert; das
+        // Badge (unten) fährt IMMER weiter — es dient auch dem Kreis-Hover
+        // der Säulen-Motive nach der Bühne.
+        var ruhig = p > 0.92;
         if (!ruhig || !ruhte) {
         if (armiert === null) {
             zustand.forEach(function (s) {
@@ -289,33 +294,47 @@
         // von Zone + Fade.
         var zone   = 80 / (window.innerHeight / 100) + 1;   // in vh, mit Luft
         var deckel = 1 - klemm(p / 0.03);                   // nur am Seitenanfang scharf
-        // Oberkante des Übergangsbilds: Das Bild ist auch in seinem weißen
-        // Teil DECKEND (zweiter Befund Roman, 20.11.2026 — der erste Fix
-        // setzte die Kante fälschlich auf die gemalte Tinte bei 60 % der
-        // Bildhöhe, die Objekte wurden weiter schnurgerade abgeschnitten).
-        // Jedes Objekt löst sich auf, bevor die hereinfahrende Bildkante
-        // seine Unterkante erreicht; die Kante selbst ist Weiß auf Weiß
-        // unsichtbar, das Auflösen wirkt wie sanftes Hinausscrollen. Nach
-        // dem Übergang (Kante weit oben) sind damit ALLE Objekte aus —
-        // auch die, die sonst am Bühnenende über den nächsten Abschnitt
-        // lugten. Nebenwirkung: Unten hereinkommende Objekte blenden über
-        // die letzten 8 vh ein (Kante steht ohne Übergang bei 100).
-        var kante = 100 - klemm((p - 0.56) / 0.20) * 200;
+        // Kein Ausblenden am Übergang (Beschluss Roman, 20.11.2026 abends —
+        // löst den Kanten-Fade ab): Die Objektebene legt sich ab dem
+        // Übergang ÜBER Bild und schwarzen Akt (z-index in
+        // malenFortschritt), manche Objekte schweben also noch über
+        // „Darauf finden wir gemeinsam Antworten" und verlassen das Bild
+        // NUR durchs Scrollen. Damit beim Splash keine mehr nachkommen,
+        // friert die Umlaufbahn ab FALT_STOPP ein: Wer oben hinausfliegt,
+        // kommt nicht mehr unten herein — der letzte Nachzügler (startet
+        // bei 150 vh) ist nach rund 220 vh Fahrt oben draußen, bevor der
+        // Splash hereinfährt. Beim Zurückscrollen taut die Faltung wieder
+        // auf (stetig: bei derselben Scroll-Lage stimmen beide Rechnungen
+        // überein, die Glättung schluckt den Rest).
+        var FALT_STOPP = 0.66;
         zustand.forEach(function (s) {
             // Die Höhe folgt dem Scroll-Ziel GEGLÄTTET (Exponentialfilter):
             // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
             // Scrollen her — ungefiltert sprangen die Objekte sichtbar
             // (Roman, 24.9.2026). So wird aus jedem Sprung eine weiche Fahrt.
             var ziel = s.y0 - p * s.tiefe + s.wy;
-            s.y += (ziel - s.y) * Math.min(1, dt * 8);
-            if (Math.abs(ziel - s.y) < 0.01) s.y = ziel;
+            if (ruhig) {
+                s.y = ziel;   // Snap im letzten Durchlauf vor der Ruhe
+            } else {
+                s.y += (ziel - s.y) * Math.min(1, dt * 8);
+                if (Math.abs(ziel - s.y) < 0.01) s.y = ziel;
+            }
             // Umlaufbahn: erst zur Anzeige wird die Höhe in die Spanne
             // −50…150 vh gefaltet — wer oben hinausfliegt, kommt unten
             // wieder herein (geglättet wird die UNgefaltete Höhe, sonst
             // würde jeder Umlauf als schnelle Durchfahrt animiert).
-            var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
+            var zeig;
+            if (p < FALT_STOPP) {
+                s.off = null;
+                zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
+            } else {
+                if (s.off === null) {
+                    zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
+                    s.off = zeig - s.y;   // Faltung einfrieren
+                }
+                zeig = s.y + s.off;
+            }
             var frei = 1 - (1 - klemm((zeig - zone) / 6)) * deckel;
-            frei = Math.min(frei, klemm((kante - zeig - s.h) / 8));
             s.el.style.opacity = frei;
             s.el.style.pointerEvents = frei < 0.5 ? 'none' : '';
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';

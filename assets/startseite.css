@@ -74,16 +74,20 @@
     .buehne-runter svg { animation: none; }
 }
 
-/* Schwebende Projekt-Objekte */
+/* Schwebende Projekt-Objekte. Die Hülle lässt Zeiger durch (sie liegt ab
+   dem Übergang mit z-index 5 ÜBER dem schwarzen Akt — als Fläche finge
+   sie sonst die Klicks auf dessen Knöpfe ab); nur die Objekte selbst sind
+   Klickziele, und unsichtbare schaltet das Skript einzeln stumm. */
 .buehne-objekte {
     position: absolute;
     inset: 0;
-    transition: opacity 400ms linear;
+    pointer-events: none;
 }
 
 .buehne-obj {
     position: absolute;
     left: 0; top: 0;
+    pointer-events: auto;
     will-change: transform;
 }
 
