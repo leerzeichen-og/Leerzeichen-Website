@@ -1047,36 +1047,31 @@ body.menue-offen { overflow: hidden; }
     .leistung-liste { columns: 1; }
 }
 
-/* Scrollhinweis: zarter Pfeil nach unten (ursprünglich die Projektseiten,
-   Roman 24.9.2026; seit 8.10.2026 globaler Baustein — auch im
-   Leistungs-Hero). Rein visuell (aria-hidden); der lange Pfeil zeigt
-   gedreht nach unten und nickt sanft in Scrollrichtung. */
+/* Scrollhinweis: Pfeil nach unten (ursprünglich die Projektseiten, Roman
+   24.9.2026; seit 8.10.2026 globaler Baustein — Leistungs-Hero,
+   Säulen-Seiten, Startseite). Rein visuell (aria-hidden); seit 20.11.2026
+   das stroke-gezeichnete SVG aus lz_pfeil_runter(), kürzer und kräftiger
+   als der frühere, um 90 Grad gedrehte lz_pfeil (Wunsch Roman). Nickt
+   sanft in Scrollrichtung. */
 .pj-runter {
     display: block;
-    position: relative;
-    width: 68px;
-    height: 76px;
+    width: 20px;
     margin-top: clamp(28px, 6vh, 64px);
-    /* Der gedrehte Pfeil liegt mittig in seiner Box — die halbe Box abzüglich
-       halber Strichbreite nach links, dann sitzt er exakt an der Textkante. */
-    margin-left: -27px;
+    /* Halbe Breite nach links — die Strichmitte sitzt an der Textkante. */
+    margin-left: -10px;
     color: #fff;
     opacity: .85;
     pointer-events: none;
 }
 .pj-runter svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 64px;
-    /* Nach der Drehung zeigt die örtliche X-Achse nach unten — das Nicken
-       wandert also in Scrollrichtung. */
-    transform: translate(-50%, -50%) rotate(90deg);
-    animation: pj-nicken 2.4s ease-in-out infinite;
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: pfeil-nicken 2.4s ease-in-out infinite;
 }
-@keyframes pj-nicken {
-    0%, 100% { transform: translate(-50%, -50%) rotate(90deg) translateX(0); }
-    50%      { transform: translate(-50%, -50%) rotate(90deg) translateX(12px); }
+@keyframes pfeil-nicken {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(10px); }
 }
 @media (prefers-reduced-motion: reduce) {
     .pj-runter svg { animation: none; }
@@ -1109,11 +1104,11 @@ body.menue-offen { overflow: hidden; }
 .film-fertig .leistung-hero-video { opacity: .5; }
 .leistung-hero-inhalt { position: relative; z-index: 1; width: 100%; }
 /* Der Scrollhinweis-Pfeil, unten an der Logo-Kante (Baustein .pj-runter,
-   der −27-px-Versatz steckt hier im left). Im Scroll-Modus erscheint er
+   der −10-px-Versatz steckt hier im left). Im Scroll-Modus erscheint er
    erst gemeinsam mit dem ersten Absatz (film-fertig). */
 .leistung-runter {
     position: absolute;
-    left: calc(var(--rand) - 27px);
+    left: calc(var(--rand) - 10px);
     bottom: clamp(28px, 6vh, 64px);
     margin: 0;
     z-index: 1;

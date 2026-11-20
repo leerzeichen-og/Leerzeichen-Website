@@ -95,7 +95,7 @@ require __DIR__ . '/../teile/kopf.php';
       <a class="pj-badge" href="<?= e($saeule[1]) ?>"><?= e($saeule[0]) ?></a>
       <?php endif; ?>
       <h1 class="pj-titel"><?= e((string) ($projekt['titel'] ?? '')) ?></h1>
-      <span class="pj-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
+      <span class="pj-runter" aria-hidden="true"><?= lz_pfeil_runter() ?></span>
     </div>
   </header>
   <?php else: ?>

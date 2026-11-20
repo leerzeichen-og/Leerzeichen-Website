@@ -31,6 +31,19 @@ if (!function_exists('lz_pfeil')) {
     }
 }
 
+// lz_pfeil_runter(): der Scrollhinweis-Pfeil nach unten — eigenes,
+// stroke-gezeichnetes SVG (kraeftiger Strich; Beschluss Roman 20.11.2026,
+// loest den um 90 Grad gedrehten lz_pfeil als Scrollhinweis ab). Erbt die
+// Schriftfarbe; Layout und Nicken macht der Baustein .pj-runter bzw.
+// .buehne-runter.
+if (!function_exists('lz_pfeil_runter')) {
+    function lz_pfeil_runter(): string
+    {
+        return '<svg viewBox="0 0 20 46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+             . '<path fill="none" stroke="currentColor" stroke-width="3" d="M10 1v42M2.4 35.6 10 43.2l7.6-7.6"/></svg>';
+    }
+}
+
 // lz_laufband(): das Leistungs-Laufband — eine geneigte, nahtlos laufende
 // Bahn (Inhalt doppelt, aria-hidden); bei reduzierter Bewegung steht sie
 // als umbrechende Liste. Klassen: kipp-a/kipp-b (Neigung), laufband-retour.

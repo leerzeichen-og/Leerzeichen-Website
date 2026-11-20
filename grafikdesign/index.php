@@ -127,7 +127,7 @@ require __DIR__ . '/../teile/kopf.php';
     </div>
       </div>
     </div>
-    <span class="pj-runter leistung-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
+    <span class="pj-runter leistung-runter" aria-hidden="true"><?= lz_pfeil_runter() ?></span>
   </div>
 </section>
 

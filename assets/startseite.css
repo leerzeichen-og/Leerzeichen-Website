@@ -40,11 +40,10 @@
 }
 
 
-/* Scrollhinweis-Pfeil unter dem Claim (18.11.2026; seit 20.11. auch am
-   Telefon): eigenes, stroke-gezeichnetes SVG — kürzer und anderthalbfach
-   dick wie gewünscht (Roman, 20.11.2026), die Strichmitte sitzt an der
-   Textkante des Claims. Nickt wie der Baustein der Säulen-Seiten; das
-   Skript blendet ihn mit dem ersten Scrollen aus (opacity, inline). */
+/* Scrollhinweis-Pfeil unter dem Claim (18.11.2026): das gemeinsame
+   Pfeil-SVG (lz_pfeil_runter, nickt über pfeil-nicken aus site.css),
+   hier in Ink auf Weiß, die Strichmitte an der Textkante des Claims.
+   Das Skript blendet ihn mit dem ersten Scrollen aus (opacity, inline). */
 .buehne-runter {
     position: absolute;
     left: calc(55px - 10px);
@@ -58,16 +57,17 @@
     display: block;
     width: 100%;
     height: auto;
-    animation: buehne-nicken 2.4s ease-in-out infinite;
-}
-@keyframes buehne-nicken {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(10px); }
+    animation: pfeil-nicken 2.4s ease-in-out infinite;
 }
 @media (max-width: 900px) {
+    /* Am Telefon fix an der Schirm-Unterkante (Roman, 20.11.2026): links
+       bündig mit Logo und Headline, unten auf Höhe des Kontakt-Kreises
+       (dessen bottom-Clamp). Der Claimblock endet ~20 vh über der Kante —
+       absolute darin käme nie so tief. */
     .buehne-runter {
-        left: calc(var(--rand) - 10px);
-        bottom: clamp(10px, 2vh, 20px);
+        position: fixed;
+        left: var(--rand);
+        bottom: clamp(14px, 2vw, 28px);
     }
 }
 @media (prefers-reduced-motion: reduce) {
