@@ -253,9 +253,19 @@
 
     // --- Sanftes Treiben am Stand; die Höhe kommt vom Scrollen ------------------
     var zuletzt = performance.now();
+    var ruhte = false;   // stand die Objekt-Schleife im letzten Frame still?
     function fliegen(jetzt) {
         var dt = Math.min(64, jetzt - zuletzt) / 1000;
         zuletzt = jetzt;
+        // Hinter dem Übergang (alle Objekte unsichtbar, p > 0.8) ruht die
+        // Objekt-Schleife: Im Antwort- und Team-Akt bewegen sich ohnehin
+        // schon drei große Bildebenen je Frame — die neun Style-Writes
+        // obendrauf kosteten am Telefon spürbar (Roman, 20.11.2026).
+        // Ein letzter Durchlauf nach dem Eintritt schreibt noch opacity 0;
+        // das Badge (unten) fährt IMMER weiter — es dient auch dem
+        // Kreis-Hover der Säulen-Motive nach der Bühne.
+        var ruhig = p > 0.8;
+        if (!ruhig || !ruhte) {
         if (armiert === null) {
             zustand.forEach(function (s) {
                 s.uhr += dt;
@@ -279,14 +289,18 @@
         // von Zone + Fade.
         var zone   = 80 / (window.innerHeight / 100) + 1;   // in vh, mit Luft
         var deckel = 1 - klemm(p / 0.03);                   // nur am Seitenanfang scharf
-        // Tintenkante des Übergangsbilds: Das Motiv ist im oberen Drittel
-        // durchsichtig — die Objekte schienen durch und wurden an der
-        // gemalten Kante hart abgeschnitten (Befund Roman, 20.11.2026).
-        // Die Kante liegt bei rund 60 % der Bildhöhe; jedes Objekt löst
-        // sich auf, bevor sie seine Unterkante erreicht. Nach dem Übergang
-        // (Kante weit oben) sind damit ALLE Objekte aus — auch die, die
-        // sonst am Ende der Bühne über den nächsten Abschnitt lugten.
-        var kante = 100 - klemm((p - 0.56) / 0.20) * 200 + 60;
+        // Oberkante des Übergangsbilds: Das Bild ist auch in seinem weißen
+        // Teil DECKEND (zweiter Befund Roman, 20.11.2026 — der erste Fix
+        // setzte die Kante fälschlich auf die gemalte Tinte bei 60 % der
+        // Bildhöhe, die Objekte wurden weiter schnurgerade abgeschnitten).
+        // Jedes Objekt löst sich auf, bevor die hereinfahrende Bildkante
+        // seine Unterkante erreicht; die Kante selbst ist Weiß auf Weiß
+        // unsichtbar, das Auflösen wirkt wie sanftes Hinausscrollen. Nach
+        // dem Übergang (Kante weit oben) sind damit ALLE Objekte aus —
+        // auch die, die sonst am Bühnenende über den nächsten Abschnitt
+        // lugten. Nebenwirkung: Unten hereinkommende Objekte blenden über
+        // die letzten 8 vh ein (Kante steht ohne Übergang bei 100).
+        var kante = 100 - klemm((p - 0.56) / 0.20) * 200;
         zustand.forEach(function (s) {
             // Die Höhe folgt dem Scroll-Ziel GEGLÄTTET (Exponentialfilter):
             // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
@@ -306,6 +320,8 @@
             s.el.style.pointerEvents = frei < 0.5 ? 'none' : '';
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
         });
+        }
+        ruhte = ruhig;
         // Das Badge fährt seinem Ziel weich hinterher (Maus bzw. Objekt) —
         // geklemmt, damit der Kreis nie aus dem Bild ragt.
         if (zoomZiel === null) {

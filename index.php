@@ -196,6 +196,13 @@ function startseite_bild(string $name): ?string
 $inkSplash  = startseite_bild('ink-splash');
 $uebergang  = startseite_bild('leerzeichen-design-abenteuer-erfolg-breiter_start_bg');
 $teamFoto   = startseite_bild('team');
+// Kleine Fassung fürs Telefon (20.11.2026): Das 2500er-Foto als bewegte
+// Ebene war dort mit schuld am Ruckeln des Team-Akts.
+$teamKlein  = startseite_bild('team-klein');
+// htmlspecialchars statt e(): Das steht VOR dem Einbinden von teile/kopf.php.
+$teamSrcset = $teamFoto && $teamKlein
+    ? ' srcset="' . htmlspecialchars($teamKlein) . ' 1200w, ' . htmlspecialchars($teamFoto) . ' 2500w"'
+    : '';
 
 // Gruß an alle, die den Quellcode lesen (siehe teile/kopf.php).
 $quellkunst = <<<'KUNST'
@@ -260,7 +267,8 @@ require __DIR__ . '/teile/kopf.php';
         <div class="buehne-team">
           <?php if ($teamFoto): ?>
           <div class="buehne-team-halter">
-            <img class="buehne-team-foto" src="<?= e($teamFoto) ?>" width="2500" height="1667"
+            <img class="buehne-team-foto" src="<?= e($teamFoto) ?>"<?= $teamSrcset ?>
+              sizes="(max-width: 900px) 74vw, min(1170px, 92vw)" width="2500" height="1667"
               alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand">
           </div>
           <?php endif; ?>
@@ -303,7 +311,8 @@ require __DIR__ . '/teile/kopf.php';
   </div>
   <div class="lz-teamgrid" style="margin-top:var(--space-9)">
     <?php if ($teamFoto): ?>
-    <img class="team-foto-bild" src="<?= e($teamFoto) ?>"
+    <img class="team-foto-bild" src="<?= e($teamFoto) ?>"<?= $teamSrcset ?>
+      sizes="(max-width: 900px) 100vw, 50vw"
       alt="Das Team von leerzeichen bespricht Entwürfe an der Moodboard-Wand" loading="lazy">
     <?php endif; ?>
     <div>
