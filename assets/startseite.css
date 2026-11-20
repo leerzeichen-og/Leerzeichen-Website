@@ -474,6 +474,17 @@
 }
 @media (max-width: 1200px) {
     .lz-saeulen { grid-template-columns: 1fr; }
+    /* In der einspaltigen Ansicht wirkt der Kreis deplatziert (Roman,
+       20.11.2026): Der Wechsler wird ein flaches Rechteck über die volle
+       Breite — bis an die Seitenkanten, über den Gutter hinaus. */
+    .ww-satz {
+        width: calc(100% + 2 * var(--rand));
+        margin-inline: calc(-1 * var(--rand));
+        aspect-ratio: auto;
+        border-radius: 0;
+        padding: 30px var(--rand);
+    }
+    .ww-satz:hover, .ww-satz:focus-visible { transform: none; }
 }
 
 .lz-saeule {
@@ -539,17 +550,28 @@
     .buehne-claimblock { min-height: min(calc(68vh + 150px), calc(80vh - 32px)); }
     .buehne-antwort { left: var(--rand); right: var(--rand); }
     .buehne-statisch { padding-top: calc(90px + var(--space-6)); }
-    /* Team-Akt: Foto und Text rücken zusammen und damit tiefer (das Foto
-       hing sonst oben an der Kopfzeile). Der weiße Nebel hinter dem Text
-       läuft mit closest-side GARANTIERT innerhalb seiner Box auf 0 aus —
-       die geklemmte Oberkante stand am Telefon als harte Linie im
-       dunklen Splash (Roman, 12.10.2026). */
-    .buehne-team { gap: var(--space-7); }
+    /* Team-Akt: Foto kleiner, damit der ganze Block (Foto + Text + Knopf)
+       unter die Schirmhöhe passt und ans untere Ende rutscht — vorher
+       klebte das Foto an der Kopfzeile, und der Text stand auf dem
+       fleckigen Nebel-Übergang (Roman, 20.11.2026). Der weiße Boden des
+       Splash reicht am Telefon höher hinauf, damit hinter dem gesamten
+       Text durchgehend Weiß liegt. Der Nebel hinter dem Text läuft mit
+       closest-side GARANTIERT innerhalb seiner Box auf 0 aus — die
+       geklemmte Oberkante stand am Telefon als harte Linie im dunklen
+       Splash (Roman, 12.10.2026). */
+    .buehne-team { gap: var(--space-6); }
+    .buehne-team-foto { width: min(74vw, 56vh); }
+    .buehne-splash::after { height: 68%; }
+    /* Statt des radialen Nebels (deckte den hohen Textblock nie ganz,
+       die Zeilen standen auf fleckigem Grau — Roman, 20.11.2026) trägt
+       den Text am Telefon ein vollbreiter weißer Sockel mit weicher
+       Oberkante: oben das dunkle Motiv mit dem Foto, unten ruhiges Weiß. */
     .buehne-team-text::before {
-        inset: -120px -90px;
-        background: radial-gradient(closest-side,
-            rgba(255, 255, 255, .97) 52%,
-            rgba(255, 255, 255, 0) 100%);
+        inset: -80px -50vw -40px;
+        background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0) 0,
+            rgba(255, 255, 255, .96) 80px,
+            #fff 140px);
     }
 }
 

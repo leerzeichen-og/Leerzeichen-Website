@@ -211,7 +211,6 @@
             }
         });
 
-        var objWeg    = 1 - klemm((p - 0.52) / 0.06);  // Objekte gehen
         // Übergangsbild: 100vh (unter dem Bild) → -100vh (oben hinaus);
         // bei 0 deckt es den Bildschirm vollständig — dort wird dahinter
         // unsichtbar auf den schwarzen Akt geschaltet.
@@ -221,8 +220,13 @@
         var textWeg   = klemm((p - 0.87) / 0.03);      // … hält, geht
         var splashIn  = klemm((p - 0.88) / 0.11);      // Splash scrollt herein
 
-        huelle.style.opacity = objWeg;
-        huelle.style.pointerEvents = objWeg < 0.5 ? 'none' : '';
+        // Die Objekte werden nicht mehr ausgeblendet (Roman, 20.11.2026) —
+        // sie verschwinden durchs Scrollen aus dem Blick, und das
+        // hereinfahrende Übergangsbild deckt den Rest zu. Nur Klicks nehmen
+        // sie ab dem Übergang keine mehr an: Das Bild selbst lässt Zeiger
+        // durch (pointer-events: none), unsichtbar Anklickbares darunter
+        // wäre eine Falle.
+        huelle.style.pointerEvents = p > 0.55 ? 'none' : '';
         if (uebergang) {
             uebergang.style.transform = 'translateY(' + (100 - uIn * 200) + 'vh)';
         }
@@ -361,9 +365,11 @@
                 entwaffnen();
                 armiert = i;
                 pBeimArmieren = p;
+                // Der Kreis liegt direkt AUF dem Objekt (Roman, 20.11.2026),
+                // nicht mehr darüber — geklemmt, damit er im Bild bleibt.
                 var r = el.getBoundingClientRect();
                 bzx = bx = r.left + r.width / 2;
-                bzy = by = Math.max(70, r.top - 34);
+                bzy = by = Math.max(70, r.top + r.height / 2);
                 badgeZeigen(i);
                 // Auch der Kreis selbst darf den zweiten Tipp entgegennehmen.
                 badge.style.pointerEvents = 'auto';
