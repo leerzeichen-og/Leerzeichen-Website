@@ -282,9 +282,12 @@ require __DIR__ . '/teile/kopf.php';
 
   <div class="buehne-claimblock">
     <h1 class="lz-claim">Gemeinsam<br>Zeichen setzen.</h1>
-    <?php // Scrollhinweis wie auf den Säulen-Seiten — nur am Schreibtisch,
-          // das Skript blendet ihn mit dem ersten Scrollen aus. ?>
-    <span class="pj-runter buehne-runter" aria-hidden="true"><?= lz_pfeil() ?></span>
+    <?php // Scrollhinweis unter dem Claim; das Skript blendet ihn mit dem
+          // ersten Scrollen aus. EIGENES SVG statt lz_pfeil() (20.11.2026):
+          // kürzer und anderthalbfach dick — der gefüllte Pfeil-Pfad ließ
+          // sich nicht verdicken, ohne über Transforms auch die Spitze zu
+          // verzerren. ?>
+    <span class="buehne-runter" aria-hidden="true"><svg viewBox="0 0 20 46" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="currentColor" stroke-width="3" d="M10 1v42M2.4 35.6 10 43.2l7.6-7.6"/></svg></span>
   </div>
 </section>
 

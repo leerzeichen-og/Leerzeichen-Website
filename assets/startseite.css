@@ -40,20 +40,38 @@
 }
 
 
-/* Scrollhinweis-Pfeil unter dem Claim (nur Schreibtisch, 18.11.2026):
-   derselbe Baustein wie auf den Säulen-Seiten, hier in Ink auf Weiß und an
-   der Textkante des Claims. Das Skript blendet ihn mit dem ersten Scrollen
-   aus (opacity, inline). */
+/* Scrollhinweis-Pfeil unter dem Claim (18.11.2026; seit 20.11. auch am
+   Telefon): eigenes, stroke-gezeichnetes SVG — kürzer und anderthalbfach
+   dick wie gewünscht (Roman, 20.11.2026), die Strichmitte sitzt an der
+   Textkante des Claims. Nickt wie der Baustein der Säulen-Seiten; das
+   Skript blendet ihn mit dem ersten Scrollen aus (opacity, inline). */
 .buehne-runter {
     position: absolute;
-    left: calc(55px - 27px);
-    bottom: clamp(4px, 1vh, 12px);
-    margin: 0;
+    left: calc(55px - 10px);
+    bottom: clamp(10px, 2vh, 22px);
+    width: 20px;
     color: var(--ink);
+    pointer-events: none;
     transition: opacity .6s ease;
 }
+.buehne-runter svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: buehne-nicken 2.4s ease-in-out infinite;
+}
+@keyframes buehne-nicken {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(10px); }
+}
 @media (max-width: 900px) {
-    .buehne-runter { display: none; }
+    .buehne-runter {
+        left: calc(var(--rand) - 10px);
+        bottom: clamp(10px, 2vh, 20px);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .buehne-runter svg { animation: none; }
 }
 
 /* Schwebende Projekt-Objekte */
@@ -561,17 +579,18 @@
        Splash (Roman, 12.10.2026). */
     .buehne-team { gap: var(--space-6); }
     .buehne-team-foto { width: min(74vw, 56vh); }
-    .buehne-splash::after { height: 68%; }
-    /* Statt des radialen Nebels (deckte den hohen Textblock nie ganz,
-       die Zeilen standen auf fleckigem Grau — Roman, 20.11.2026) trägt
-       den Text am Telefon ein vollbreiter weißer Sockel mit weicher
-       Oberkante: oben das dunkle Motiv mit dem Foto, unten ruhiges Weiß. */
+    /* Der Bodenverlauf des Splash entfällt am Telefon — sein weicher
+       Übergang stünde sichtbar ÜBER der harten Kante (unten). */
+    .buehne-splash::after { content: none; }
+    /* Statt eines Verlaufs (gefiel nicht — Roman, 20.11.2026) trennt eine
+       HARTE weiße Kante den dunklen oberen Teil vom weißen Sockel, und
+       sie verläuft auf halber Fotohöhe: Das Foto (liegt über dem Sockel,
+       samt Schatten) überdeckt den Übergang. Oberkante = halbe Fotohöhe
+       (Seitenverhältnis 2500 × 1667 → 0,333 × Breite) plus der gap zum
+       Text. */
     .buehne-team-text::before {
-        inset: -80px -50vw -40px;
-        background: linear-gradient(180deg,
-            rgba(255, 255, 255, 0) 0,
-            rgba(255, 255, 255, .96) 80px,
-            #fff 140px);
+        inset: calc(-0.334 * min(74vw, 56vh) - var(--space-6)) -50vw -40px;
+        background: #fff;
     }
 }
 

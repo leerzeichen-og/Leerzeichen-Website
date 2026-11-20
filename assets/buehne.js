@@ -279,6 +279,14 @@
         // von Zone + Fade.
         var zone   = 80 / (window.innerHeight / 100) + 1;   // in vh, mit Luft
         var deckel = 1 - klemm(p / 0.03);                   // nur am Seitenanfang scharf
+        // Tintenkante des Übergangsbilds: Das Motiv ist im oberen Drittel
+        // durchsichtig — die Objekte schienen durch und wurden an der
+        // gemalten Kante hart abgeschnitten (Befund Roman, 20.11.2026).
+        // Die Kante liegt bei rund 60 % der Bildhöhe; jedes Objekt löst
+        // sich auf, bevor sie seine Unterkante erreicht. Nach dem Übergang
+        // (Kante weit oben) sind damit ALLE Objekte aus — auch die, die
+        // sonst am Ende der Bühne über den nächsten Abschnitt lugten.
+        var kante = 100 - klemm((p - 0.56) / 0.20) * 200 + 60;
         zustand.forEach(function (s) {
             // Die Höhe folgt dem Scroll-Ziel GEGLÄTTET (Exponentialfilter):
             // Am Telefon kommen Scroll-Ereignisse ruckhaft hinter dem nativen
@@ -293,6 +301,7 @@
             // würde jeder Umlauf als schnelle Durchfahrt animiert).
             var zeig = ((s.y + 50) % SPANNE + SPANNE) % SPANNE - 50;
             var frei = 1 - (1 - klemm((zeig - zone) / 6)) * deckel;
+            frei = Math.min(frei, klemm((kante - zeig - s.h) / 8));
             s.el.style.opacity = frei;
             s.el.style.pointerEvents = frei < 0.5 ? 'none' : '';
             s.el.style.transform = 'translate3d(' + s.x + 'vw,' + zeig + 'vh,0)';
